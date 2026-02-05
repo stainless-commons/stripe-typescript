@@ -1723,7 +1723,7 @@ export namespace PaymentLinkCreateParams {
     export interface InvoiceData {
       account_tax_ids?: Array<string> | '';
 
-      custom_fields?: Array<InvoiceData.UnionMember0> | '';
+      custom_fields?: Array<InvoiceData.CustomFieldsList> | '';
 
       description?: string;
 
@@ -1737,7 +1737,7 @@ export namespace PaymentLinkCreateParams {
     }
 
     export namespace InvoiceData {
-      export interface UnionMember0 {
+      export interface CustomFieldsList {
         name: string;
 
         value: string;

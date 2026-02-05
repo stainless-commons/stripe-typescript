@@ -272,7 +272,7 @@ export interface InvoiceitemCreateParams {
    * The coupons and promotion codes to redeem into discounts for the invoice item or
    * invoice line item.
    */
-  discounts?: Array<InvoiceitemCreateParams.UnionMember0> | '';
+  discounts?: Array<InvoiceitemCreateParams.DiscountsList> | '';
 
   /**
    * Specifies which fields in the response should be expanded.
@@ -366,7 +366,7 @@ export interface InvoiceitemCreateParams {
 }
 
 export namespace InvoiceitemCreateParams {
-  export interface UnionMember0 {
+  export interface DiscountsList {
     coupon?: string;
 
     discount?: string;

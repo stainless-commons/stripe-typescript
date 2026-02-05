@@ -1524,7 +1524,7 @@ export namespace CustomerCreateParams {
    * Default invoice settings for this customer.
    */
   export interface InvoiceSettings {
-    custom_fields?: Array<InvoiceSettings.UnionMember0> | '';
+    custom_fields?: Array<InvoiceSettings.CustomFieldsList> | '';
 
     default_payment_method?: string;
 
@@ -1534,7 +1534,7 @@ export namespace CustomerCreateParams {
   }
 
   export namespace InvoiceSettings {
-    export interface UnionMember0 {
+    export interface CustomFieldsList {
       name: string;
 
       value: string;
