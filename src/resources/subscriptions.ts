@@ -205,7 +205,7 @@ export interface Mandate {
    */
   type: 'multi_use' | 'single_use';
 
-  multi_use?: unknown;
+  multi_use?: Mandate.MultiUse;
 
   /**
    * The account (if any) that the mandate is intended for.
@@ -228,12 +228,14 @@ export namespace Mandate {
      */
     accepted_at?: number | null;
 
-    offline?: unknown;
+    offline?: CustomerAcceptance.Offline;
 
     online?: CustomerAcceptance.Online;
   }
 
   export namespace CustomerAcceptance {
+    export interface Offline {}
+
     export interface Online {
       /**
        * The customer accepts the mandate from this IP address.
@@ -257,33 +259,33 @@ export namespace Mandate {
 
     acss_debit?: PaymentMethodDetails.AcssDebit;
 
-    amazon_pay?: unknown;
+    amazon_pay?: PaymentMethodDetails.AmazonPay;
 
     au_becs_debit?: PaymentMethodDetails.AuBecsDebit;
 
     bacs_debit?: PaymentMethodDetails.BacsDebit;
 
-    card?: unknown;
+    card?: PaymentMethodDetails.Card;
 
-    cashapp?: unknown;
+    cashapp?: PaymentMethodDetails.Cashapp;
 
-    kakao_pay?: unknown;
+    kakao_pay?: PaymentMethodDetails.KakaoPay;
 
-    klarna?: unknown;
+    klarna?: PaymentMethodDetails.Klarna;
 
-    kr_card?: unknown;
+    kr_card?: PaymentMethodDetails.KrCard;
 
-    link?: unknown;
+    link?: PaymentMethodDetails.Link;
 
-    naver_pay?: unknown;
+    naver_pay?: PaymentMethodDetails.NaverPay;
 
-    nz_bank_account?: unknown;
+    nz_bank_account?: PaymentMethodDetails.NzBankAccount;
 
     paypal?: PaymentMethodDetails.Paypal;
 
     payto?: PaymentMethodDetails.Payto;
 
-    revolut_pay?: unknown;
+    revolut_pay?: PaymentMethodDetails.RevolutPay;
 
     sepa_debit?: PaymentMethodDetails.SepaDebit;
 
@@ -313,6 +315,8 @@ export namespace Mandate {
        */
       interval_description?: string | null;
     }
+
+    export interface AmazonPay {}
 
     export interface AuBecsDebit {
       /**
@@ -351,6 +355,22 @@ export namespace Mandate {
         | 'debit_not_authorized'
         | null;
     }
+
+    export interface Card {}
+
+    export interface Cashapp {}
+
+    export interface KakaoPay {}
+
+    export interface Klarna {}
+
+    export interface KrCard {}
+
+    export interface Link {}
+
+    export interface NaverPay {}
+
+    export interface NzBankAccount {}
 
     export interface Paypal {
       /**
@@ -429,6 +449,8 @@ export namespace Mandate {
       start_date?: string | null;
     }
 
+    export interface RevolutPay {}
+
     export interface SepaDebit {
       /**
        * The unique reference of the mandate.
@@ -449,6 +471,8 @@ export namespace Mandate {
       collection_method?: 'paper';
     }
   }
+
+  export interface MultiUse {}
 
   export interface SingleUse {
     /**
@@ -1280,52 +1304,62 @@ export interface SetupAttemptPaymentMethodDetails {
    */
   type: string;
 
-  acss_debit?: unknown;
+  acss_debit?: SetupAttemptPaymentMethodDetails.AcssDebit;
 
-  amazon_pay?: unknown;
+  amazon_pay?: SetupAttemptPaymentMethodDetails.AmazonPay;
 
-  au_becs_debit?: unknown;
+  au_becs_debit?: SetupAttemptPaymentMethodDetails.AuBecsDebit;
 
-  bacs_debit?: unknown;
+  bacs_debit?: SetupAttemptPaymentMethodDetails.BacsDebit;
 
   bancontact?: PaymentMethodDetailsBancontactSetupAttempt;
 
-  boleto?: unknown;
+  boleto?: SetupAttemptPaymentMethodDetails.Boleto;
 
   card?: SetupAttemptPaymentMethodDetails.Card;
 
   card_present?: SetupAttemptPaymentMethodDetailsCardPresent;
 
-  cashapp?: unknown;
+  cashapp?: SetupAttemptPaymentMethodDetails.Cashapp;
 
   ideal?: PaymentMethodDetailsIdealSetupAttempt;
 
-  kakao_pay?: unknown;
+  kakao_pay?: SetupAttemptPaymentMethodDetails.KakaoPay;
 
-  klarna?: unknown;
+  klarna?: SetupAttemptPaymentMethodDetails.Klarna;
 
-  kr_card?: unknown;
+  kr_card?: SetupAttemptPaymentMethodDetails.KrCard;
 
-  link?: unknown;
+  link?: SetupAttemptPaymentMethodDetails.Link;
 
   naver_pay?: SetupAttemptPaymentMethodDetails.NaverPay;
 
-  nz_bank_account?: unknown;
+  nz_bank_account?: SetupAttemptPaymentMethodDetails.NzBankAccount;
 
-  paypal?: unknown;
+  paypal?: SetupAttemptPaymentMethodDetails.Paypal;
 
-  payto?: unknown;
+  payto?: SetupAttemptPaymentMethodDetails.Payto;
 
-  revolut_pay?: unknown;
+  revolut_pay?: SetupAttemptPaymentMethodDetails.RevolutPay;
 
-  sepa_debit?: unknown;
+  sepa_debit?: SetupAttemptPaymentMethodDetails.SepaDebit;
 
   sofort?: PaymentMethodDetailsSofortSetupAttempt;
 
-  us_bank_account?: unknown;
+  us_bank_account?: SetupAttemptPaymentMethodDetails.UsBankAccount;
 }
 
 export namespace SetupAttemptPaymentMethodDetails {
+  export interface AcssDebit {}
+
+  export interface AmazonPay {}
+
+  export interface AuBecsDebit {}
+
+  export interface BacsDebit {}
+
+  export interface Boleto {}
+
   export interface Card {
     /**
      * Card brand. Can be `amex`, `cartes_bancaires`, `diners`, `discover`,
@@ -1467,11 +1501,27 @@ export namespace SetupAttemptPaymentMethodDetails {
        */
       type: 'apple_pay' | 'google_pay' | 'link';
 
-      apple_pay?: unknown;
+      apple_pay?: Wallet.ApplePay;
 
-      google_pay?: unknown;
+      google_pay?: Wallet.GooglePay;
+    }
+
+    export namespace Wallet {
+      export interface ApplePay {}
+
+      export interface GooglePay {}
     }
   }
+
+  export interface Cashapp {}
+
+  export interface KakaoPay {}
+
+  export interface Klarna {}
+
+  export interface KrCard {}
+
+  export interface Link {}
 
   export interface NaverPay {
     /**
@@ -1480,6 +1530,18 @@ export namespace SetupAttemptPaymentMethodDetails {
      */
     buyer_id?: string;
   }
+
+  export interface NzBankAccount {}
+
+  export interface Paypal {}
+
+  export interface Payto {}
+
+  export interface RevolutPay {}
+
+  export interface SepaDebit {}
+
+  export interface UsBankAccount {}
 }
 
 export interface SetupAttemptPaymentMethodDetailsCardPresent {
@@ -1874,7 +1936,9 @@ export namespace SetupIntent {
       | PaymentMethodOptions.SetupIntentPaymentMethodOptionsAcssDebit
       | SubscriptionsAPI.SetupIntentTypeSpecificPaymentMethodOptionsClient;
 
-    amazon_pay?: unknown | SubscriptionsAPI.SetupIntentTypeSpecificPaymentMethodOptionsClient;
+    amazon_pay?:
+      | PaymentMethodOptions.SetupIntentPaymentMethodOptionsAmazonPay
+      | SubscriptionsAPI.SetupIntentTypeSpecificPaymentMethodOptionsClient;
 
     bacs_debit?:
       | PaymentMethodOptions.SetupIntentPaymentMethodOptionsBacsDebit
@@ -1884,13 +1948,17 @@ export namespace SetupIntent {
       | PaymentMethodOptions.SetupIntentPaymentMethodOptionsCard
       | SubscriptionsAPI.SetupIntentTypeSpecificPaymentMethodOptionsClient;
 
-    card_present?: unknown | SubscriptionsAPI.SetupIntentTypeSpecificPaymentMethodOptionsClient;
+    card_present?:
+      | PaymentMethodOptions.SetupIntentPaymentMethodOptionsCardPresent
+      | SubscriptionsAPI.SetupIntentTypeSpecificPaymentMethodOptionsClient;
 
     klarna?:
       | PaymentMethodOptions.SetupIntentPaymentMethodOptionsKlarna
       | SubscriptionsAPI.SetupIntentTypeSpecificPaymentMethodOptionsClient;
 
-    link?: unknown | SubscriptionsAPI.SetupIntentTypeSpecificPaymentMethodOptionsClient;
+    link?:
+      | PaymentMethodOptions.SetupIntentPaymentMethodOptionsLink
+      | SubscriptionsAPI.SetupIntentTypeSpecificPaymentMethodOptionsClient;
 
     paypal?:
       | PaymentMethodOptions.SetupIntentPaymentMethodOptionsPaypal
@@ -1953,6 +2021,8 @@ export namespace SetupIntent {
         transaction_type?: 'business' | 'personal' | null;
       }
     }
+
+    export interface SetupIntentPaymentMethodOptionsAmazonPay {}
 
     export interface SetupIntentPaymentMethodOptionsBacsDebit {
       mandate_options?: SetupIntentPaymentMethodOptionsBacsDebit.MandateOptions;
@@ -2072,6 +2142,8 @@ export namespace SetupIntent {
       }
     }
 
+    export interface SetupIntentPaymentMethodOptionsCardPresent {}
+
     export interface SetupIntentPaymentMethodOptionsKlarna {
       /**
        * The currency of the setup intent. Three letter ISO currency code.
@@ -2083,6 +2155,8 @@ export namespace SetupIntent {
        */
       preferred_locale?: string | null;
     }
+
+    export interface SetupIntentPaymentMethodOptionsLink {}
 
     export interface SetupIntentPaymentMethodOptionsPaypal {
       /**
@@ -2755,11 +2829,11 @@ export namespace Subscription {
 
       customer_balance?: PaymentMethodOptions.CustomerBalance | null;
 
-      konbini?: unknown | null;
+      konbini?: PaymentMethodOptions.Konbini | null;
 
       payto?: PaymentMethodOptions.Payto | null;
 
-      sepa_debit?: unknown | null;
+      sepa_debit?: PaymentMethodOptions.SepaDebit | null;
 
       us_bank_account?: PaymentMethodOptions.UsBankAccount | null;
     }
@@ -2882,6 +2956,8 @@ export namespace Subscription {
         }
       }
 
+      export interface Konbini {}
+
       export interface Payto {
         mandate_options?: Payto.MandateOptions;
       }
@@ -2918,6 +2994,8 @@ export namespace Subscription {
             | null;
         }
       }
+
+      export interface SepaDebit {}
 
       export interface UsBankAccount {
         financial_connections?: UsBankAccount.FinancialConnections;

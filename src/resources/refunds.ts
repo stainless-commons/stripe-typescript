@@ -172,17 +172,17 @@ export namespace Refund {
      */
     type: string;
 
-    affirm?: unknown;
+    affirm?: DestinationDetails.Affirm;
 
-    afterpay_clearpay?: unknown;
+    afterpay_clearpay?: DestinationDetails.AfterpayClearpay;
 
-    alipay?: unknown;
+    alipay?: DestinationDetails.Alipay;
 
-    alma?: unknown;
+    alma?: DestinationDetails.Alma;
 
-    amazon_pay?: unknown;
+    amazon_pay?: DestinationDetails.AmazonPay;
 
-    au_bank_transfer?: unknown;
+    au_bank_transfer?: DestinationDetails.AuBankTransfer;
 
     blik?: DestinationDetails.Blik;
 
@@ -190,25 +190,25 @@ export namespace Refund {
 
     card?: DestinationDetails.Card;
 
-    cashapp?: unknown;
+    cashapp?: DestinationDetails.Cashapp;
 
     crypto?: DestinationDetails.Crypto;
 
-    customer_cash_balance?: unknown;
+    customer_cash_balance?: DestinationDetails.CustomerCashBalance;
 
-    eps?: unknown;
+    eps?: DestinationDetails.Eps;
 
     eu_bank_transfer?: DestinationDetails.EuBankTransfer;
 
     gb_bank_transfer?: DestinationDetails.GBBankTransfer;
 
-    giropay?: unknown;
+    giropay?: DestinationDetails.Giropay;
 
-    grabpay?: unknown;
+    grabpay?: DestinationDetails.Grabpay;
 
     jp_bank_transfer?: DestinationDetails.JpBankTransfer;
 
-    klarna?: unknown;
+    klarna?: DestinationDetails.Klarna;
 
     mb_way?: DestinationDetails.MBWay;
 
@@ -216,34 +216,46 @@ export namespace Refund {
 
     mx_bank_transfer?: DestinationDetails.MxBankTransfer;
 
-    nz_bank_transfer?: unknown;
+    nz_bank_transfer?: DestinationDetails.NzBankTransfer;
 
     p24?: DestinationDetails.P24;
 
-    paynow?: unknown;
+    paynow?: DestinationDetails.Paynow;
 
     paypal?: DestinationDetails.Paypal;
 
-    pix?: unknown;
+    pix?: DestinationDetails.Pix;
 
-    revolut?: unknown;
+    revolut?: DestinationDetails.Revolut;
 
-    sofort?: unknown;
+    sofort?: DestinationDetails.Sofort;
 
     swish?: DestinationDetails.Swish;
 
     th_bank_transfer?: DestinationDetails.ThBankTransfer;
 
-    twint?: unknown;
+    twint?: DestinationDetails.Twint;
 
     us_bank_transfer?: DestinationDetails.UsBankTransfer;
 
-    wechat_pay?: unknown;
+    wechat_pay?: DestinationDetails.WechatPay;
 
-    zip?: unknown;
+    zip?: DestinationDetails.Zip;
   }
 
   export namespace DestinationDetails {
+    export interface Affirm {}
+
+    export interface AfterpayClearpay {}
+
+    export interface Alipay {}
+
+    export interface Alma {}
+
+    export interface AmazonPay {}
+
+    export interface AuBankTransfer {}
+
     export interface Blik {
       /**
        * For refunds declined by the network, a decline code provided by the network
@@ -299,12 +311,18 @@ export namespace Refund {
       reference_type?: string;
     }
 
+    export interface Cashapp {}
+
     export interface Crypto {
       /**
        * The transaction hash of the refund.
        */
       reference?: string | null;
     }
+
+    export interface CustomerCashBalance {}
+
+    export interface Eps {}
 
     export interface EuBankTransfer {
       /**
@@ -332,6 +350,10 @@ export namespace Refund {
       reference_status?: string | null;
     }
 
+    export interface Giropay {}
+
+    export interface Grabpay {}
+
     export interface JpBankTransfer {
       /**
        * The reference assigned to the refund.
@@ -344,6 +366,8 @@ export namespace Refund {
        */
       reference_status?: string | null;
     }
+
+    export interface Klarna {}
 
     export interface MBWay {
       /**
@@ -384,6 +408,8 @@ export namespace Refund {
       reference_status?: string | null;
     }
 
+    export interface NzBankTransfer {}
+
     export interface P24 {
       /**
        * The reference assigned to the refund.
@@ -397,6 +423,8 @@ export namespace Refund {
       reference_status?: string | null;
     }
 
+    export interface Paynow {}
+
     export interface Paypal {
       /**
        * For refunds declined by the network, a decline code provided by the network
@@ -404,6 +432,12 @@ export namespace Refund {
        */
       network_decline_code?: string | null;
     }
+
+    export interface Pix {}
+
+    export interface Revolut {}
+
+    export interface Sofort {}
 
     export interface Swish {
       /**
@@ -437,6 +471,8 @@ export namespace Refund {
       reference_status?: string | null;
     }
 
+    export interface Twint {}
+
     export interface UsBankTransfer {
       /**
        * The reference assigned to the refund.
@@ -449,6 +485,10 @@ export namespace Refund {
        */
       reference_status?: string | null;
     }
+
+    export interface WechatPay {}
+
+    export interface Zip {}
   }
 
   export interface NextAction {
