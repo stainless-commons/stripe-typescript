@@ -78,12 +78,11 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/coupons.ts">Coupon</a></code>
-- <code><a href="./src/resources/coupons.ts">CouponListResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/coupons">client.coupons.<a href="./src/resources/coupons.ts">create</a>({ ...params }) -> Coupon</code>
-- <code title="get /v1/coupons">client.coupons.<a href="./src/resources/coupons.ts">list</a>({ ...params }) -> CouponListResponse</code>
+- <code title="get /v1/coupons">client.coupons.<a href="./src/resources/coupons.ts">list</a>({ ...params }) -> CouponsMyCursorIDPage</code>
 
 # Customers
 
@@ -97,12 +96,11 @@ Types:
 - <code><a href="./src/resources/customers.ts">PromotionCode</a></code>
 - <code><a href="./src/resources/customers.ts">TaxID</a></code>
 - <code><a href="./src/resources/customers.ts">TaxIDsOwner</a></code>
-- <code><a href="./src/resources/customers.ts">CustomerListResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/customers">client.customers.<a href="./src/resources/customers.ts">create</a>({ ...params }) -> Customer</code>
-- <code title="get /v1/customers">client.customers.<a href="./src/resources/customers.ts">list</a>({ ...params }) -> CustomerListResponse</code>
+- <code title="get /v1/customers">client.customers.<a href="./src/resources/customers.ts">list</a>({ ...params }) -> CustomersMyCursorIDPage</code>
 
 # Disputes
 
@@ -148,12 +146,11 @@ Types:
 - <code><a href="./src/resources/disputes.ts">Payout</a></code>
 - <code><a href="./src/resources/disputes.ts">Topup</a></code>
 - <code><a href="./src/resources/disputes.ts">Transfer</a></code>
-- <code><a href="./src/resources/disputes.ts">DisputeListResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/disputes/{dispute}">client.disputes.<a href="./src/resources/disputes.ts">update</a>(dispute, { ...params }) -> Dispute</code>
-- <code title="get /v1/disputes">client.disputes.<a href="./src/resources/disputes.ts">list</a>({ ...params }) -> DisputeListResponse</code>
+- <code title="get /v1/disputes">client.disputes.<a href="./src/resources/disputes.ts">list</a>({ ...params }) -> DisputesMyCursorIDPage</code>
 
 # Invoices
 
@@ -191,12 +188,11 @@ Types:
 - <code><a href="./src/resources/invoices.ts">SepaDebitGeneratedFrom</a></code>
 - <code><a href="./src/resources/invoices.ts">ShippingRateDeliveryEstimateBound</a></code>
 - <code><a href="./src/resources/invoices.ts">TaxRate</a></code>
-- <code><a href="./src/resources/invoices.ts">InvoiceListResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/invoices">client.invoices.<a href="./src/resources/invoices.ts">create</a>({ ...params }) -> Invoice</code>
-- <code title="get /v1/invoices">client.invoices.<a href="./src/resources/invoices.ts">list</a>({ ...params }) -> InvoiceListResponse</code>
+- <code title="get /v1/invoices">client.invoices.<a href="./src/resources/invoices.ts">list</a>({ ...params }) -> InvoicesMyCursorIDPage</code>
 - <code title="post /v1/invoices/{invoice}/finalize">client.invoices.<a href="./src/resources/invoices.ts">finalize</a>(invoice, { ...params }) -> Invoice</code>
 
 # Invoiceitems
@@ -231,35 +227,32 @@ Types:
 - <code><a href="./src/resources/payment-intents.ts">PaymentMethodOptionsCardPresentRouting</a></code>
 - <code><a href="./src/resources/payment-intents.ts">PaymentTransferData</a></code>
 - <code><a href="./src/resources/payment-intents.ts">Review</a></code>
-- <code><a href="./src/resources/payment-intents.ts">PaymentIntentListResponse</a></code>
 
 Methods:
 
-- <code title="get /v1/payment_intents">client.paymentIntents.<a href="./src/resources/payment-intents.ts">list</a>({ ...params }) -> PaymentIntentListResponse</code>
+- <code title="get /v1/payment_intents">client.paymentIntents.<a href="./src/resources/payment-intents.ts">list</a>({ ...params }) -> PaymentIntentsMyCursorIDPage</code>
 
 # Prices
 
 Types:
 
 - <code><a href="./src/resources/prices.ts">Price</a></code>
-- <code><a href="./src/resources/prices.ts">PriceListResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/prices">client.prices.<a href="./src/resources/prices.ts">create</a>({ ...params }) -> Price</code>
-- <code title="get /v1/prices">client.prices.<a href="./src/resources/prices.ts">list</a>({ ...params }) -> PriceListResponse</code>
+- <code title="get /v1/prices">client.prices.<a href="./src/resources/prices.ts">list</a>({ ...params }) -> PricesMyCursorIDPage</code>
 
 # Products
 
 Types:
 
 - <code><a href="./src/resources/products.ts">Product</a></code>
-- <code><a href="./src/resources/products.ts">ProductListResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/products">client.products.<a href="./src/resources/products.ts">create</a>({ ...params }) -> Product</code>
-- <code title="get /v1/products">client.products.<a href="./src/resources/products.ts">list</a>({ ...params }) -> ProductListResponse</code>
+- <code title="get /v1/products">client.products.<a href="./src/resources/products.ts">list</a>({ ...params }) -> ProductsMyCursorIDPage</code>
 
 # Refunds
 
@@ -303,10 +296,9 @@ Types:
 - <code><a href="./src/resources/subscriptions.ts">SubscriptionInvoiceSettings</a></code>
 - <code><a href="./src/resources/subscriptions.ts">SubscriptionItem</a></code>
 - <code><a href="./src/resources/subscriptions.ts">SubscriptionTransferData</a></code>
-- <code><a href="./src/resources/subscriptions.ts">SubscriptionListResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/subscriptions/{subscription_exposed_id}">client.subscriptions.<a href="./src/resources/subscriptions.ts">update</a>(subscriptionExposedID, { ...params }) -> Subscription</code>
-- <code title="get /v1/subscriptions">client.subscriptions.<a href="./src/resources/subscriptions.ts">list</a>({ ...params }) -> SubscriptionListResponse</code>
+- <code title="get /v1/subscriptions">client.subscriptions.<a href="./src/resources/subscriptions.ts">list</a>({ ...params }) -> SubscriptionsMyCursorIDPage</code>
 - <code title="delete /v1/subscriptions/{subscription_exposed_id}">client.subscriptions.<a href="./src/resources/subscriptions.ts">cancel</a>(subscriptionExposedID, { ...params }) -> Subscription</code>

@@ -9,6 +9,7 @@ import * as InvoicesAPI from './invoices';
 import * as PricesAPI from './prices';
 import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
+import { MyCursorIDPage, type MyCursorIDPageParams, PagePromise } from '../core/pagination';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
@@ -55,8 +56,8 @@ export class Subscriptions extends APIResource {
   list(
     query: SubscriptionListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<SubscriptionListResponse> {
-    return this._client.get('/v1/subscriptions', { query, ...options });
+  ): PagePromise<SubscriptionsMyCursorIDPage, Subscription> {
+    return this._client.getAPIList('/v1/subscriptions', MyCursorIDPage<Subscription>, { query, ...options });
   }
 
   /**
@@ -78,6 +79,8 @@ export class Subscriptions extends APIResource {
     });
   }
 }
+
+export type SubscriptionsMyCursorIDPage = MyCursorIDPage<Subscription>;
 
 export interface AutomaticTaxSubscription {
   /**
@@ -3209,26 +3212,6 @@ export interface SubscriptionTransferData {
   amount_percent?: number | null;
 }
 
-export interface SubscriptionListResponse {
-  data: Array<Subscription>;
-
-  /**
-   * True if this list has another page of items after this one that can be fetched.
-   */
-  has_more: boolean;
-
-  /**
-   * String representing the object's type. Objects of the same type share the same
-   * value. Always has the value `list`.
-   */
-  object: 'list';
-
-  /**
-   * The URL where this list can be accessed.
-   */
-  url: string;
-}
-
 export interface SubscriptionUpdateParams {
   /**
    * A list of prices and quantities that will generate invoice items appended to the
@@ -3893,7 +3876,7 @@ export namespace SubscriptionUpdateParams {
   }
 }
 
-export interface SubscriptionListParams {
+export interface SubscriptionListParams extends MyCursorIDPageParams {
   /**
    * Filter subscriptions by their automatic tax settings.
    */
@@ -3934,36 +3917,14 @@ export interface SubscriptionListParams {
   customer_account?: string;
 
   /**
-   * A cursor for use in pagination. `ending_before` is an object ID that defines
-   * your place in the list. For instance, if you make a list request and receive 100
-   * objects, starting with `obj_bar`, your subsequent call can include
-   * `ending_before=obj_bar` in order to fetch the previous page of the list.
-   */
-  ending_before?: string;
-
-  /**
    * Specifies which fields in the response should be expanded.
    */
   expand?: Array<string>;
 
   /**
-   * A limit on the number of objects to be returned. Limit can range between 1 and
-   * 100, and the default is 10.
-   */
-  limit?: number;
-
-  /**
    * Filter for subscriptions that contain this recurring price ID.
    */
   price?: string;
-
-  /**
-   * A cursor for use in pagination. `starting_after` is an object ID that defines
-   * your place in the list. For instance, if you make a list request and receive 100
-   * objects, ending with `obj_foo`, your subsequent call can include
-   * `starting_after=obj_foo` in order to fetch the next page of the list.
-   */
-  starting_after?: string;
 
   /**
    * The status of the subscriptions to retrieve. Passing in a value of `canceled`
@@ -4106,7 +4067,7 @@ export declare namespace Subscriptions {
     type SubscriptionInvoiceSettings as SubscriptionInvoiceSettings,
     type SubscriptionItem as SubscriptionItem,
     type SubscriptionTransferData as SubscriptionTransferData,
-    type SubscriptionListResponse as SubscriptionListResponse,
+    type SubscriptionsMyCursorIDPage as SubscriptionsMyCursorIDPage,
     type SubscriptionUpdateParams as SubscriptionUpdateParams,
     type SubscriptionListParams as SubscriptionListParams,
     type SubscriptionCancelParams as SubscriptionCancelParams,

@@ -2,6 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
+import { MyCursorIDPage, type MyCursorIDPageParams, PagePromise } from '../core/pagination';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 
@@ -25,10 +26,12 @@ export class Coupons extends APIResource {
   list(
     query: CouponListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CouponListResponse> {
-    return this._client.get('/v1/coupons', { query, ...options });
+  ): PagePromise<CouponsMyCursorIDPage, Coupon> {
+    return this._client.getAPIList('/v1/coupons', MyCursorIDPage<Coupon>, { query, ...options });
   }
 }
+
+export type CouponsMyCursorIDPage = MyCursorIDPage<Coupon>;
 
 /**
  * A coupon contains information about a percent-off or amount-off discount you
@@ -158,26 +161,6 @@ export namespace Coupon {
   }
 }
 
-export interface CouponListResponse {
-  data: Array<Coupon>;
-
-  /**
-   * True if this list has another page of items after this one that can be fetched.
-   */
-  has_more: boolean;
-
-  /**
-   * String representing the object's type. Objects of the same type share the same
-   * value. Always has the value `list`.
-   */
-  object: 'list';
-
-  /**
-   * The URL where this list can be accessed.
-   */
-  url: string;
-}
-
 export interface CouponCreateParams {
   /**
    * Unique string of your choice that will be used to identify this coupon when
@@ -277,7 +260,7 @@ export namespace CouponCreateParams {
   }
 }
 
-export interface CouponListParams {
+export interface CouponListParams extends MyCursorIDPageParams {
   /**
    * A filter on the list, based on the object `created` field. The value can be a
    * string with an integer Unix timestamp, or it can be a dictionary with a number
@@ -286,31 +269,9 @@ export interface CouponListParams {
   created?: CouponListParams.RangeQuerySpecs | number;
 
   /**
-   * A cursor for use in pagination. `ending_before` is an object ID that defines
-   * your place in the list. For instance, if you make a list request and receive 100
-   * objects, starting with `obj_bar`, your subsequent call can include
-   * `ending_before=obj_bar` in order to fetch the previous page of the list.
-   */
-  ending_before?: string;
-
-  /**
    * Specifies which fields in the response should be expanded.
    */
   expand?: Array<string>;
-
-  /**
-   * A limit on the number of objects to be returned. Limit can range between 1 and
-   * 100, and the default is 10.
-   */
-  limit?: number;
-
-  /**
-   * A cursor for use in pagination. `starting_after` is an object ID that defines
-   * your place in the list. For instance, if you make a list request and receive 100
-   * objects, ending with `obj_foo`, your subsequent call can include
-   * `starting_after=obj_foo` in order to fetch the next page of the list.
-   */
-  starting_after?: string;
 }
 
 export namespace CouponListParams {
@@ -328,7 +289,7 @@ export namespace CouponListParams {
 export declare namespace Coupons {
   export {
     type Coupon as Coupon,
-    type CouponListResponse as CouponListResponse,
+    type CouponsMyCursorIDPage as CouponsMyCursorIDPage,
     type CouponCreateParams as CouponCreateParams,
     type CouponListParams as CouponListParams,
   };

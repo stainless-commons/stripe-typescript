@@ -14,6 +14,8 @@ import * as Opts from './internal/request-options';
 import * as qs from './internal/qs';
 import { VERSION } from './version';
 import * as Errors from './core/error';
+import * as Pagination from './core/pagination';
+import { AbstractPage, type MyCursorIDPageParams, MyCursorIDPageResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
@@ -37,8 +39,8 @@ import {
   Coupon,
   CouponCreateParams,
   CouponListParams,
-  CouponListResponse,
   Coupons,
+  CouponsMyCursorIDPage,
 } from './resources/coupons';
 import {
   BankAccount,
@@ -46,8 +48,8 @@ import {
   Customer,
   CustomerCreateParams,
   CustomerListParams,
-  CustomerListResponse,
   Customers,
+  CustomersMyCursorIDPage,
   Discount,
   InvoiceSetting,
   PromotionCode,
@@ -68,9 +70,9 @@ import {
   CustomerCashBalanceTransaction,
   Dispute,
   DisputeListParams,
-  DisputeListResponse,
   DisputeUpdateParams,
   Disputes,
+  DisputesMyCursorIDPage,
   FeeRefund,
   File,
   FileLink,
@@ -121,9 +123,9 @@ import {
   InvoiceCreateParams,
   InvoiceFinalizeParams,
   InvoiceListParams,
-  InvoiceListResponse,
   InvoicePayment,
   Invoices,
+  InvoicesMyCursorIDPage,
   InvoicesPaymentsInvoicePaymentAssociatedPayment,
   InvoicesResourceFromInvoice,
   InvoicesResourcePretaxCreditAmount,
@@ -144,10 +146,10 @@ import {
   PaymentFlowsInstallmentOptions,
   PaymentIntent,
   PaymentIntentListParams,
-  PaymentIntentListResponse,
   PaymentIntentPaymentMethodOptionsMandateOptionsPayto,
   PaymentIntentTypeSpecificPaymentMethodOptionsClient,
   PaymentIntents,
+  PaymentIntentsMyCursorIDPage,
   PaymentMethodOptionsCardPresentRouting,
   PaymentTransferData,
   Review,
@@ -158,13 +160,13 @@ import {
   PaymentLinkCreateResponse,
   PaymentLinks,
 } from './resources/payment-links';
-import { Price, PriceCreateParams, PriceListParams, PriceListResponse, Prices } from './resources/prices';
+import { Price, PriceCreateParams, PriceListParams, Prices, PricesMyCursorIDPage } from './resources/prices';
 import {
   Product,
   ProductCreateParams,
   ProductListParams,
-  ProductListResponse,
   Products,
+  ProductsMyCursorIDPage,
 } from './resources/products';
 import { Refund, RefundCreateParams, Refunds, TransferReversal } from './resources/refunds';
 import {
@@ -196,10 +198,10 @@ import {
   SubscriptionInvoiceSettings,
   SubscriptionItem,
   SubscriptionListParams,
-  SubscriptionListResponse,
   SubscriptionTransferData,
   SubscriptionUpdateParams,
   Subscriptions,
+  SubscriptionsMyCursorIDPage,
 } from './resources/subscriptions';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -656,6 +658,30 @@ export class Stripe {
     return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
   }
 
+  getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
+    path: string,
+    Page: new (...args: any[]) => PageClass,
+    opts?: PromiseOrValue<RequestOptions>,
+  ): Pagination.PagePromise<PageClass, Item> {
+    return this.requestAPIList(
+      Page,
+      opts && 'then' in opts ?
+        opts.then((opts) => ({ method: 'get', path, ...opts }))
+      : { method: 'get', path, ...opts },
+    );
+  }
+
+  requestAPIList<
+    Item = unknown,
+    PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
+  >(
+    Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
+    options: PromiseOrValue<FinalRequestOptions>,
+  ): Pagination.PagePromise<PageClass, Item> {
+    const request = this.makeRequest(options, null, undefined);
+    return new Pagination.PagePromise<PageClass, Item>(this as any as Stripe, request, Page);
+  }
+
   async fetchWithTimeout(
     url: RequestInfo,
     init: RequestInit | undefined,
@@ -927,6 +953,12 @@ Stripe.Subscriptions = Subscriptions;
 export declare namespace Stripe {
   export type RequestOptions = Opts.RequestOptions;
 
+  export import MyCursorIDPage = Pagination.MyCursorIDPage;
+  export {
+    type MyCursorIDPageParams as MyCursorIDPageParams,
+    type MyCursorIDPageResponse as MyCursorIDPageResponse,
+  };
+
   export {
     Accounts as Accounts,
     type Account as Account,
@@ -948,7 +980,7 @@ export declare namespace Stripe {
   export {
     Coupons as Coupons,
     type Coupon as Coupon,
-    type CouponListResponse as CouponListResponse,
+    type CouponsMyCursorIDPage as CouponsMyCursorIDPage,
     type CouponCreateParams as CouponCreateParams,
     type CouponListParams as CouponListParams,
   };
@@ -963,7 +995,7 @@ export declare namespace Stripe {
     type PromotionCode as PromotionCode,
     type TaxID as TaxID,
     type TaxIDsOwner as TaxIDsOwner,
-    type CustomerListResponse as CustomerListResponse,
+    type CustomersMyCursorIDPage as CustomersMyCursorIDPage,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerListParams as CustomerListParams,
   };
@@ -1010,7 +1042,7 @@ export declare namespace Stripe {
     type Payout as Payout,
     type Topup as Topup,
     type Transfer as Transfer,
-    type DisputeListResponse as DisputeListResponse,
+    type DisputesMyCursorIDPage as DisputesMyCursorIDPage,
     type DisputeUpdateParams as DisputeUpdateParams,
     type DisputeListParams as DisputeListParams,
   };
@@ -1049,7 +1081,7 @@ export declare namespace Stripe {
     type SepaDebitGeneratedFrom as SepaDebitGeneratedFrom,
     type ShippingRateDeliveryEstimateBound as ShippingRateDeliveryEstimateBound,
     type TaxRate as TaxRate,
-    type InvoiceListResponse as InvoiceListResponse,
+    type InvoicesMyCursorIDPage as InvoicesMyCursorIDPage,
     type InvoiceCreateParams as InvoiceCreateParams,
     type InvoiceListParams as InvoiceListParams,
     type InvoiceFinalizeParams as InvoiceFinalizeParams,
@@ -1077,14 +1109,14 @@ export declare namespace Stripe {
     type PaymentMethodOptionsCardPresentRouting as PaymentMethodOptionsCardPresentRouting,
     type PaymentTransferData as PaymentTransferData,
     type Review as Review,
-    type PaymentIntentListResponse as PaymentIntentListResponse,
+    type PaymentIntentsMyCursorIDPage as PaymentIntentsMyCursorIDPage,
     type PaymentIntentListParams as PaymentIntentListParams,
   };
 
   export {
     Prices as Prices,
     type Price as Price,
-    type PriceListResponse as PriceListResponse,
+    type PricesMyCursorIDPage as PricesMyCursorIDPage,
     type PriceCreateParams as PriceCreateParams,
     type PriceListParams as PriceListParams,
   };
@@ -1092,7 +1124,7 @@ export declare namespace Stripe {
   export {
     Products as Products,
     type Product as Product,
-    type ProductListResponse as ProductListResponse,
+    type ProductsMyCursorIDPage as ProductsMyCursorIDPage,
     type ProductCreateParams as ProductCreateParams,
     type ProductListParams as ProductListParams,
   };
@@ -1133,7 +1165,7 @@ export declare namespace Stripe {
     type SubscriptionInvoiceSettings as SubscriptionInvoiceSettings,
     type SubscriptionItem as SubscriptionItem,
     type SubscriptionTransferData as SubscriptionTransferData,
-    type SubscriptionListResponse as SubscriptionListResponse,
+    type SubscriptionsMyCursorIDPage as SubscriptionsMyCursorIDPage,
     type SubscriptionUpdateParams as SubscriptionUpdateParams,
     type SubscriptionListParams as SubscriptionListParams,
     type SubscriptionCancelParams as SubscriptionCancelParams,
