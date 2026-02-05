@@ -281,7 +281,6 @@ Types:
 - <code><a href="./src/resources/subscriptions.ts">DefaultSettingsAutomaticTax</a></code>
 - <code><a href="./src/resources/subscriptions.ts">Mandate</a></code>
 - <code><a href="./src/resources/subscriptions.ts">PaymentMethodDetailsBancontactSetupAttempt</a></code>
-- <code><a href="./src/resources/subscriptions.ts">PaymentMethodDetailsCardPresent</a></code>
 - <code><a href="./src/resources/subscriptions.ts">PaymentMethodDetailsIdealSetupAttempt</a></code>
 - <code><a href="./src/resources/subscriptions.ts">PaymentMethodDetailsSofortSetupAttempt</a></code>
 - <code><a href="./src/resources/subscriptions.ts">PendingUpdate</a></code>
@@ -294,6 +293,7 @@ Types:
 - <code><a href="./src/resources/subscriptions.ts">ScheduleSetting</a></code>
 - <code><a href="./src/resources/subscriptions.ts">SetupAttempt</a></code>
 - <code><a href="./src/resources/subscriptions.ts">SetupAttemptPaymentMethodDetails</a></code>
+- <code><a href="./src/resources/subscriptions.ts">SetupAttemptPaymentMethodDetailsCardPresent</a></code>
 - <code><a href="./src/resources/subscriptions.ts">SetupIntent</a></code>
 - <code><a href="./src/resources/subscriptions.ts">SetupIntentPaymentMethodOptionsMandateOptionsPayto</a></code>
 - <code><a href="./src/resources/subscriptions.ts">SetupIntentTypeSpecificPaymentMethodOptionsClient</a></code>
