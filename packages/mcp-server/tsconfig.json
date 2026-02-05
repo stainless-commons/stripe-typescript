@@ -8,8 +8,8 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "paths": {
-      "stripe-minimal-mcp/*": ["./src/*"],
-      "stripe-minimal-mcp": ["./src/index.ts"]
+      "@stainless-commons/stripe-minimal-mcp/*": ["./src/*"],
+      "@stainless-commons/stripe-minimal-mcp": ["./src/index.ts"]
     },
     "noEmit": true,
 
