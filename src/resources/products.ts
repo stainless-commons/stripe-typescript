@@ -2,6 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import * as PricesAPI from './prices';
+import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
@@ -135,7 +136,7 @@ export interface Product {
   /**
    * A [tax code](https://docs.stripe.com/tax/tax-categories) ID.
    */
-  tax_code?: string | Product.TaxCode | null;
+  tax_code?: string | Shared.TaxCode | null;
 
   /**
    * A label that represents units of this product. When set, this will be included
@@ -177,33 +178,6 @@ export namespace Product {
      * Width, in inches.
      */
     width: number;
-  }
-
-  /**
-   * [Tax codes](https://stripe.com/docs/tax/tax-categories) classify goods and
-   * services for tax purposes.
-   */
-  export interface TaxCode {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * A detailed description of which types of products the tax code represents.
-     */
-    description: string;
-
-    /**
-     * A short name for the tax code.
-     */
-    name: string;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'tax_code';
   }
 }
 

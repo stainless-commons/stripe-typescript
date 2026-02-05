@@ -7,6 +7,7 @@ import * as CouponsAPI from './coupons';
 import * as CustomersAPI from './customers';
 import * as InvoicesAPI from './invoices';
 import * as PricesAPI from './prices';
+import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
@@ -119,7 +120,7 @@ export interface DefaultSettings {
 
   automatic_tax?: DefaultSettingsAutomaticTax;
 
-  billing_thresholds?: DefaultSettings.BillingThresholds | null;
+  billing_thresholds?: SubscriptionBillingThresholds | null;
 
   /**
    * Either `charge_automatically`, or `send_invoice`. When charging automatically,
@@ -150,24 +151,6 @@ export interface DefaultSettings {
   on_behalf_of?: string | AccountAPI.Account | null;
 
   transfer_data?: SubscriptionTransferData | null;
-}
-
-export namespace DefaultSettings {
-  export interface BillingThresholds {
-    /**
-     * Monetary threshold that triggers the subscription to create an invoice
-     */
-    amount_gte?: number | null;
-
-    /**
-     * Indicates if the `billing_cycle_anchor` should be reset when a threshold is
-     * reached. If true, `billing_cycle_anchor` will be updated to the date/time the
-     * threshold was last reached; otherwise, the value will remain unchanged. This
-     * value may not be `true` if the subscription contains items with plans that have
-     * `aggregate_usage=last_ever`.
-     */
-    reset_billing_cycle_anchor?: boolean | null;
-  }
 }
 
 export interface DefaultSettingsAutomaticTax {
@@ -537,22 +520,7 @@ export interface PaymentMethodDetailsCardPresent {
    */
   generated_card?: string | InvoicesAPI.PaymentMethod | null;
 
-  offline?: PaymentMethodDetailsCardPresent.Offline | null;
-}
-
-export namespace PaymentMethodDetailsCardPresent {
-  export interface Offline {
-    /**
-     * Time at which the payment was collected while offline
-     */
-    stored_at?: number | null;
-
-    /**
-     * The method used to process this payment method offline. Only deferred is
-     * allowed.
-     */
-    type?: 'deferred' | null;
-  }
+  offline?: Shared.PaymentMethodDetailsCardPresentOffline | null;
 }
 
 export interface PaymentMethodDetailsIdealSetupAttempt {
@@ -764,7 +732,7 @@ export interface Schedule {
   /**
    * ID of the customer who owns the subscription schedule.
    */
-  customer: string | CustomersAPI.Customer | Schedule.DeletedCustomer;
+  customer: string | CustomersAPI.Customer | Shared.DeletedCustomer;
 
   default_settings: DefaultSettings;
 
@@ -805,7 +773,7 @@ export interface Schedule {
   /**
    * ID of the Connect Application that created the schedule.
    */
-  application?: string | Schedule.Application | Schedule.DeletedApplication | null;
+  application?: string | Shared.Application | Shared.DeletedApplication | null;
 
   /**
    * Time at which the subscription schedule was canceled. Measured in seconds since
@@ -853,7 +821,7 @@ export interface Schedule {
   /**
    * ID of the test clock this subscription schedule belongs to.
    */
-  test_clock?: string | Schedule.TestHelpersTestClock | null;
+  test_clock?: string | Shared.TestHelpersTestClock | null;
 }
 
 export namespace Schedule {
@@ -885,65 +853,6 @@ export namespace Schedule {
     }
   }
 
-  export interface DeletedCustomer {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * Always true for a deleted object
-     */
-    deleted: true;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'customer';
-  }
-
-  export interface Application {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'application';
-
-    /**
-     * The name of the application.
-     */
-    name?: string | null;
-  }
-
-  export interface DeletedApplication {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * Always true for a deleted object
-     */
-    deleted: true;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'application';
-
-    /**
-     * The name of the application.
-     */
-    name?: string | null;
-  }
-
   export interface CurrentPhase {
     /**
      * The end of this phase of the subscription schedule.
@@ -954,75 +863,6 @@ export namespace Schedule {
      * The start of this phase of the subscription schedule.
      */
     start_date: number;
-  }
-
-  /**
-   * A test clock enables deterministic control over objects in testmode. With a test
-   * clock, you can create objects at a frozen time in the past or future, and
-   * advance to a specific future time to observe webhooks and state changes. After
-   * the clock advances, you can either validate the current state of your scenario
-   * (and test your assumptions), change the current state of your scenario (and test
-   * more complex scenarios), or keep advancing forward in time.
-   */
-  export interface TestHelpersTestClock {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * Time at which the object was created. Measured in seconds since the Unix epoch.
-     */
-    created: number;
-
-    /**
-     * Time at which this clock is scheduled to auto delete.
-     */
-    deletes_after: number;
-
-    /**
-     * Time at which all objects belonging to this clock are frozen.
-     */
-    frozen_time: number;
-
-    /**
-     * Has the value `true` if the object exists in live mode or the value `false` if
-     * the object exists in test mode.
-     */
-    livemode: boolean;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'test_helpers.test_clock';
-
-    /**
-     * The status of the Test Clock.
-     */
-    status: 'advancing' | 'internal_failure' | 'ready';
-
-    status_details: TestHelpersTestClock.StatusDetails;
-
-    /**
-     * The custom name supplied at creation.
-     */
-    name?: string | null;
-  }
-
-  export namespace TestHelpersTestClock {
-    export interface StatusDetails {
-      advancing?: StatusDetails.Advancing;
-    }
-
-    export namespace StatusDetails {
-      export interface Advancing {
-        /**
-         * The `frozen_time` that the Test Clock is advancing towards.
-         */
-        target_frozen_time: number;
-      }
-    }
   }
 }
 
@@ -1246,7 +1086,7 @@ export interface SchedulePhaseConfiguration {
    */
   billing_cycle_anchor?: 'automatic' | 'phase_start' | null;
 
-  billing_thresholds?: SchedulePhaseConfiguration.BillingThresholds | null;
+  billing_thresholds?: SubscriptionBillingThresholds | null;
 
   /**
    * Either `charge_automatically`, or `send_invoice`. When charging automatically,
@@ -1302,30 +1142,12 @@ export interface SchedulePhaseConfiguration {
   trial_end?: number | null;
 }
 
-export namespace SchedulePhaseConfiguration {
-  export interface BillingThresholds {
-    /**
-     * Monetary threshold that triggers the subscription to create an invoice
-     */
-    amount_gte?: number | null;
-
-    /**
-     * Indicates if the `billing_cycle_anchor` should be reset when a threshold is
-     * reached. If true, `billing_cycle_anchor` will be updated to the date/time the
-     * threshold was last reached; otherwise, the value will remain unchanged. This
-     * value may not be `true` if the subscription contains items with plans that have
-     * `aggregate_usage=last_ever`.
-     */
-    reset_billing_cycle_anchor?: boolean | null;
-  }
-}
-
 export interface SchedulePhaseSetting {
   /**
    * The account tax IDs associated with this phase of the subscription schedule.
    * Will be set on invoices generated by this phase of the subscription schedule.
    */
-  account_tax_ids?: Array<string | CustomersAPI.TaxID | SchedulePhaseSetting.DeletedTaxID> | null;
+  account_tax_ids?: Array<string | CustomersAPI.TaxID | Shared.DeletedTaxID> | null;
 
   /**
    * Number of days within which a customer must pay invoices generated by this
@@ -1337,26 +1159,6 @@ export interface SchedulePhaseSetting {
   issuer?: InvoicesAPI.ConnectAccountReference | null;
 }
 
-export namespace SchedulePhaseSetting {
-  export interface DeletedTaxID {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * Always true for a deleted object
-     */
-    deleted: true;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'tax_id';
-  }
-}
-
 export interface ScheduleSetting {
   issuer: InvoicesAPI.ConnectAccountReference;
 
@@ -1364,7 +1166,7 @@ export interface ScheduleSetting {
    * The account tax IDs associated with the subscription schedule. Will be set on
    * invoices generated by the subscription schedule.
    */
-  account_tax_ids?: Array<string | CustomersAPI.TaxID | ScheduleSetting.DeletedTaxID> | null;
+  account_tax_ids?: Array<string | CustomersAPI.TaxID | Shared.DeletedTaxID> | null;
 
   /**
    * Number of days within which a customer must pay invoices generated by this
@@ -1372,26 +1174,6 @@ export interface ScheduleSetting {
    * where `billing=charge_automatically`.
    */
   days_until_due?: number | null;
-}
-
-export namespace ScheduleSetting {
-  export interface DeletedTaxID {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * Always true for a deleted object
-     */
-    deleted: true;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'tax_id';
-  }
 }
 
 /**
@@ -1454,7 +1236,7 @@ export interface SetupAttempt {
    * [application](https://docs.stripe.com/api/setup_intents/object#setup_intent_object-application)
    * on the SetupIntent at the time of this confirmation.
    */
-  application?: string | SetupAttempt.Application | null;
+  application?: string | Shared.Application | null;
 
   /**
    * If present, the SetupIntent's payment method will be attached to the in-context
@@ -1472,7 +1254,7 @@ export interface SetupAttempt {
    * [customer](https://docs.stripe.com/api/setup_intents/object#setup_intent_object-customer)
    * on the SetupIntent at the time of this confirmation.
    */
-  customer?: string | CustomersAPI.Customer | SetupAttempt.DeletedCustomer | null;
+  customer?: string | CustomersAPI.Customer | Shared.DeletedCustomer | null;
 
   /**
    * The value of
@@ -1500,44 +1282,6 @@ export interface SetupAttempt {
   on_behalf_of?: string | AccountAPI.Account | null;
 
   setup_error?: InvoicesAPI.APIErrors | null;
-}
-
-export namespace SetupAttempt {
-  export interface Application {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'application';
-
-    /**
-     * The name of the application.
-     */
-    name?: string | null;
-  }
-
-  export interface DeletedCustomer {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * Always true for a deleted object
-     */
-    deleted: true;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'customer';
-  }
 }
 
 export interface SetupAttemptPaymentMethodDetails {
@@ -1842,7 +1586,7 @@ export interface SetupIntent {
   /**
    * ID of the Connect application that created the SetupIntent.
    */
-  application?: string | SetupIntent.Application | null;
+  application?: string | Shared.Application | null;
 
   /**
    * If present, the SetupIntent's payment method will be attached to the in-context
@@ -1880,7 +1624,7 @@ export interface SetupIntent {
    * successful setup. Payment methods attached to other Customers cannot be used
    * with this SetupIntent.
    */
-  customer?: string | CustomersAPI.Customer | SetupIntent.DeletedCustomer | null;
+  customer?: string | CustomersAPI.Customer | Shared.DeletedCustomer | null;
 
   /**
    * ID of the Account this SetupIntent belongs to, if one exists.
@@ -2008,24 +1752,6 @@ export interface SetupIntent {
 }
 
 export namespace SetupIntent {
-  export interface Application {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'application';
-
-    /**
-     * The name of the application.
-     */
-    name?: string | null;
-  }
-
   export interface AutomaticPaymentMethods {
     /**
      * Controls whether this SetupIntent will accept redirect-based payment methods.
@@ -2042,24 +1768,6 @@ export namespace SetupIntent {
      * Automatically calculates compatible payment methods
      */
     enabled?: boolean | null;
-  }
-
-  export interface DeletedCustomer {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * Always true for a deleted object
-     */
-    deleted: true;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'customer';
   }
 
   export interface NextAction {
@@ -2168,41 +1876,41 @@ export namespace SetupIntent {
   export interface PaymentMethodOptions {
     acss_debit?:
       | PaymentMethodOptions.SetupIntentPaymentMethodOptionsAcssDebit
-      | PaymentMethodOptions.SetupIntentTypeSpecificPaymentMethodOptionsClient;
+      | SubscriptionsAPI.SetupIntentTypeSpecificPaymentMethodOptionsClient;
 
-    amazon_pay?: unknown | PaymentMethodOptions.SetupIntentTypeSpecificPaymentMethodOptionsClient;
+    amazon_pay?: unknown | SubscriptionsAPI.SetupIntentTypeSpecificPaymentMethodOptionsClient;
 
     bacs_debit?:
       | PaymentMethodOptions.SetupIntentPaymentMethodOptionsBacsDebit
-      | PaymentMethodOptions.SetupIntentTypeSpecificPaymentMethodOptionsClient;
+      | SubscriptionsAPI.SetupIntentTypeSpecificPaymentMethodOptionsClient;
 
     card?:
       | PaymentMethodOptions.SetupIntentPaymentMethodOptionsCard
-      | PaymentMethodOptions.SetupIntentTypeSpecificPaymentMethodOptionsClient;
+      | SubscriptionsAPI.SetupIntentTypeSpecificPaymentMethodOptionsClient;
 
-    card_present?: unknown | PaymentMethodOptions.SetupIntentTypeSpecificPaymentMethodOptionsClient;
+    card_present?: unknown | SubscriptionsAPI.SetupIntentTypeSpecificPaymentMethodOptionsClient;
 
     klarna?:
       | PaymentMethodOptions.SetupIntentPaymentMethodOptionsKlarna
-      | PaymentMethodOptions.SetupIntentTypeSpecificPaymentMethodOptionsClient;
+      | SubscriptionsAPI.SetupIntentTypeSpecificPaymentMethodOptionsClient;
 
-    link?: unknown | PaymentMethodOptions.SetupIntentTypeSpecificPaymentMethodOptionsClient;
+    link?: unknown | SubscriptionsAPI.SetupIntentTypeSpecificPaymentMethodOptionsClient;
 
     paypal?:
       | PaymentMethodOptions.SetupIntentPaymentMethodOptionsPaypal
-      | PaymentMethodOptions.SetupIntentTypeSpecificPaymentMethodOptionsClient;
+      | SubscriptionsAPI.SetupIntentTypeSpecificPaymentMethodOptionsClient;
 
     payto?:
       | PaymentMethodOptions.SetupIntentPaymentMethodOptionsPayto
-      | PaymentMethodOptions.SetupIntentTypeSpecificPaymentMethodOptionsClient;
+      | SubscriptionsAPI.SetupIntentTypeSpecificPaymentMethodOptionsClient;
 
     sepa_debit?:
       | PaymentMethodOptions.SetupIntentPaymentMethodOptionsSepaDebit
-      | PaymentMethodOptions.SetupIntentTypeSpecificPaymentMethodOptionsClient;
+      | SubscriptionsAPI.SetupIntentTypeSpecificPaymentMethodOptionsClient;
 
     us_bank_account?:
       | PaymentMethodOptions.SetupIntentPaymentMethodOptionsUsBankAccount
-      | PaymentMethodOptions.SetupIntentTypeSpecificPaymentMethodOptionsClient;
+      | SubscriptionsAPI.SetupIntentTypeSpecificPaymentMethodOptionsClient;
   }
 
   export namespace PaymentMethodOptions {
@@ -2250,158 +1958,6 @@ export namespace SetupIntent {
       }
     }
 
-    export interface SetupIntentTypeSpecificPaymentMethodOptionsClient {
-      mandate_options?: SetupIntentTypeSpecificPaymentMethodOptionsClient.MandateOptions;
-
-      /**
-       * Bank account verification method.
-       */
-      verification_method?: 'automatic' | 'instant' | 'microdeposits';
-    }
-
-    export namespace SetupIntentTypeSpecificPaymentMethodOptionsClient {
-      export interface MandateOptions {
-        /**
-         * Amount that will be collected. It is required when `amount_type` is `fixed`.
-         */
-        amount?: number | null;
-
-        /**
-         * The type of amount that will be collected. The amount charged must be exact or
-         * up to the value of `amount` param for `fixed` or `maximum` type respectively.
-         * Defaults to `maximum`.
-         */
-        amount_type?: 'fixed' | 'maximum' | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, after which payments will not be collected. Defaults
-         * to no end date.
-         */
-        end_date?: string | null;
-
-        /**
-         * The periodicity at which payments will be collected. Defaults to `adhoc`.
-         */
-        payment_schedule?:
-          | 'adhoc'
-          | 'annual'
-          | 'daily'
-          | 'fortnightly'
-          | 'monthly'
-          | 'quarterly'
-          | 'semi_annual'
-          | 'weekly'
-          | null;
-
-        /**
-         * The number of payments that will be made during a payment period. Defaults to 1
-         * except for when `payment_schedule` is `adhoc`. In that case, it defaults to no
-         * limit.
-         */
-        payments_per_period?: number | null;
-
-        /**
-         * The purpose for which payments are made. Has a default value based on your
-         * merchant category code.
-         */
-        purpose?:
-          | 'dependant_support'
-          | 'government'
-          | 'loan'
-          | 'mortgage'
-          | 'other'
-          | 'pension'
-          | 'personal'
-          | 'retail'
-          | 'salary'
-          | 'tax'
-          | 'utility'
-          | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, from which payments will be collected. Defaults to
-         * confirmation time.
-         */
-        start_date?: string | null;
-      }
-    }
-
-    export interface SetupIntentTypeSpecificPaymentMethodOptionsClient {
-      mandate_options?: SetupIntentTypeSpecificPaymentMethodOptionsClient.MandateOptions;
-
-      /**
-       * Bank account verification method.
-       */
-      verification_method?: 'automatic' | 'instant' | 'microdeposits';
-    }
-
-    export namespace SetupIntentTypeSpecificPaymentMethodOptionsClient {
-      export interface MandateOptions {
-        /**
-         * Amount that will be collected. It is required when `amount_type` is `fixed`.
-         */
-        amount?: number | null;
-
-        /**
-         * The type of amount that will be collected. The amount charged must be exact or
-         * up to the value of `amount` param for `fixed` or `maximum` type respectively.
-         * Defaults to `maximum`.
-         */
-        amount_type?: 'fixed' | 'maximum' | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, after which payments will not be collected. Defaults
-         * to no end date.
-         */
-        end_date?: string | null;
-
-        /**
-         * The periodicity at which payments will be collected. Defaults to `adhoc`.
-         */
-        payment_schedule?:
-          | 'adhoc'
-          | 'annual'
-          | 'daily'
-          | 'fortnightly'
-          | 'monthly'
-          | 'quarterly'
-          | 'semi_annual'
-          | 'weekly'
-          | null;
-
-        /**
-         * The number of payments that will be made during a payment period. Defaults to 1
-         * except for when `payment_schedule` is `adhoc`. In that case, it defaults to no
-         * limit.
-         */
-        payments_per_period?: number | null;
-
-        /**
-         * The purpose for which payments are made. Has a default value based on your
-         * merchant category code.
-         */
-        purpose?:
-          | 'dependant_support'
-          | 'government'
-          | 'loan'
-          | 'mortgage'
-          | 'other'
-          | 'pension'
-          | 'personal'
-          | 'retail'
-          | 'salary'
-          | 'tax'
-          | 'utility'
-          | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, from which payments will be collected. Defaults to
-         * confirmation time.
-         */
-        start_date?: string | null;
-      }
-    }
-
     export interface SetupIntentPaymentMethodOptionsBacsDebit {
       mandate_options?: SetupIntentPaymentMethodOptionsBacsDebit.MandateOptions;
     }
@@ -2415,82 +1971,6 @@ export namespace SetupIntent {
          * 'STRIPE'.
          */
         reference_prefix?: string;
-      }
-    }
-
-    export interface SetupIntentTypeSpecificPaymentMethodOptionsClient {
-      mandate_options?: SetupIntentTypeSpecificPaymentMethodOptionsClient.MandateOptions;
-
-      /**
-       * Bank account verification method.
-       */
-      verification_method?: 'automatic' | 'instant' | 'microdeposits';
-    }
-
-    export namespace SetupIntentTypeSpecificPaymentMethodOptionsClient {
-      export interface MandateOptions {
-        /**
-         * Amount that will be collected. It is required when `amount_type` is `fixed`.
-         */
-        amount?: number | null;
-
-        /**
-         * The type of amount that will be collected. The amount charged must be exact or
-         * up to the value of `amount` param for `fixed` or `maximum` type respectively.
-         * Defaults to `maximum`.
-         */
-        amount_type?: 'fixed' | 'maximum' | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, after which payments will not be collected. Defaults
-         * to no end date.
-         */
-        end_date?: string | null;
-
-        /**
-         * The periodicity at which payments will be collected. Defaults to `adhoc`.
-         */
-        payment_schedule?:
-          | 'adhoc'
-          | 'annual'
-          | 'daily'
-          | 'fortnightly'
-          | 'monthly'
-          | 'quarterly'
-          | 'semi_annual'
-          | 'weekly'
-          | null;
-
-        /**
-         * The number of payments that will be made during a payment period. Defaults to 1
-         * except for when `payment_schedule` is `adhoc`. In that case, it defaults to no
-         * limit.
-         */
-        payments_per_period?: number | null;
-
-        /**
-         * The purpose for which payments are made. Has a default value based on your
-         * merchant category code.
-         */
-        purpose?:
-          | 'dependant_support'
-          | 'government'
-          | 'loan'
-          | 'mortgage'
-          | 'other'
-          | 'pension'
-          | 'personal'
-          | 'retail'
-          | 'salary'
-          | 'tax'
-          | 'utility'
-          | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, from which payments will be collected. Defaults to
-         * confirmation time.
-         */
-        start_date?: string | null;
       }
     }
 
@@ -2596,158 +2076,6 @@ export namespace SetupIntent {
       }
     }
 
-    export interface SetupIntentTypeSpecificPaymentMethodOptionsClient {
-      mandate_options?: SetupIntentTypeSpecificPaymentMethodOptionsClient.MandateOptions;
-
-      /**
-       * Bank account verification method.
-       */
-      verification_method?: 'automatic' | 'instant' | 'microdeposits';
-    }
-
-    export namespace SetupIntentTypeSpecificPaymentMethodOptionsClient {
-      export interface MandateOptions {
-        /**
-         * Amount that will be collected. It is required when `amount_type` is `fixed`.
-         */
-        amount?: number | null;
-
-        /**
-         * The type of amount that will be collected. The amount charged must be exact or
-         * up to the value of `amount` param for `fixed` or `maximum` type respectively.
-         * Defaults to `maximum`.
-         */
-        amount_type?: 'fixed' | 'maximum' | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, after which payments will not be collected. Defaults
-         * to no end date.
-         */
-        end_date?: string | null;
-
-        /**
-         * The periodicity at which payments will be collected. Defaults to `adhoc`.
-         */
-        payment_schedule?:
-          | 'adhoc'
-          | 'annual'
-          | 'daily'
-          | 'fortnightly'
-          | 'monthly'
-          | 'quarterly'
-          | 'semi_annual'
-          | 'weekly'
-          | null;
-
-        /**
-         * The number of payments that will be made during a payment period. Defaults to 1
-         * except for when `payment_schedule` is `adhoc`. In that case, it defaults to no
-         * limit.
-         */
-        payments_per_period?: number | null;
-
-        /**
-         * The purpose for which payments are made. Has a default value based on your
-         * merchant category code.
-         */
-        purpose?:
-          | 'dependant_support'
-          | 'government'
-          | 'loan'
-          | 'mortgage'
-          | 'other'
-          | 'pension'
-          | 'personal'
-          | 'retail'
-          | 'salary'
-          | 'tax'
-          | 'utility'
-          | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, from which payments will be collected. Defaults to
-         * confirmation time.
-         */
-        start_date?: string | null;
-      }
-    }
-
-    export interface SetupIntentTypeSpecificPaymentMethodOptionsClient {
-      mandate_options?: SetupIntentTypeSpecificPaymentMethodOptionsClient.MandateOptions;
-
-      /**
-       * Bank account verification method.
-       */
-      verification_method?: 'automatic' | 'instant' | 'microdeposits';
-    }
-
-    export namespace SetupIntentTypeSpecificPaymentMethodOptionsClient {
-      export interface MandateOptions {
-        /**
-         * Amount that will be collected. It is required when `amount_type` is `fixed`.
-         */
-        amount?: number | null;
-
-        /**
-         * The type of amount that will be collected. The amount charged must be exact or
-         * up to the value of `amount` param for `fixed` or `maximum` type respectively.
-         * Defaults to `maximum`.
-         */
-        amount_type?: 'fixed' | 'maximum' | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, after which payments will not be collected. Defaults
-         * to no end date.
-         */
-        end_date?: string | null;
-
-        /**
-         * The periodicity at which payments will be collected. Defaults to `adhoc`.
-         */
-        payment_schedule?:
-          | 'adhoc'
-          | 'annual'
-          | 'daily'
-          | 'fortnightly'
-          | 'monthly'
-          | 'quarterly'
-          | 'semi_annual'
-          | 'weekly'
-          | null;
-
-        /**
-         * The number of payments that will be made during a payment period. Defaults to 1
-         * except for when `payment_schedule` is `adhoc`. In that case, it defaults to no
-         * limit.
-         */
-        payments_per_period?: number | null;
-
-        /**
-         * The purpose for which payments are made. Has a default value based on your
-         * merchant category code.
-         */
-        purpose?:
-          | 'dependant_support'
-          | 'government'
-          | 'loan'
-          | 'mortgage'
-          | 'other'
-          | 'pension'
-          | 'personal'
-          | 'retail'
-          | 'salary'
-          | 'tax'
-          | 'utility'
-          | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, from which payments will be collected. Defaults to
-         * confirmation time.
-         */
-        start_date?: string | null;
-      }
-    }
-
     export interface SetupIntentPaymentMethodOptionsKlarna {
       /**
        * The currency of the setup intent. Three letter ISO currency code.
@@ -2760,158 +2088,6 @@ export namespace SetupIntent {
       preferred_locale?: string | null;
     }
 
-    export interface SetupIntentTypeSpecificPaymentMethodOptionsClient {
-      mandate_options?: SetupIntentTypeSpecificPaymentMethodOptionsClient.MandateOptions;
-
-      /**
-       * Bank account verification method.
-       */
-      verification_method?: 'automatic' | 'instant' | 'microdeposits';
-    }
-
-    export namespace SetupIntentTypeSpecificPaymentMethodOptionsClient {
-      export interface MandateOptions {
-        /**
-         * Amount that will be collected. It is required when `amount_type` is `fixed`.
-         */
-        amount?: number | null;
-
-        /**
-         * The type of amount that will be collected. The amount charged must be exact or
-         * up to the value of `amount` param for `fixed` or `maximum` type respectively.
-         * Defaults to `maximum`.
-         */
-        amount_type?: 'fixed' | 'maximum' | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, after which payments will not be collected. Defaults
-         * to no end date.
-         */
-        end_date?: string | null;
-
-        /**
-         * The periodicity at which payments will be collected. Defaults to `adhoc`.
-         */
-        payment_schedule?:
-          | 'adhoc'
-          | 'annual'
-          | 'daily'
-          | 'fortnightly'
-          | 'monthly'
-          | 'quarterly'
-          | 'semi_annual'
-          | 'weekly'
-          | null;
-
-        /**
-         * The number of payments that will be made during a payment period. Defaults to 1
-         * except for when `payment_schedule` is `adhoc`. In that case, it defaults to no
-         * limit.
-         */
-        payments_per_period?: number | null;
-
-        /**
-         * The purpose for which payments are made. Has a default value based on your
-         * merchant category code.
-         */
-        purpose?:
-          | 'dependant_support'
-          | 'government'
-          | 'loan'
-          | 'mortgage'
-          | 'other'
-          | 'pension'
-          | 'personal'
-          | 'retail'
-          | 'salary'
-          | 'tax'
-          | 'utility'
-          | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, from which payments will be collected. Defaults to
-         * confirmation time.
-         */
-        start_date?: string | null;
-      }
-    }
-
-    export interface SetupIntentTypeSpecificPaymentMethodOptionsClient {
-      mandate_options?: SetupIntentTypeSpecificPaymentMethodOptionsClient.MandateOptions;
-
-      /**
-       * Bank account verification method.
-       */
-      verification_method?: 'automatic' | 'instant' | 'microdeposits';
-    }
-
-    export namespace SetupIntentTypeSpecificPaymentMethodOptionsClient {
-      export interface MandateOptions {
-        /**
-         * Amount that will be collected. It is required when `amount_type` is `fixed`.
-         */
-        amount?: number | null;
-
-        /**
-         * The type of amount that will be collected. The amount charged must be exact or
-         * up to the value of `amount` param for `fixed` or `maximum` type respectively.
-         * Defaults to `maximum`.
-         */
-        amount_type?: 'fixed' | 'maximum' | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, after which payments will not be collected. Defaults
-         * to no end date.
-         */
-        end_date?: string | null;
-
-        /**
-         * The periodicity at which payments will be collected. Defaults to `adhoc`.
-         */
-        payment_schedule?:
-          | 'adhoc'
-          | 'annual'
-          | 'daily'
-          | 'fortnightly'
-          | 'monthly'
-          | 'quarterly'
-          | 'semi_annual'
-          | 'weekly'
-          | null;
-
-        /**
-         * The number of payments that will be made during a payment period. Defaults to 1
-         * except for when `payment_schedule` is `adhoc`. In that case, it defaults to no
-         * limit.
-         */
-        payments_per_period?: number | null;
-
-        /**
-         * The purpose for which payments are made. Has a default value based on your
-         * merchant category code.
-         */
-        purpose?:
-          | 'dependant_support'
-          | 'government'
-          | 'loan'
-          | 'mortgage'
-          | 'other'
-          | 'pension'
-          | 'personal'
-          | 'retail'
-          | 'salary'
-          | 'tax'
-          | 'utility'
-          | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, from which payments will be collected. Defaults to
-         * confirmation time.
-         */
-        start_date?: string | null;
-      }
-    }
-
     export interface SetupIntentPaymentMethodOptionsPaypal {
       /**
        * The PayPal Billing Agreement ID (BAID). This is an ID generated by PayPal which
@@ -2920,227 +2096,8 @@ export namespace SetupIntent {
       billing_agreement_id?: string | null;
     }
 
-    export interface SetupIntentTypeSpecificPaymentMethodOptionsClient {
-      mandate_options?: SetupIntentTypeSpecificPaymentMethodOptionsClient.MandateOptions;
-
-      /**
-       * Bank account verification method.
-       */
-      verification_method?: 'automatic' | 'instant' | 'microdeposits';
-    }
-
-    export namespace SetupIntentTypeSpecificPaymentMethodOptionsClient {
-      export interface MandateOptions {
-        /**
-         * Amount that will be collected. It is required when `amount_type` is `fixed`.
-         */
-        amount?: number | null;
-
-        /**
-         * The type of amount that will be collected. The amount charged must be exact or
-         * up to the value of `amount` param for `fixed` or `maximum` type respectively.
-         * Defaults to `maximum`.
-         */
-        amount_type?: 'fixed' | 'maximum' | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, after which payments will not be collected. Defaults
-         * to no end date.
-         */
-        end_date?: string | null;
-
-        /**
-         * The periodicity at which payments will be collected. Defaults to `adhoc`.
-         */
-        payment_schedule?:
-          | 'adhoc'
-          | 'annual'
-          | 'daily'
-          | 'fortnightly'
-          | 'monthly'
-          | 'quarterly'
-          | 'semi_annual'
-          | 'weekly'
-          | null;
-
-        /**
-         * The number of payments that will be made during a payment period. Defaults to 1
-         * except for when `payment_schedule` is `adhoc`. In that case, it defaults to no
-         * limit.
-         */
-        payments_per_period?: number | null;
-
-        /**
-         * The purpose for which payments are made. Has a default value based on your
-         * merchant category code.
-         */
-        purpose?:
-          | 'dependant_support'
-          | 'government'
-          | 'loan'
-          | 'mortgage'
-          | 'other'
-          | 'pension'
-          | 'personal'
-          | 'retail'
-          | 'salary'
-          | 'tax'
-          | 'utility'
-          | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, from which payments will be collected. Defaults to
-         * confirmation time.
-         */
-        start_date?: string | null;
-      }
-    }
-
     export interface SetupIntentPaymentMethodOptionsPayto {
-      mandate_options?: SetupIntentPaymentMethodOptionsPayto.MandateOptions;
-    }
-
-    export namespace SetupIntentPaymentMethodOptionsPayto {
-      export interface MandateOptions {
-        /**
-         * Amount that will be collected. It is required when `amount_type` is `fixed`.
-         */
-        amount?: number | null;
-
-        /**
-         * The type of amount that will be collected. The amount charged must be exact or
-         * up to the value of `amount` param for `fixed` or `maximum` type respectively.
-         * Defaults to `maximum`.
-         */
-        amount_type?: 'fixed' | 'maximum' | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, after which payments will not be collected. Defaults
-         * to no end date.
-         */
-        end_date?: string | null;
-
-        /**
-         * The periodicity at which payments will be collected. Defaults to `adhoc`.
-         */
-        payment_schedule?:
-          | 'adhoc'
-          | 'annual'
-          | 'daily'
-          | 'fortnightly'
-          | 'monthly'
-          | 'quarterly'
-          | 'semi_annual'
-          | 'weekly'
-          | null;
-
-        /**
-         * The number of payments that will be made during a payment period. Defaults to 1
-         * except for when `payment_schedule` is `adhoc`. In that case, it defaults to no
-         * limit.
-         */
-        payments_per_period?: number | null;
-
-        /**
-         * The purpose for which payments are made. Has a default value based on your
-         * merchant category code.
-         */
-        purpose?:
-          | 'dependant_support'
-          | 'government'
-          | 'loan'
-          | 'mortgage'
-          | 'other'
-          | 'pension'
-          | 'personal'
-          | 'retail'
-          | 'salary'
-          | 'tax'
-          | 'utility'
-          | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, from which payments will be collected. Defaults to
-         * confirmation time.
-         */
-        start_date?: string | null;
-      }
-    }
-
-    export interface SetupIntentTypeSpecificPaymentMethodOptionsClient {
-      mandate_options?: SetupIntentTypeSpecificPaymentMethodOptionsClient.MandateOptions;
-
-      /**
-       * Bank account verification method.
-       */
-      verification_method?: 'automatic' | 'instant' | 'microdeposits';
-    }
-
-    export namespace SetupIntentTypeSpecificPaymentMethodOptionsClient {
-      export interface MandateOptions {
-        /**
-         * Amount that will be collected. It is required when `amount_type` is `fixed`.
-         */
-        amount?: number | null;
-
-        /**
-         * The type of amount that will be collected. The amount charged must be exact or
-         * up to the value of `amount` param for `fixed` or `maximum` type respectively.
-         * Defaults to `maximum`.
-         */
-        amount_type?: 'fixed' | 'maximum' | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, after which payments will not be collected. Defaults
-         * to no end date.
-         */
-        end_date?: string | null;
-
-        /**
-         * The periodicity at which payments will be collected. Defaults to `adhoc`.
-         */
-        payment_schedule?:
-          | 'adhoc'
-          | 'annual'
-          | 'daily'
-          | 'fortnightly'
-          | 'monthly'
-          | 'quarterly'
-          | 'semi_annual'
-          | 'weekly'
-          | null;
-
-        /**
-         * The number of payments that will be made during a payment period. Defaults to 1
-         * except for when `payment_schedule` is `adhoc`. In that case, it defaults to no
-         * limit.
-         */
-        payments_per_period?: number | null;
-
-        /**
-         * The purpose for which payments are made. Has a default value based on your
-         * merchant category code.
-         */
-        purpose?:
-          | 'dependant_support'
-          | 'government'
-          | 'loan'
-          | 'mortgage'
-          | 'other'
-          | 'pension'
-          | 'personal'
-          | 'retail'
-          | 'salary'
-          | 'tax'
-          | 'utility'
-          | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, from which payments will be collected. Defaults to
-         * confirmation time.
-         */
-        start_date?: string | null;
-      }
+      mandate_options?: SubscriptionsAPI.SetupIntentPaymentMethodOptionsMandateOptionsPayto;
     }
 
     export interface SetupIntentPaymentMethodOptionsSepaDebit {
@@ -3155,82 +2112,6 @@ export namespace SetupIntent {
          * special characters: '/', '\_', '-', '&', '.'. Cannot begin with 'STRIPE'.
          */
         reference_prefix?: string;
-      }
-    }
-
-    export interface SetupIntentTypeSpecificPaymentMethodOptionsClient {
-      mandate_options?: SetupIntentTypeSpecificPaymentMethodOptionsClient.MandateOptions;
-
-      /**
-       * Bank account verification method.
-       */
-      verification_method?: 'automatic' | 'instant' | 'microdeposits';
-    }
-
-    export namespace SetupIntentTypeSpecificPaymentMethodOptionsClient {
-      export interface MandateOptions {
-        /**
-         * Amount that will be collected. It is required when `amount_type` is `fixed`.
-         */
-        amount?: number | null;
-
-        /**
-         * The type of amount that will be collected. The amount charged must be exact or
-         * up to the value of `amount` param for `fixed` or `maximum` type respectively.
-         * Defaults to `maximum`.
-         */
-        amount_type?: 'fixed' | 'maximum' | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, after which payments will not be collected. Defaults
-         * to no end date.
-         */
-        end_date?: string | null;
-
-        /**
-         * The periodicity at which payments will be collected. Defaults to `adhoc`.
-         */
-        payment_schedule?:
-          | 'adhoc'
-          | 'annual'
-          | 'daily'
-          | 'fortnightly'
-          | 'monthly'
-          | 'quarterly'
-          | 'semi_annual'
-          | 'weekly'
-          | null;
-
-        /**
-         * The number of payments that will be made during a payment period. Defaults to 1
-         * except for when `payment_schedule` is `adhoc`. In that case, it defaults to no
-         * limit.
-         */
-        payments_per_period?: number | null;
-
-        /**
-         * The purpose for which payments are made. Has a default value based on your
-         * merchant category code.
-         */
-        purpose?:
-          | 'dependant_support'
-          | 'government'
-          | 'loan'
-          | 'mortgage'
-          | 'other'
-          | 'pension'
-          | 'personal'
-          | 'retail'
-          | 'salary'
-          | 'tax'
-          | 'utility'
-          | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, from which payments will be collected. Defaults to
-         * confirmation time.
-         */
-        start_date?: string | null;
       }
     }
 
@@ -3284,83 +2165,81 @@ export namespace SetupIntent {
         collection_method?: 'paper';
       }
     }
-
-    export interface SetupIntentTypeSpecificPaymentMethodOptionsClient {
-      mandate_options?: SetupIntentTypeSpecificPaymentMethodOptionsClient.MandateOptions;
-
-      /**
-       * Bank account verification method.
-       */
-      verification_method?: 'automatic' | 'instant' | 'microdeposits';
-    }
-
-    export namespace SetupIntentTypeSpecificPaymentMethodOptionsClient {
-      export interface MandateOptions {
-        /**
-         * Amount that will be collected. It is required when `amount_type` is `fixed`.
-         */
-        amount?: number | null;
-
-        /**
-         * The type of amount that will be collected. The amount charged must be exact or
-         * up to the value of `amount` param for `fixed` or `maximum` type respectively.
-         * Defaults to `maximum`.
-         */
-        amount_type?: 'fixed' | 'maximum' | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, after which payments will not be collected. Defaults
-         * to no end date.
-         */
-        end_date?: string | null;
-
-        /**
-         * The periodicity at which payments will be collected. Defaults to `adhoc`.
-         */
-        payment_schedule?:
-          | 'adhoc'
-          | 'annual'
-          | 'daily'
-          | 'fortnightly'
-          | 'monthly'
-          | 'quarterly'
-          | 'semi_annual'
-          | 'weekly'
-          | null;
-
-        /**
-         * The number of payments that will be made during a payment period. Defaults to 1
-         * except for when `payment_schedule` is `adhoc`. In that case, it defaults to no
-         * limit.
-         */
-        payments_per_period?: number | null;
-
-        /**
-         * The purpose for which payments are made. Has a default value based on your
-         * merchant category code.
-         */
-        purpose?:
-          | 'dependant_support'
-          | 'government'
-          | 'loan'
-          | 'mortgage'
-          | 'other'
-          | 'pension'
-          | 'personal'
-          | 'retail'
-          | 'salary'
-          | 'tax'
-          | 'utility'
-          | null;
-
-        /**
-         * Date, in YYYY-MM-DD format, from which payments will be collected. Defaults to
-         * confirmation time.
-         */
-        start_date?: string | null;
-      }
-    }
   }
+}
+
+export interface SetupIntentPaymentMethodOptionsMandateOptionsPayto {
+  /**
+   * Amount that will be collected. It is required when `amount_type` is `fixed`.
+   */
+  amount?: number | null;
+
+  /**
+   * The type of amount that will be collected. The amount charged must be exact or
+   * up to the value of `amount` param for `fixed` or `maximum` type respectively.
+   * Defaults to `maximum`.
+   */
+  amount_type?: 'fixed' | 'maximum' | null;
+
+  /**
+   * Date, in YYYY-MM-DD format, after which payments will not be collected. Defaults
+   * to no end date.
+   */
+  end_date?: string | null;
+
+  /**
+   * The periodicity at which payments will be collected. Defaults to `adhoc`.
+   */
+  payment_schedule?:
+    | 'adhoc'
+    | 'annual'
+    | 'daily'
+    | 'fortnightly'
+    | 'monthly'
+    | 'quarterly'
+    | 'semi_annual'
+    | 'weekly'
+    | null;
+
+  /**
+   * The number of payments that will be made during a payment period. Defaults to 1
+   * except for when `payment_schedule` is `adhoc`. In that case, it defaults to no
+   * limit.
+   */
+  payments_per_period?: number | null;
+
+  /**
+   * The purpose for which payments are made. Has a default value based on your
+   * merchant category code.
+   */
+  purpose?:
+    | 'dependant_support'
+    | 'government'
+    | 'loan'
+    | 'mortgage'
+    | 'other'
+    | 'pension'
+    | 'personal'
+    | 'retail'
+    | 'salary'
+    | 'tax'
+    | 'utility'
+    | null;
+
+  /**
+   * Date, in YYYY-MM-DD format, from which payments will be collected. Defaults to
+   * confirmation time.
+   */
+  start_date?: string | null;
+}
+
+export interface SetupIntentTypeSpecificPaymentMethodOptionsClient {
+  mandate_options?: SetupIntentPaymentMethodOptionsMandateOptionsPayto;
+
+  /**
+   * Bank account verification method.
+   */
+  verification_method?: 'automatic' | 'instant' | 'microdeposits';
 }
 
 export interface StackableDiscount {
@@ -3438,7 +2317,7 @@ export interface Subscription {
   /**
    * ID of the customer who owns the subscription.
    */
-  customer: string | CustomersAPI.Customer | Subscription.DeletedCustomer;
+  customer: string | CustomersAPI.Customer | Shared.DeletedCustomer;
 
   /**
    * The discounts applied to the subscription. Subscription item discounts are
@@ -3528,7 +2407,7 @@ export interface Subscription {
   /**
    * ID of the Connect Application that created the subscription.
    */
-  application?: string | Subscription.Application | Subscription.DeletedApplication | null;
+  application?: string | Shared.Application | Shared.DeletedApplication | null;
 
   /**
    * A non-negative decimal between 0 and 100, with at most two decimal places. This
@@ -3539,7 +2418,7 @@ export interface Subscription {
 
   billing_cycle_anchor_config?: Subscription.BillingCycleAnchorConfig | null;
 
-  billing_thresholds?: Subscription.BillingThresholds | null;
+  billing_thresholds?: SubscriptionBillingThresholds | null;
 
   /**
    * A date in the future at which the subscription will automatically get canceled
@@ -3588,7 +2467,7 @@ export interface Subscription {
    * or
    * [default_source](https://docs.stripe.com/api/customers/object#customer_object-default_source).
    */
-  default_source?: string | CustomersAPI.BankAccount | CustomersAPI.Card | Subscription.Source | null;
+  default_source?: string | CustomersAPI.BankAccount | CustomersAPI.Card | Shared.Source | null;
 
   /**
    * The tax rates that will apply to any subscription item that does not have
@@ -3662,7 +2541,7 @@ export interface Subscription {
   /**
    * ID of the test clock this subscription belongs to.
    */
-  test_clock?: string | Subscription.TestHelpersTestClock | null;
+  test_clock?: string | Shared.TestHelpersTestClock | null;
 
   transfer_data?: SubscriptionTransferData | null;
 
@@ -3711,24 +2590,6 @@ export namespace Subscription {
     }
   }
 
-  export interface DeletedCustomer {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * Always true for a deleted object
-     */
-    deleted: true;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'customer';
-  }
-
   /**
    * List of subscription items, each with an attached price.
    */
@@ -3753,47 +2614,6 @@ export namespace Subscription {
      * The URL where this list can be accessed.
      */
     url: string;
-  }
-
-  export interface Application {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'application';
-
-    /**
-     * The name of the application.
-     */
-    name?: string | null;
-  }
-
-  export interface DeletedApplication {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * Always true for a deleted object
-     */
-    deleted: true;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'application';
-
-    /**
-     * The name of the application.
-     */
-    name?: string | null;
   }
 
   export interface BillingCycleAnchorConfig {
@@ -3823,22 +2643,6 @@ export namespace Subscription {
     second?: number | null;
   }
 
-  export interface BillingThresholds {
-    /**
-     * Monetary threshold that triggers the subscription to create an invoice
-     */
-    amount_gte?: number | null;
-
-    /**
-     * Indicates if the `billing_cycle_anchor` should be reset when a threshold is
-     * reached. If true, `billing_cycle_anchor` will be updated to the date/time the
-     * threshold was last reached; otherwise, the value will remain unchanged. This
-     * value may not be `true` if the subscription contains items with plans that have
-     * `aggregate_usage=last_ever`.
-     */
-    reset_billing_cycle_anchor?: boolean | null;
-  }
-
   export interface CancellationDetails {
     /**
      * Additional comments about why the user canceled the subscription, if the
@@ -3865,859 +2669,6 @@ export namespace Subscription {
      * Why this subscription was canceled.
      */
     reason?: 'cancellation_requested' | 'payment_disputed' | 'payment_failed' | null;
-  }
-
-  /**
-   * `Source` objects allow you to accept a variety of payment methods. They
-   * represent a customer's payment instrument, and can be used with the Stripe API
-   * just like a `Card` object: once chargeable, they can be charged, or can be
-   * attached to customers.
-   *
-   * Stripe doesn't recommend using the deprecated
-   * [Sources API](https://docs.stripe.com/api/sources). We recommend that you adopt
-   * the [PaymentMethods API](https://docs.stripe.com/api/payment_methods). This
-   * newer API provides access to our latest features and payment method types.
-   *
-   * Related guides: [Sources API](https://docs.stripe.com/sources) and
-   * [Sources & Customers](https://docs.stripe.com/sources/customers).
-   */
-  export interface Source {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * The client secret of the source. Used for client-side retrieval using a
-     * publishable key.
-     */
-    client_secret: string;
-
-    /**
-     * Time at which the object was created. Measured in seconds since the Unix epoch.
-     */
-    created: number;
-
-    /**
-     * The authentication `flow` of the source. `flow` is one of `redirect`,
-     * `receiver`, `code_verification`, `none`.
-     */
-    flow: string;
-
-    /**
-     * Has the value `true` if the object exists in live mode or the value `false` if
-     * the object exists in test mode.
-     */
-    livemode: boolean;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'source';
-
-    /**
-     * The status of the source, one of `canceled`, `chargeable`, `consumed`, `failed`,
-     * or `pending`. Only `chargeable` sources can be used to create a charge.
-     */
-    status: string;
-
-    /**
-     * The `type` of the source. The `type` is a payment method, one of
-     * `ach_credit_transfer`, `ach_debit`, `alipay`, `bancontact`, `card`,
-     * `card_present`, `eps`, `giropay`, `ideal`, `multibanco`, `klarna`, `p24`,
-     * `sepa_debit`, `sofort`, `three_d_secure`, or `wechat`. An additional hash is
-     * included on the source with a name matching this value. It contains additional
-     * information specific to the [payment method](https://docs.stripe.com/sources)
-     * used.
-     */
-    type:
-      | 'ach_credit_transfer'
-      | 'ach_debit'
-      | 'acss_debit'
-      | 'alipay'
-      | 'au_becs_debit'
-      | 'bancontact'
-      | 'card'
-      | 'card_present'
-      | 'eps'
-      | 'giropay'
-      | 'ideal'
-      | 'klarna'
-      | 'multibanco'
-      | 'p24'
-      | 'sepa_debit'
-      | 'sofort'
-      | 'three_d_secure'
-      | 'wechat';
-
-    ach_credit_transfer?: Source.ACHCreditTransfer;
-
-    ach_debit?: Source.ACHDebit;
-
-    acss_debit?: Source.AcssDebit;
-
-    alipay?: Source.Alipay;
-
-    /**
-     * This field indicates whether this payment method can be shown again to its
-     * customer in a checkout flow. Stripe products such as Checkout and Elements use
-     * this field to determine whether a payment method can be shown as a saved payment
-     * method in a checkout flow. The field defaults to “unspecified”.
-     */
-    allow_redisplay?: 'always' | 'limited' | 'unspecified' | null;
-
-    /**
-     * A positive integer in the smallest currency unit (that is, 100 cents for $1.00,
-     * or 1 for ¥1, Japanese Yen being a zero-decimal currency) representing the total
-     * amount associated with the source. This is the amount for which the source will
-     * be chargeable once ready. Required for `single_use` sources.
-     */
-    amount?: number | null;
-
-    au_becs_debit?: Source.AuBecsDebit;
-
-    bancontact?: Source.Bancontact;
-
-    card?: Source.Card;
-
-    card_present?: Source.CardPresent;
-
-    code_verification?: Source.CodeVerification;
-
-    /**
-     * Three-letter [ISO code for the currency](https://stripe.com/docs/currencies)
-     * associated with the source. This is the currency for which the source will be
-     * chargeable once ready. Required for `single_use` sources.
-     */
-    currency?: string | null;
-
-    /**
-     * The ID of the customer to which this source is attached. This will not be
-     * present when the source has not been attached to a customer.
-     */
-    customer?: string;
-
-    eps?: Source.Eps;
-
-    giropay?: Source.Giropay;
-
-    ideal?: Source.Ideal;
-
-    klarna?: Source.Klarna;
-
-    /**
-     * Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can
-     * attach to an object. This can be useful for storing additional information about
-     * the object in a structured format.
-     */
-    metadata?: { [key: string]: string } | null;
-
-    multibanco?: Source.Multibanco;
-
-    owner?: Source.Owner | null;
-
-    p24?: Source.P24;
-
-    receiver?: Source.Receiver;
-
-    redirect?: Source.Redirect;
-
-    sepa_debit?: Source.SepaDebit;
-
-    sofort?: Source.Sofort;
-
-    source_order?: Source.SourceOrder;
-
-    /**
-     * Extra information about a source. This will appear on your customer's statement
-     * every time you charge the source.
-     */
-    statement_descriptor?: string | null;
-
-    three_d_secure?: Source.ThreeDSecure;
-
-    /**
-     * Either `reusable` or `single_use`. Whether this source should be reusable or
-     * not. Some source types may or may not be reusable by construction, while others
-     * may leave the option at creation. If an incompatible value is passed, an error
-     * will be returned.
-     */
-    usage?: string | null;
-
-    wechat?: Source.Wechat;
-  }
-
-  export namespace Source {
-    export interface ACHCreditTransfer {
-      account_number?: string | null;
-
-      bank_name?: string | null;
-
-      fingerprint?: string | null;
-
-      refund_account_holder_name?: string | null;
-
-      refund_account_holder_type?: string | null;
-
-      refund_routing_number?: string | null;
-
-      routing_number?: string | null;
-
-      swift_code?: string | null;
-    }
-
-    export interface ACHDebit {
-      bank_name?: string | null;
-
-      country?: string | null;
-
-      fingerprint?: string | null;
-
-      last4?: string | null;
-
-      routing_number?: string | null;
-
-      type?: string | null;
-    }
-
-    export interface AcssDebit {
-      bank_address_city?: string | null;
-
-      bank_address_line_1?: string | null;
-
-      bank_address_line_2?: string | null;
-
-      bank_address_postal_code?: string | null;
-
-      bank_name?: string | null;
-
-      category?: string | null;
-
-      country?: string | null;
-
-      fingerprint?: string | null;
-
-      last4?: string | null;
-
-      routing_number?: string | null;
-    }
-
-    export interface Alipay {
-      data_string?: string | null;
-
-      native_url?: string | null;
-
-      statement_descriptor?: string | null;
-    }
-
-    export interface AuBecsDebit {
-      bsb_number?: string | null;
-
-      fingerprint?: string | null;
-
-      last4?: string | null;
-    }
-
-    export interface Bancontact {
-      bank_code?: string | null;
-
-      bank_name?: string | null;
-
-      bic?: string | null;
-
-      iban_last4?: string | null;
-
-      preferred_language?: string | null;
-
-      statement_descriptor?: string | null;
-    }
-
-    export interface Card {
-      address_line1_check?: string | null;
-
-      address_zip_check?: string | null;
-
-      brand?: string | null;
-
-      country?: string | null;
-
-      cvc_check?: string | null;
-
-      dynamic_last4?: string | null;
-
-      exp_month?: number | null;
-
-      exp_year?: number | null;
-
-      fingerprint?: string;
-
-      funding?: string | null;
-
-      last4?: string | null;
-
-      name?: string | null;
-
-      three_d_secure?: string;
-
-      tokenization_method?: string | null;
-    }
-
-    export interface CardPresent {
-      application_cryptogram?: string;
-
-      application_preferred_name?: string;
-
-      authorization_code?: string | null;
-
-      authorization_response_code?: string;
-
-      brand?: string | null;
-
-      country?: string | null;
-
-      cvm_type?: string;
-
-      data_type?: string | null;
-
-      dedicated_file_name?: string;
-
-      emv_auth_data?: string;
-
-      evidence_customer_signature?: string | null;
-
-      evidence_transaction_certificate?: string | null;
-
-      exp_month?: number | null;
-
-      exp_year?: number | null;
-
-      fingerprint?: string;
-
-      funding?: string | null;
-
-      last4?: string | null;
-
-      pos_device_id?: string | null;
-
-      pos_entry_mode?: string;
-
-      read_method?: string | null;
-
-      reader?: string | null;
-
-      terminal_verification_results?: string;
-
-      transaction_status_information?: string;
-    }
-
-    export interface CodeVerification {
-      /**
-       * The number of attempts remaining to authenticate the source object with a
-       * verification code.
-       */
-      attempts_remaining: number;
-
-      /**
-       * The status of the code verification, either `pending` (awaiting verification,
-       * `attempts_remaining` should be greater than 0), `succeeded` (successful
-       * verification) or `failed` (failed verification, cannot be verified anymore as
-       * `attempts_remaining` should be 0).
-       */
-      status: string;
-    }
-
-    export interface Eps {
-      reference?: string | null;
-
-      statement_descriptor?: string | null;
-    }
-
-    export interface Giropay {
-      bank_code?: string | null;
-
-      bank_name?: string | null;
-
-      bic?: string | null;
-
-      statement_descriptor?: string | null;
-    }
-
-    export interface Ideal {
-      bank?: string | null;
-
-      bic?: string | null;
-
-      iban_last4?: string | null;
-
-      statement_descriptor?: string | null;
-    }
-
-    export interface Klarna {
-      background_image_url?: string;
-
-      client_token?: string | null;
-
-      first_name?: string;
-
-      last_name?: string;
-
-      locale?: string;
-
-      logo_url?: string;
-
-      page_title?: string;
-
-      pay_later_asset_urls_descriptive?: string;
-
-      pay_later_asset_urls_standard?: string;
-
-      pay_later_name?: string;
-
-      pay_later_redirect_url?: string;
-
-      pay_now_asset_urls_descriptive?: string;
-
-      pay_now_asset_urls_standard?: string;
-
-      pay_now_name?: string;
-
-      pay_now_redirect_url?: string;
-
-      pay_over_time_asset_urls_descriptive?: string;
-
-      pay_over_time_asset_urls_standard?: string;
-
-      pay_over_time_name?: string;
-
-      pay_over_time_redirect_url?: string;
-
-      payment_method_categories?: string;
-
-      purchase_country?: string;
-
-      purchase_type?: string;
-
-      redirect_url?: string;
-
-      shipping_delay?: number;
-
-      shipping_first_name?: string;
-
-      shipping_last_name?: string;
-    }
-
-    export interface Multibanco {
-      entity?: string | null;
-
-      reference?: string | null;
-
-      refund_account_holder_address_city?: string | null;
-
-      refund_account_holder_address_country?: string | null;
-
-      refund_account_holder_address_line1?: string | null;
-
-      refund_account_holder_address_line2?: string | null;
-
-      refund_account_holder_address_postal_code?: string | null;
-
-      refund_account_holder_address_state?: string | null;
-
-      refund_account_holder_name?: string | null;
-
-      refund_iban?: string | null;
-    }
-
-    export interface Owner {
-      address?: Owner.Address | null;
-
-      /**
-       * Owner's email address.
-       */
-      email?: string | null;
-
-      /**
-       * Owner's full name.
-       */
-      name?: string | null;
-
-      /**
-       * Owner's phone number (including extension).
-       */
-      phone?: string | null;
-
-      verified_address?: Owner.VerifiedAddress | null;
-
-      /**
-       * Verified owner's email address. Verified values are verified or provided by the
-       * payment method directly (and if supported) at the time of authorization or
-       * settlement. They cannot be set or mutated.
-       */
-      verified_email?: string | null;
-
-      /**
-       * Verified owner's full name. Verified values are verified or provided by the
-       * payment method directly (and if supported) at the time of authorization or
-       * settlement. They cannot be set or mutated.
-       */
-      verified_name?: string | null;
-
-      /**
-       * Verified owner's phone number (including extension). Verified values are
-       * verified or provided by the payment method directly (and if supported) at the
-       * time of authorization or settlement. They cannot be set or mutated.
-       */
-      verified_phone?: string | null;
-    }
-
-    export namespace Owner {
-      export interface Address {
-        /**
-         * City, district, suburb, town, or village.
-         */
-        city?: string | null;
-
-        /**
-         * Two-letter country code
-         * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-         */
-        country?: string | null;
-
-        /**
-         * Address line 1, such as the street, PO Box, or company name.
-         */
-        line1?: string | null;
-
-        /**
-         * Address line 2, such as the apartment, suite, unit, or building.
-         */
-        line2?: string | null;
-
-        /**
-         * ZIP or postal code.
-         */
-        postal_code?: string | null;
-
-        /**
-         * State, county, province, or region
-         * ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
-         */
-        state?: string | null;
-      }
-
-      export interface VerifiedAddress {
-        /**
-         * City, district, suburb, town, or village.
-         */
-        city?: string | null;
-
-        /**
-         * Two-letter country code
-         * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-         */
-        country?: string | null;
-
-        /**
-         * Address line 1, such as the street, PO Box, or company name.
-         */
-        line1?: string | null;
-
-        /**
-         * Address line 2, such as the apartment, suite, unit, or building.
-         */
-        line2?: string | null;
-
-        /**
-         * ZIP or postal code.
-         */
-        postal_code?: string | null;
-
-        /**
-         * State, county, province, or region
-         * ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
-         */
-        state?: string | null;
-      }
-    }
-
-    export interface P24 {
-      reference?: string | null;
-    }
-
-    export interface Receiver {
-      /**
-       * The total amount that was moved to your balance. This is almost always equal to
-       * the amount charged. In rare cases when customers deposit excess funds and we are
-       * unable to refund those, those funds get moved to your balance and show up in
-       * amount_charged as well. The amount charged is expressed in the source's
-       * currency.
-       */
-      amount_charged: number;
-
-      /**
-       * The total amount received by the receiver source.
-       * `amount_received = amount_returned + amount_charged` should be true for consumed
-       * sources unless customers deposit excess funds. The amount received is expressed
-       * in the source's currency.
-       */
-      amount_received: number;
-
-      /**
-       * The total amount that was returned to the customer. The amount returned is
-       * expressed in the source's currency.
-       */
-      amount_returned: number;
-
-      /**
-       * Type of refund attribute method, one of `email`, `manual`, or `none`.
-       */
-      refund_attributes_method: string;
-
-      /**
-       * Type of refund attribute status, one of `missing`, `requested`, or `available`.
-       */
-      refund_attributes_status: string;
-
-      /**
-       * The address of the receiver source. This is the value that should be
-       * communicated to the customer to send their funds to.
-       */
-      address?: string | null;
-    }
-
-    export interface Redirect {
-      /**
-       * The URL you provide to redirect the customer to after they authenticated their
-       * payment.
-       */
-      return_url: string;
-
-      /**
-       * The status of the redirect, either `pending` (ready to be used by your customer
-       * to authenticate the transaction), `succeeded` (successful authentication, cannot
-       * be reused) or `not_required` (redirect should not be used) or `failed` (failed
-       * authentication, cannot be reused).
-       */
-      status: string;
-
-      /**
-       * The URL provided to you to redirect a customer to as part of a `redirect`
-       * authentication flow.
-       */
-      url: string;
-
-      /**
-       * The failure reason for the redirect, either `user_abort` (the customer aborted
-       * or dropped out of the redirect flow), `declined` (the authentication failed or
-       * the transaction was declined), or `processing_error` (the redirect failed due to
-       * a technical error). Present only if the redirect status is `failed`.
-       */
-      failure_reason?: string | null;
-    }
-
-    export interface SepaDebit {
-      bank_code?: string | null;
-
-      branch_code?: string | null;
-
-      country?: string | null;
-
-      fingerprint?: string | null;
-
-      last4?: string | null;
-
-      mandate_reference?: string | null;
-
-      mandate_url?: string | null;
-    }
-
-    export interface Sofort {
-      bank_code?: string | null;
-
-      bank_name?: string | null;
-
-      bic?: string | null;
-
-      country?: string | null;
-
-      iban_last4?: string | null;
-
-      preferred_language?: string | null;
-
-      statement_descriptor?: string | null;
-    }
-
-    export interface SourceOrder {
-      /**
-       * A positive integer in the smallest currency unit (that is, 100 cents for $1.00,
-       * or 1 for ¥1, Japanese Yen being a zero-decimal currency) representing the total
-       * amount for the order.
-       */
-      amount: number;
-
-      /**
-       * Three-letter
-       * [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in
-       * lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-       */
-      currency: string;
-
-      /**
-       * The email address of the customer placing the order.
-       */
-      email?: string;
-
-      /**
-       * List of items constituting the order.
-       */
-      items?: Array<SourceOrder.Item> | null;
-
-      shipping?: SourceOrder.Shipping;
-    }
-
-    export namespace SourceOrder {
-      export interface Item {
-        /**
-         * The amount (price) for this order item.
-         */
-        amount?: number | null;
-
-        /**
-         * This currency of this order item. Required when `amount` is present.
-         */
-        currency?: string | null;
-
-        /**
-         * Human-readable description for this order item.
-         */
-        description?: string | null;
-
-        /**
-         * The ID of the associated object for this line item. Expandable if not null
-         * (e.g., expandable to a SKU).
-         */
-        parent?: string | null;
-
-        /**
-         * The quantity of this order item. When type is `sku`, this is the number of
-         * instances of the SKU to be ordered.
-         */
-        quantity?: number;
-
-        /**
-         * The type of this order item. Must be `sku`, `tax`, or `shipping`.
-         */
-        type?: string | null;
-      }
-
-      export interface Shipping {
-        address?: Shipping.Address;
-
-        /**
-         * The delivery service that shipped a physical product, such as Fedex, UPS, USPS,
-         * etc.
-         */
-        carrier?: string | null;
-
-        /**
-         * Recipient name.
-         */
-        name?: string;
-
-        /**
-         * Recipient phone (including extension).
-         */
-        phone?: string | null;
-
-        /**
-         * The tracking number for a physical product, obtained from the delivery service.
-         * If multiple tracking numbers were generated for this purchase, please separate
-         * them with commas.
-         */
-        tracking_number?: string | null;
-      }
-
-      export namespace Shipping {
-        export interface Address {
-          /**
-           * City, district, suburb, town, or village.
-           */
-          city?: string | null;
-
-          /**
-           * Two-letter country code
-           * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-           */
-          country?: string | null;
-
-          /**
-           * Address line 1, such as the street, PO Box, or company name.
-           */
-          line1?: string | null;
-
-          /**
-           * Address line 2, such as the apartment, suite, unit, or building.
-           */
-          line2?: string | null;
-
-          /**
-           * ZIP or postal code.
-           */
-          postal_code?: string | null;
-
-          /**
-           * State, county, province, or region
-           * ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
-           */
-          state?: string | null;
-        }
-      }
-    }
-
-    export interface ThreeDSecure {
-      address_line1_check?: string | null;
-
-      address_zip_check?: string | null;
-
-      authenticated?: boolean | null;
-
-      brand?: string | null;
-
-      card?: string | null;
-
-      country?: string | null;
-
-      customer?: string | null;
-
-      cvc_check?: string | null;
-
-      dynamic_last4?: string | null;
-
-      exp_month?: number | null;
-
-      exp_year?: number | null;
-
-      fingerprint?: string;
-
-      funding?: string | null;
-
-      last4?: string | null;
-
-      name?: string | null;
-
-      three_d_secure?: string;
-
-      tokenization_method?: string | null;
-    }
-
-    export interface Wechat {
-      prepay_id?: string;
-
-      qr_code_url?: string | null;
-
-      statement_descriptor?: string;
-    }
   }
 
   /**
@@ -5025,75 +2976,6 @@ export namespace Subscription {
   }
 
   /**
-   * A test clock enables deterministic control over objects in testmode. With a test
-   * clock, you can create objects at a frozen time in the past or future, and
-   * advance to a specific future time to observe webhooks and state changes. After
-   * the clock advances, you can either validate the current state of your scenario
-   * (and test your assumptions), change the current state of your scenario (and test
-   * more complex scenarios), or keep advancing forward in time.
-   */
-  export interface TestHelpersTestClock {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * Time at which the object was created. Measured in seconds since the Unix epoch.
-     */
-    created: number;
-
-    /**
-     * Time at which this clock is scheduled to auto delete.
-     */
-    deletes_after: number;
-
-    /**
-     * Time at which all objects belonging to this clock are frozen.
-     */
-    frozen_time: number;
-
-    /**
-     * Has the value `true` if the object exists in live mode or the value `false` if
-     * the object exists in test mode.
-     */
-    livemode: boolean;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'test_helpers.test_clock';
-
-    /**
-     * The status of the Test Clock.
-     */
-    status: 'advancing' | 'internal_failure' | 'ready';
-
-    status_details: TestHelpersTestClock.StatusDetails;
-
-    /**
-     * The custom name supplied at creation.
-     */
-    name?: string | null;
-  }
-
-  export namespace TestHelpersTestClock {
-    export interface StatusDetails {
-      advancing?: StatusDetails.Advancing;
-    }
-
-    export namespace StatusDetails {
-      export interface Advancing {
-        /**
-         * The `frozen_time` that the Test Clock is advancing towards.
-         */
-        target_frozen_time: number;
-      }
-    }
-  }
-
-  /**
    * Configures how this subscription behaves during the trial period.
    */
   export interface TrialSettings {
@@ -5117,6 +2999,22 @@ export namespace Subscription {
   }
 }
 
+export interface SubscriptionBillingThresholds {
+  /**
+   * Monetary threshold that triggers the subscription to create an invoice
+   */
+  amount_gte?: number | null;
+
+  /**
+   * Indicates if the `billing_cycle_anchor` should be reset when a threshold is
+   * reached. If true, `billing_cycle_anchor` will be updated to the date/time the
+   * threshold was last reached; otherwise, the value will remain unchanged. This
+   * value may not be `true` if the subscription contains items with plans that have
+   * `aggregate_usage=last_ever`.
+   */
+  reset_billing_cycle_anchor?: boolean | null;
+}
+
 export interface SubscriptionInvoiceSettings {
   issuer: InvoicesAPI.ConnectAccountReference;
 
@@ -5124,27 +3022,7 @@ export interface SubscriptionInvoiceSettings {
    * The account tax IDs associated with the subscription. Will be set on invoices
    * generated by the subscription.
    */
-  account_tax_ids?: Array<string | CustomersAPI.TaxID | SubscriptionInvoiceSettings.DeletedTaxID> | null;
-}
-
-export namespace SubscriptionInvoiceSettings {
-  export interface DeletedTaxID {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * Always true for a deleted object
-     */
-    deleted: true;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'tax_id';
-  }
+  account_tax_ids?: Array<string | CustomersAPI.TaxID | Shared.DeletedTaxID> | null;
 }
 
 /**
@@ -6146,8 +4024,11 @@ export declare namespace Subscriptions {
     type SetupAttempt as SetupAttempt,
     type SetupAttemptPaymentMethodDetails as SetupAttemptPaymentMethodDetails,
     type SetupIntent as SetupIntent,
+    type SetupIntentPaymentMethodOptionsMandateOptionsPayto as SetupIntentPaymentMethodOptionsMandateOptionsPayto,
+    type SetupIntentTypeSpecificPaymentMethodOptionsClient as SetupIntentTypeSpecificPaymentMethodOptionsClient,
     type StackableDiscount as StackableDiscount,
     type Subscription as Subscription,
+    type SubscriptionBillingThresholds as SubscriptionBillingThresholds,
     type SubscriptionInvoiceSettings as SubscriptionInvoiceSettings,
     type SubscriptionItem as SubscriptionItem,
     type SubscriptionTransferData as SubscriptionTransferData,

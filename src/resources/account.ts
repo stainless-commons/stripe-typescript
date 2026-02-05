@@ -1,8 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as AccountAPI from './account';
 import * as CustomersAPI from './customers';
 import * as DisputesAPI from './disputes';
+import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
@@ -194,7 +196,7 @@ export namespace Account {
      */
     product_description?: string | null;
 
-    support_address?: BusinessProfile.SupportAddress | null;
+    support_address?: Shared.Address | null;
 
     /**
      * A publicly available email address for sending support issues to.
@@ -252,40 +254,6 @@ export namespace Account {
        * lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
        */
       currency: string;
-    }
-
-    export interface SupportAddress {
-      /**
-       * City, district, suburb, town, or village.
-       */
-      city?: string | null;
-
-      /**
-       * Two-letter country code
-       * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-       */
-      country?: string | null;
-
-      /**
-       * Address line 1, such as the street, PO Box, or company name.
-       */
-      line1?: string | null;
-
-      /**
-       * Address line 2, such as the apartment, suite, unit, or building.
-       */
-      line2?: string | null;
-
-      /**
-       * ZIP or postal code.
-       */
-      postal_code?: string | null;
-
-      /**
-       * State, county, province, or region
-       * ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
-       */
-      state?: string | null;
     }
   }
 
@@ -663,11 +631,11 @@ export namespace Account {
   }
 
   export interface Company {
-    address?: Company.Address;
+    address?: Shared.Address;
 
-    address_kana?: Company.AddressKana | null;
+    address_kana?: AccountAPI.LegalEntityJapanAddress | null;
 
-    address_kanji?: Company.AddressKanji | null;
+    address_kanji?: AccountAPI.LegalEntityJapanAddress | null;
 
     /**
      * Whether the company's directors have been provided. This Boolean will be `true`
@@ -807,116 +775,6 @@ export namespace Account {
   }
 
   export namespace Company {
-    export interface Address {
-      /**
-       * City, district, suburb, town, or village.
-       */
-      city?: string | null;
-
-      /**
-       * Two-letter country code
-       * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-       */
-      country?: string | null;
-
-      /**
-       * Address line 1, such as the street, PO Box, or company name.
-       */
-      line1?: string | null;
-
-      /**
-       * Address line 2, such as the apartment, suite, unit, or building.
-       */
-      line2?: string | null;
-
-      /**
-       * ZIP or postal code.
-       */
-      postal_code?: string | null;
-
-      /**
-       * State, county, province, or region
-       * ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
-       */
-      state?: string | null;
-    }
-
-    export interface AddressKana {
-      /**
-       * City/Ward.
-       */
-      city?: string | null;
-
-      /**
-       * Two-letter country code
-       * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-       */
-      country?: string | null;
-
-      /**
-       * Block/Building number.
-       */
-      line1?: string | null;
-
-      /**
-       * Building details.
-       */
-      line2?: string | null;
-
-      /**
-       * ZIP or postal code.
-       */
-      postal_code?: string | null;
-
-      /**
-       * Prefecture.
-       */
-      state?: string | null;
-
-      /**
-       * Town/cho-me.
-       */
-      town?: string | null;
-    }
-
-    export interface AddressKanji {
-      /**
-       * City/Ward.
-       */
-      city?: string | null;
-
-      /**
-       * Two-letter country code
-       * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-       */
-      country?: string | null;
-
-      /**
-       * Block/Building number.
-       */
-      line1?: string | null;
-
-      /**
-       * Building details.
-       */
-      line2?: string | null;
-
-      /**
-       * ZIP or postal code.
-       */
-      postal_code?: string | null;
-
-      /**
-       * Prefecture.
-       */
-      state?: string | null;
-
-      /**
-       * Town/cho-me.
-       */
-      town?: string | null;
-    }
-
     export interface DirectorshipDeclaration {
       /**
        * The Unix timestamp marking when the directorship declaration attestation was
@@ -1123,7 +981,7 @@ export namespace Account {
      * attempting to resolve the fields again. Re-providing `original_fields_due` also
      * serves as a pathway for attempting to resolve the fields again.
      */
-    alternatives?: Array<FutureRequirements.Alternative> | null;
+    alternatives?: Array<AccountAPI.AccountRequirementsAlternative> | null;
 
     /**
      * Date on which `future_requirements` becomes the main `requirements` hash and
@@ -1165,7 +1023,7 @@ export namespace Account {
      * Details about validation and verification failures for `due` requirements that
      * must be resolved.
      */
-    errors?: Array<FutureRequirements.Error> | null;
+    errors?: Array<Shared.AccountRequirementsError> | null;
 
     /**
      * Fields you must collect when all thresholds are reached. As they become
@@ -1188,136 +1046,6 @@ export namespace Account {
      * `pending_verification` if one verification fails but another is still pending.
      */
     pending_verification?: Array<string> | null;
-  }
-
-  export namespace FutureRequirements {
-    export interface Alternative {
-      /**
-       * Fields that can be provided to resolve all fields in `original_fields_due`.
-       */
-      alternative_fields_due: Array<string>;
-
-      /**
-       * Fields that are due and can be resolved by providing all fields in
-       * `alternative_fields_due`.
-       */
-      original_fields_due: Array<string>;
-    }
-
-    export interface Error {
-      /**
-       * The code for the type of error.
-       */
-      code:
-        | 'external_request'
-        | 'information_missing'
-        | 'invalid_address_city_state_postal_code'
-        | 'invalid_address_highway_contract_box'
-        | 'invalid_address_private_mailbox'
-        | 'invalid_business_profile_name'
-        | 'invalid_business_profile_name_denylisted'
-        | 'invalid_company_name_denylisted'
-        | 'invalid_dob_age_over_maximum'
-        | 'invalid_dob_age_under_18'
-        | 'invalid_dob_age_under_minimum'
-        | 'invalid_product_description_length'
-        | 'invalid_product_description_url_match'
-        | 'invalid_representative_country'
-        | 'invalid_signator'
-        | 'invalid_statement_descriptor_business_mismatch'
-        | 'invalid_statement_descriptor_denylisted'
-        | 'invalid_statement_descriptor_length'
-        | 'invalid_statement_descriptor_prefix_denylisted'
-        | 'invalid_statement_descriptor_prefix_mismatch'
-        | 'invalid_street_address'
-        | 'invalid_tax_id'
-        | 'invalid_tax_id_format'
-        | 'invalid_tos_acceptance'
-        | 'invalid_url_denylisted'
-        | 'invalid_url_format'
-        | 'invalid_url_web_presence_detected'
-        | 'invalid_url_website_business_information_mismatch'
-        | 'invalid_url_website_empty'
-        | 'invalid_url_website_inaccessible'
-        | 'invalid_url_website_inaccessible_geoblocked'
-        | 'invalid_url_website_inaccessible_password_protected'
-        | 'invalid_url_website_incomplete'
-        | 'invalid_url_website_incomplete_cancellation_policy'
-        | 'invalid_url_website_incomplete_customer_service_details'
-        | 'invalid_url_website_incomplete_legal_restrictions'
-        | 'invalid_url_website_incomplete_refund_policy'
-        | 'invalid_url_website_incomplete_return_policy'
-        | 'invalid_url_website_incomplete_terms_and_conditions'
-        | 'invalid_url_website_incomplete_under_construction'
-        | 'invalid_url_website_other'
-        | 'invalid_value_other'
-        | 'unsupported_business_type'
-        | 'verification_directors_mismatch'
-        | 'verification_document_address_mismatch'
-        | 'verification_document_address_missing'
-        | 'verification_document_corrupt'
-        | 'verification_document_country_not_supported'
-        | 'verification_document_directors_mismatch'
-        | 'verification_document_dob_mismatch'
-        | 'verification_document_duplicate_type'
-        | 'verification_document_expired'
-        | 'verification_document_failed_copy'
-        | 'verification_document_failed_greyscale'
-        | 'verification_document_failed_other'
-        | 'verification_document_failed_test_mode'
-        | 'verification_document_fraudulent'
-        | 'verification_document_id_number_mismatch'
-        | 'verification_document_id_number_missing'
-        | 'verification_document_incomplete'
-        | 'verification_document_invalid'
-        | 'verification_document_issue_or_expiry_date_missing'
-        | 'verification_document_manipulated'
-        | 'verification_document_missing_back'
-        | 'verification_document_missing_front'
-        | 'verification_document_name_mismatch'
-        | 'verification_document_name_missing'
-        | 'verification_document_nationality_mismatch'
-        | 'verification_document_not_readable'
-        | 'verification_document_not_signed'
-        | 'verification_document_not_uploaded'
-        | 'verification_document_photo_mismatch'
-        | 'verification_document_too_large'
-        | 'verification_document_type_not_supported'
-        | 'verification_extraneous_directors'
-        | 'verification_failed_address_match'
-        | 'verification_failed_authorizer_authority'
-        | 'verification_failed_business_iec_number'
-        | 'verification_failed_document_match'
-        | 'verification_failed_id_number_match'
-        | 'verification_failed_keyed_identity'
-        | 'verification_failed_keyed_match'
-        | 'verification_failed_name_match'
-        | 'verification_failed_other'
-        | 'verification_failed_representative_authority'
-        | 'verification_failed_residential_address'
-        | 'verification_failed_tax_id_match'
-        | 'verification_failed_tax_id_not_issued'
-        | 'verification_legal_entity_structure_mismatch'
-        | 'verification_missing_directors'
-        | 'verification_missing_executives'
-        | 'verification_missing_owners'
-        | 'verification_rejected_ownership_exemption_reason'
-        | 'verification_requires_additional_memorandum_of_associations'
-        | 'verification_requires_additional_proof_of_registration'
-        | 'verification_supportability';
-
-      /**
-       * An informative message that indicates the error type and provides additional
-       * details about the error.
-       */
-      reason: string;
-
-      /**
-       * The specific user onboarding requirement field (in the requirements hash) that
-       * needs to be resolved.
-       */
-      requirement: string;
-    }
   }
 
   export interface Groups {
@@ -1367,11 +1095,11 @@ export namespace Account {
 
     additional_tos_acceptances?: Individual.AdditionalTosAcceptances;
 
-    address?: Individual.Address;
+    address?: Shared.Address;
 
-    address_kana?: Individual.AddressKana | null;
+    address_kana?: AccountAPI.LegalEntityJapanAddress | null;
 
-    address_kanji?: Individual.AddressKanji | null;
+    address_kanji?: AccountAPI.LegalEntityJapanAddress | null;
 
     dob?: Individual.Dob;
 
@@ -1484,7 +1212,7 @@ export namespace Account {
      */
     political_exposure?: 'existing' | 'none';
 
-    registered_address?: Individual.RegisteredAddress;
+    registered_address?: Shared.Address;
 
     relationship?: Individual.Relationship;
 
@@ -1527,116 +1255,6 @@ export namespace Account {
       }
     }
 
-    export interface Address {
-      /**
-       * City, district, suburb, town, or village.
-       */
-      city?: string | null;
-
-      /**
-       * Two-letter country code
-       * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-       */
-      country?: string | null;
-
-      /**
-       * Address line 1, such as the street, PO Box, or company name.
-       */
-      line1?: string | null;
-
-      /**
-       * Address line 2, such as the apartment, suite, unit, or building.
-       */
-      line2?: string | null;
-
-      /**
-       * ZIP or postal code.
-       */
-      postal_code?: string | null;
-
-      /**
-       * State, county, province, or region
-       * ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
-       */
-      state?: string | null;
-    }
-
-    export interface AddressKana {
-      /**
-       * City/Ward.
-       */
-      city?: string | null;
-
-      /**
-       * Two-letter country code
-       * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-       */
-      country?: string | null;
-
-      /**
-       * Block/Building number.
-       */
-      line1?: string | null;
-
-      /**
-       * Building details.
-       */
-      line2?: string | null;
-
-      /**
-       * ZIP or postal code.
-       */
-      postal_code?: string | null;
-
-      /**
-       * Prefecture.
-       */
-      state?: string | null;
-
-      /**
-       * Town/cho-me.
-       */
-      town?: string | null;
-    }
-
-    export interface AddressKanji {
-      /**
-       * City/Ward.
-       */
-      city?: string | null;
-
-      /**
-       * Two-letter country code
-       * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-       */
-      country?: string | null;
-
-      /**
-       * Block/Building number.
-       */
-      line1?: string | null;
-
-      /**
-       * Building details.
-       */
-      line2?: string | null;
-
-      /**
-       * ZIP or postal code.
-       */
-      postal_code?: string | null;
-
-      /**
-       * Prefecture.
-       */
-      state?: string | null;
-
-      /**
-       * Town/cho-me.
-       */
-      town?: string | null;
-    }
-
     export interface Dob {
       /**
        * The day of birth, between 1 and 31.
@@ -1668,7 +1286,7 @@ export namespace Account {
        * Details about validation and verification failures for `due` requirements that
        * must be resolved.
        */
-      errors: Array<FutureRequirements.Error>;
+      errors: Array<Shared.AccountRequirementsError>;
 
       /**
        * Fields you must collect when all thresholds are reached. As they become
@@ -1701,171 +1319,7 @@ export namespace Account {
        * attempting to resolve the fields again. Re-providing `original_fields_due` also
        * serves as a pathway for attempting to resolve the fields again.
        */
-      alternatives?: Array<FutureRequirements.Alternative> | null;
-    }
-
-    export namespace FutureRequirements {
-      export interface Error {
-        /**
-         * The code for the type of error.
-         */
-        code:
-          | 'external_request'
-          | 'information_missing'
-          | 'invalid_address_city_state_postal_code'
-          | 'invalid_address_highway_contract_box'
-          | 'invalid_address_private_mailbox'
-          | 'invalid_business_profile_name'
-          | 'invalid_business_profile_name_denylisted'
-          | 'invalid_company_name_denylisted'
-          | 'invalid_dob_age_over_maximum'
-          | 'invalid_dob_age_under_18'
-          | 'invalid_dob_age_under_minimum'
-          | 'invalid_product_description_length'
-          | 'invalid_product_description_url_match'
-          | 'invalid_representative_country'
-          | 'invalid_signator'
-          | 'invalid_statement_descriptor_business_mismatch'
-          | 'invalid_statement_descriptor_denylisted'
-          | 'invalid_statement_descriptor_length'
-          | 'invalid_statement_descriptor_prefix_denylisted'
-          | 'invalid_statement_descriptor_prefix_mismatch'
-          | 'invalid_street_address'
-          | 'invalid_tax_id'
-          | 'invalid_tax_id_format'
-          | 'invalid_tos_acceptance'
-          | 'invalid_url_denylisted'
-          | 'invalid_url_format'
-          | 'invalid_url_web_presence_detected'
-          | 'invalid_url_website_business_information_mismatch'
-          | 'invalid_url_website_empty'
-          | 'invalid_url_website_inaccessible'
-          | 'invalid_url_website_inaccessible_geoblocked'
-          | 'invalid_url_website_inaccessible_password_protected'
-          | 'invalid_url_website_incomplete'
-          | 'invalid_url_website_incomplete_cancellation_policy'
-          | 'invalid_url_website_incomplete_customer_service_details'
-          | 'invalid_url_website_incomplete_legal_restrictions'
-          | 'invalid_url_website_incomplete_refund_policy'
-          | 'invalid_url_website_incomplete_return_policy'
-          | 'invalid_url_website_incomplete_terms_and_conditions'
-          | 'invalid_url_website_incomplete_under_construction'
-          | 'invalid_url_website_other'
-          | 'invalid_value_other'
-          | 'unsupported_business_type'
-          | 'verification_directors_mismatch'
-          | 'verification_document_address_mismatch'
-          | 'verification_document_address_missing'
-          | 'verification_document_corrupt'
-          | 'verification_document_country_not_supported'
-          | 'verification_document_directors_mismatch'
-          | 'verification_document_dob_mismatch'
-          | 'verification_document_duplicate_type'
-          | 'verification_document_expired'
-          | 'verification_document_failed_copy'
-          | 'verification_document_failed_greyscale'
-          | 'verification_document_failed_other'
-          | 'verification_document_failed_test_mode'
-          | 'verification_document_fraudulent'
-          | 'verification_document_id_number_mismatch'
-          | 'verification_document_id_number_missing'
-          | 'verification_document_incomplete'
-          | 'verification_document_invalid'
-          | 'verification_document_issue_or_expiry_date_missing'
-          | 'verification_document_manipulated'
-          | 'verification_document_missing_back'
-          | 'verification_document_missing_front'
-          | 'verification_document_name_mismatch'
-          | 'verification_document_name_missing'
-          | 'verification_document_nationality_mismatch'
-          | 'verification_document_not_readable'
-          | 'verification_document_not_signed'
-          | 'verification_document_not_uploaded'
-          | 'verification_document_photo_mismatch'
-          | 'verification_document_too_large'
-          | 'verification_document_type_not_supported'
-          | 'verification_extraneous_directors'
-          | 'verification_failed_address_match'
-          | 'verification_failed_authorizer_authority'
-          | 'verification_failed_business_iec_number'
-          | 'verification_failed_document_match'
-          | 'verification_failed_id_number_match'
-          | 'verification_failed_keyed_identity'
-          | 'verification_failed_keyed_match'
-          | 'verification_failed_name_match'
-          | 'verification_failed_other'
-          | 'verification_failed_representative_authority'
-          | 'verification_failed_residential_address'
-          | 'verification_failed_tax_id_match'
-          | 'verification_failed_tax_id_not_issued'
-          | 'verification_legal_entity_structure_mismatch'
-          | 'verification_missing_directors'
-          | 'verification_missing_executives'
-          | 'verification_missing_owners'
-          | 'verification_rejected_ownership_exemption_reason'
-          | 'verification_requires_additional_memorandum_of_associations'
-          | 'verification_requires_additional_proof_of_registration'
-          | 'verification_supportability';
-
-        /**
-         * An informative message that indicates the error type and provides additional
-         * details about the error.
-         */
-        reason: string;
-
-        /**
-         * The specific user onboarding requirement field (in the requirements hash) that
-         * needs to be resolved.
-         */
-        requirement: string;
-      }
-
-      export interface Alternative {
-        /**
-         * Fields that can be provided to resolve all fields in `original_fields_due`.
-         */
-        alternative_fields_due: Array<string>;
-
-        /**
-         * Fields that are due and can be resolved by providing all fields in
-         * `alternative_fields_due`.
-         */
-        original_fields_due: Array<string>;
-      }
-    }
-
-    export interface RegisteredAddress {
-      /**
-       * City, district, suburb, town, or village.
-       */
-      city?: string | null;
-
-      /**
-       * Two-letter country code
-       * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-       */
-      country?: string | null;
-
-      /**
-       * Address line 1, such as the street, PO Box, or company name.
-       */
-      line1?: string | null;
-
-      /**
-       * Address line 2, such as the apartment, suite, unit, or building.
-       */
-      line2?: string | null;
-
-      /**
-       * ZIP or postal code.
-       */
-      postal_code?: string | null;
-
-      /**
-       * State, county, province, or region
-       * ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
-       */
-      state?: string | null;
+      alternatives?: Array<AccountAPI.AccountRequirementsAlternative> | null;
     }
 
     export interface Relationship {
@@ -1929,7 +1383,7 @@ export namespace Account {
        * Details about validation and verification failures for `due` requirements that
        * must be resolved.
        */
-      errors: Array<Requirements.Error>;
+      errors: Array<Shared.AccountRequirementsError>;
 
       /**
        * Fields you must collect when all thresholds are reached. As they become
@@ -1960,137 +1414,7 @@ export namespace Account {
        * attempting to resolve the fields again. Re-providing `original_fields_due` also
        * serves as a pathway for attempting to resolve the fields again.
        */
-      alternatives?: Array<Requirements.Alternative> | null;
-    }
-
-    export namespace Requirements {
-      export interface Error {
-        /**
-         * The code for the type of error.
-         */
-        code:
-          | 'external_request'
-          | 'information_missing'
-          | 'invalid_address_city_state_postal_code'
-          | 'invalid_address_highway_contract_box'
-          | 'invalid_address_private_mailbox'
-          | 'invalid_business_profile_name'
-          | 'invalid_business_profile_name_denylisted'
-          | 'invalid_company_name_denylisted'
-          | 'invalid_dob_age_over_maximum'
-          | 'invalid_dob_age_under_18'
-          | 'invalid_dob_age_under_minimum'
-          | 'invalid_product_description_length'
-          | 'invalid_product_description_url_match'
-          | 'invalid_representative_country'
-          | 'invalid_signator'
-          | 'invalid_statement_descriptor_business_mismatch'
-          | 'invalid_statement_descriptor_denylisted'
-          | 'invalid_statement_descriptor_length'
-          | 'invalid_statement_descriptor_prefix_denylisted'
-          | 'invalid_statement_descriptor_prefix_mismatch'
-          | 'invalid_street_address'
-          | 'invalid_tax_id'
-          | 'invalid_tax_id_format'
-          | 'invalid_tos_acceptance'
-          | 'invalid_url_denylisted'
-          | 'invalid_url_format'
-          | 'invalid_url_web_presence_detected'
-          | 'invalid_url_website_business_information_mismatch'
-          | 'invalid_url_website_empty'
-          | 'invalid_url_website_inaccessible'
-          | 'invalid_url_website_inaccessible_geoblocked'
-          | 'invalid_url_website_inaccessible_password_protected'
-          | 'invalid_url_website_incomplete'
-          | 'invalid_url_website_incomplete_cancellation_policy'
-          | 'invalid_url_website_incomplete_customer_service_details'
-          | 'invalid_url_website_incomplete_legal_restrictions'
-          | 'invalid_url_website_incomplete_refund_policy'
-          | 'invalid_url_website_incomplete_return_policy'
-          | 'invalid_url_website_incomplete_terms_and_conditions'
-          | 'invalid_url_website_incomplete_under_construction'
-          | 'invalid_url_website_other'
-          | 'invalid_value_other'
-          | 'unsupported_business_type'
-          | 'verification_directors_mismatch'
-          | 'verification_document_address_mismatch'
-          | 'verification_document_address_missing'
-          | 'verification_document_corrupt'
-          | 'verification_document_country_not_supported'
-          | 'verification_document_directors_mismatch'
-          | 'verification_document_dob_mismatch'
-          | 'verification_document_duplicate_type'
-          | 'verification_document_expired'
-          | 'verification_document_failed_copy'
-          | 'verification_document_failed_greyscale'
-          | 'verification_document_failed_other'
-          | 'verification_document_failed_test_mode'
-          | 'verification_document_fraudulent'
-          | 'verification_document_id_number_mismatch'
-          | 'verification_document_id_number_missing'
-          | 'verification_document_incomplete'
-          | 'verification_document_invalid'
-          | 'verification_document_issue_or_expiry_date_missing'
-          | 'verification_document_manipulated'
-          | 'verification_document_missing_back'
-          | 'verification_document_missing_front'
-          | 'verification_document_name_mismatch'
-          | 'verification_document_name_missing'
-          | 'verification_document_nationality_mismatch'
-          | 'verification_document_not_readable'
-          | 'verification_document_not_signed'
-          | 'verification_document_not_uploaded'
-          | 'verification_document_photo_mismatch'
-          | 'verification_document_too_large'
-          | 'verification_document_type_not_supported'
-          | 'verification_extraneous_directors'
-          | 'verification_failed_address_match'
-          | 'verification_failed_authorizer_authority'
-          | 'verification_failed_business_iec_number'
-          | 'verification_failed_document_match'
-          | 'verification_failed_id_number_match'
-          | 'verification_failed_keyed_identity'
-          | 'verification_failed_keyed_match'
-          | 'verification_failed_name_match'
-          | 'verification_failed_other'
-          | 'verification_failed_representative_authority'
-          | 'verification_failed_residential_address'
-          | 'verification_failed_tax_id_match'
-          | 'verification_failed_tax_id_not_issued'
-          | 'verification_legal_entity_structure_mismatch'
-          | 'verification_missing_directors'
-          | 'verification_missing_executives'
-          | 'verification_missing_owners'
-          | 'verification_rejected_ownership_exemption_reason'
-          | 'verification_requires_additional_memorandum_of_associations'
-          | 'verification_requires_additional_proof_of_registration'
-          | 'verification_supportability';
-
-        /**
-         * An informative message that indicates the error type and provides additional
-         * details about the error.
-         */
-        reason: string;
-
-        /**
-         * The specific user onboarding requirement field (in the requirements hash) that
-         * needs to be resolved.
-         */
-        requirement: string;
-      }
-
-      export interface Alternative {
-        /**
-         * Fields that can be provided to resolve all fields in `original_fields_due`.
-         */
-        alternative_fields_due: Array<string>;
-
-        /**
-         * Fields that are due and can be resolved by providing all fields in
-         * `alternative_fields_due`.
-         */
-        original_fields_due: Array<string>;
-      }
+      alternatives?: Array<AccountAPI.AccountRequirementsAlternative> | null;
     }
 
     export interface UsCfpbData {
@@ -2273,7 +1597,7 @@ export namespace Account {
      * attempting to resolve the fields again. Re-providing `original_fields_due` also
      * serves as a pathway for attempting to resolve the fields again.
      */
-    alternatives?: Array<Requirements.Alternative> | null;
+    alternatives?: Array<AccountAPI.AccountRequirementsAlternative> | null;
 
     /**
      * Date by which the fields in `currently_due` must be collected to keep the
@@ -2315,7 +1639,7 @@ export namespace Account {
      * Details about validation and verification failures for `due` requirements that
      * must be resolved.
      */
-    errors?: Array<Requirements.Error> | null;
+    errors?: Array<Shared.AccountRequirementsError> | null;
 
     /**
      * Fields you must collect when all thresholds are reached. As they become
@@ -2338,136 +1662,6 @@ export namespace Account {
      * `pending_verification` if one verification fails but another is still pending.
      */
     pending_verification?: Array<string> | null;
-  }
-
-  export namespace Requirements {
-    export interface Alternative {
-      /**
-       * Fields that can be provided to resolve all fields in `original_fields_due`.
-       */
-      alternative_fields_due: Array<string>;
-
-      /**
-       * Fields that are due and can be resolved by providing all fields in
-       * `alternative_fields_due`.
-       */
-      original_fields_due: Array<string>;
-    }
-
-    export interface Error {
-      /**
-       * The code for the type of error.
-       */
-      code:
-        | 'external_request'
-        | 'information_missing'
-        | 'invalid_address_city_state_postal_code'
-        | 'invalid_address_highway_contract_box'
-        | 'invalid_address_private_mailbox'
-        | 'invalid_business_profile_name'
-        | 'invalid_business_profile_name_denylisted'
-        | 'invalid_company_name_denylisted'
-        | 'invalid_dob_age_over_maximum'
-        | 'invalid_dob_age_under_18'
-        | 'invalid_dob_age_under_minimum'
-        | 'invalid_product_description_length'
-        | 'invalid_product_description_url_match'
-        | 'invalid_representative_country'
-        | 'invalid_signator'
-        | 'invalid_statement_descriptor_business_mismatch'
-        | 'invalid_statement_descriptor_denylisted'
-        | 'invalid_statement_descriptor_length'
-        | 'invalid_statement_descriptor_prefix_denylisted'
-        | 'invalid_statement_descriptor_prefix_mismatch'
-        | 'invalid_street_address'
-        | 'invalid_tax_id'
-        | 'invalid_tax_id_format'
-        | 'invalid_tos_acceptance'
-        | 'invalid_url_denylisted'
-        | 'invalid_url_format'
-        | 'invalid_url_web_presence_detected'
-        | 'invalid_url_website_business_information_mismatch'
-        | 'invalid_url_website_empty'
-        | 'invalid_url_website_inaccessible'
-        | 'invalid_url_website_inaccessible_geoblocked'
-        | 'invalid_url_website_inaccessible_password_protected'
-        | 'invalid_url_website_incomplete'
-        | 'invalid_url_website_incomplete_cancellation_policy'
-        | 'invalid_url_website_incomplete_customer_service_details'
-        | 'invalid_url_website_incomplete_legal_restrictions'
-        | 'invalid_url_website_incomplete_refund_policy'
-        | 'invalid_url_website_incomplete_return_policy'
-        | 'invalid_url_website_incomplete_terms_and_conditions'
-        | 'invalid_url_website_incomplete_under_construction'
-        | 'invalid_url_website_other'
-        | 'invalid_value_other'
-        | 'unsupported_business_type'
-        | 'verification_directors_mismatch'
-        | 'verification_document_address_mismatch'
-        | 'verification_document_address_missing'
-        | 'verification_document_corrupt'
-        | 'verification_document_country_not_supported'
-        | 'verification_document_directors_mismatch'
-        | 'verification_document_dob_mismatch'
-        | 'verification_document_duplicate_type'
-        | 'verification_document_expired'
-        | 'verification_document_failed_copy'
-        | 'verification_document_failed_greyscale'
-        | 'verification_document_failed_other'
-        | 'verification_document_failed_test_mode'
-        | 'verification_document_fraudulent'
-        | 'verification_document_id_number_mismatch'
-        | 'verification_document_id_number_missing'
-        | 'verification_document_incomplete'
-        | 'verification_document_invalid'
-        | 'verification_document_issue_or_expiry_date_missing'
-        | 'verification_document_manipulated'
-        | 'verification_document_missing_back'
-        | 'verification_document_missing_front'
-        | 'verification_document_name_mismatch'
-        | 'verification_document_name_missing'
-        | 'verification_document_nationality_mismatch'
-        | 'verification_document_not_readable'
-        | 'verification_document_not_signed'
-        | 'verification_document_not_uploaded'
-        | 'verification_document_photo_mismatch'
-        | 'verification_document_too_large'
-        | 'verification_document_type_not_supported'
-        | 'verification_extraneous_directors'
-        | 'verification_failed_address_match'
-        | 'verification_failed_authorizer_authority'
-        | 'verification_failed_business_iec_number'
-        | 'verification_failed_document_match'
-        | 'verification_failed_id_number_match'
-        | 'verification_failed_keyed_identity'
-        | 'verification_failed_keyed_match'
-        | 'verification_failed_name_match'
-        | 'verification_failed_other'
-        | 'verification_failed_representative_authority'
-        | 'verification_failed_residential_address'
-        | 'verification_failed_tax_id_match'
-        | 'verification_failed_tax_id_not_issued'
-        | 'verification_legal_entity_structure_mismatch'
-        | 'verification_missing_directors'
-        | 'verification_missing_executives'
-        | 'verification_missing_owners'
-        | 'verification_rejected_ownership_exemption_reason'
-        | 'verification_requires_additional_memorandum_of_associations'
-        | 'verification_requires_additional_proof_of_registration'
-        | 'verification_supportability';
-
-      /**
-       * An informative message that indicates the error type and provides additional
-       * details about the error.
-       */
-      reason: string;
-
-      /**
-       * The specific user onboarding requirement field (in the requirements hash) that
-       * needs to be resolved.
-       */
-      requirement: string;
-    }
   }
 
   export interface TosAcceptance {
@@ -2509,6 +1703,19 @@ export interface AccountInvoicesSettings {
    * payment method on the hosted invoice page.
    */
   hosted_payment_method_save?: 'always' | 'never' | 'offer' | null;
+}
+
+export interface AccountRequirementsAlternative {
+  /**
+   * Fields that can be provided to resolve all fields in `original_fields_due`.
+   */
+  alternative_fields_due: Array<string>;
+
+  /**
+   * Fields that are due and can be resolved by providing all fields in
+   * `alternative_fields_due`.
+   */
+  original_fields_due: Array<string>;
 }
 
 export interface AccountSettings {
@@ -2785,6 +1992,44 @@ export namespace AccountSettings {
   }
 }
 
+export interface LegalEntityJapanAddress {
+  /**
+   * City/Ward.
+   */
+  city?: string | null;
+
+  /**
+   * Two-letter country code
+   * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
+   */
+  country?: string | null;
+
+  /**
+   * Block/Building number.
+   */
+  line1?: string | null;
+
+  /**
+   * Building details.
+   */
+  line2?: string | null;
+
+  /**
+   * ZIP or postal code.
+   */
+  postal_code?: string | null;
+
+  /**
+   * Prefecture.
+   */
+  state?: string | null;
+
+  /**
+   * Town/cho-me.
+   */
+  town?: string | null;
+}
+
 export interface AccountRetrieveParams {
   /**
    * Specifies which fields in the response should be expanded.
@@ -2796,7 +2041,9 @@ export declare namespace AccountResource {
   export {
     type Account as Account,
     type AccountInvoicesSettings as AccountInvoicesSettings,
+    type AccountRequirementsAlternative as AccountRequirementsAlternative,
     type AccountSettings as AccountSettings,
+    type LegalEntityJapanAddress as LegalEntityJapanAddress,
     type AccountRetrieveParams as AccountRetrieveParams,
   };
 }

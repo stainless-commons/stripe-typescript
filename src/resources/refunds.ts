@@ -3,6 +3,7 @@
 import { APIResource } from '../core/resource';
 import * as DisputesAPI from './disputes';
 import * as PaymentIntentsAPI from './payment-intents';
+import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
@@ -125,7 +126,7 @@ export interface Refund {
    */
   pending_reason?: 'charge_pending' | 'insufficient_funds' | 'processing';
 
-  presentment_details?: Refund.PresentmentDetails;
+  presentment_details?: Shared.PaymentFlowsPaymentIntentPresentmentDetails;
 
   /**
    * Reason for the refund, which is either user-provided (`duplicate`, `fraudulent`,
@@ -482,19 +483,6 @@ export namespace Refund {
         email_sent_to: string;
       }
     }
-  }
-
-  export interface PresentmentDetails {
-    /**
-     * Amount intended to be collected by this payment, denominated in
-     * `presentment_currency`.
-     */
-    presentment_amount: number;
-
-    /**
-     * Currency presented to the customer during payment.
-     */
-    presentment_currency: string;
   }
 }
 
