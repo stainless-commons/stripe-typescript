@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "stripe-minimal-mcp/*": ["./dist/src/*"],
-      "stripe-minimal-mcp": ["./dist/src/index.ts"]
+      "@stainless-commons/stripe-minimal-mcp/*": ["./dist/src/*"],
+      "@stainless-commons/stripe-minimal-mcp": ["./dist/src/index.ts"]
     },
     "noEmit": false,
     "declaration": true,
