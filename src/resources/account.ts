@@ -6,7 +6,6 @@ import * as CustomersAPI from './customers';
 import * as DisputesAPI from './disputes';
 import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
-import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 
 export class AccountResource extends APIResource {
@@ -17,11 +16,7 @@ export class AccountResource extends APIResource {
     query: AccountRetrieveParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<Account> {
-    return this._client.get('/v1/account', {
-      query,
-      ...options,
-      headers: buildHeaders([{ 'Content-Type': 'application/x-www-form-urlencoded' }, options?.headers]),
-    });
+    return this._client.get('/v1/account', { query, ...options });
   }
 }
 

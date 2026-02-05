@@ -39,11 +39,7 @@ export class Disputes extends APIResource {
     query: DisputeListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<DisputeListResponse> {
-    return this._client.get('/v1/disputes', {
-      query,
-      ...options,
-      headers: buildHeaders([{ 'Content-Type': 'application/x-www-form-urlencoded' }, options?.headers]),
-    });
+    return this._client.get('/v1/disputes', { query, ...options });
   }
 }
 

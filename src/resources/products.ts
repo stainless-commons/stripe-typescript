@@ -26,11 +26,7 @@ export class Products extends APIResource {
     query: ProductListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<ProductListResponse> {
-    return this._client.get('/v1/products', {
-      query,
-      ...options,
-      headers: buildHeaders([{ 'Content-Type': 'application/x-www-form-urlencoded' }, options?.headers]),
-    });
+    return this._client.get('/v1/products', { query, ...options });
   }
 }
 

@@ -8,7 +8,6 @@ import * as DisputesAPI from './disputes';
 import * as InvoicesAPI from './invoices';
 import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
-import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 
 export class PaymentIntents extends APIResource {
@@ -19,11 +18,7 @@ export class PaymentIntents extends APIResource {
     query: PaymentIntentListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<PaymentIntentListResponse> {
-    return this._client.get('/v1/payment_intents', {
-      query,
-      ...options,
-      headers: buildHeaders([{ 'Content-Type': 'application/x-www-form-urlencoded' }, options?.headers]),
-    });
+    return this._client.get('/v1/payment_intents', { query, ...options });
   }
 }
 

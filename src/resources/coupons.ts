@@ -26,11 +26,7 @@ export class Coupons extends APIResource {
     query: CouponListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<CouponListResponse> {
-    return this._client.get('/v1/coupons', {
-      query,
-      ...options,
-      headers: buildHeaders([{ 'Content-Type': 'application/x-www-form-urlencoded' }, options?.headers]),
-    });
+    return this._client.get('/v1/coupons', { query, ...options });
   }
 }
 
