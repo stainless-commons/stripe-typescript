@@ -1,5 +1,5 @@
-import { multipartFormRequestOptions, createForm } from 'stripe-minimal/internal/uploads';
-import { toFile } from 'stripe-minimal/core/uploads';
+import { multipartFormRequestOptions, createForm } from '@stainless-commons/stripe-minimal/internal/uploads';
+import { toFile } from '@stainless-commons/stripe-minimal/core/uploads';
 
 describe('form data validation', () => {
   test('valid values do not error', async () => {

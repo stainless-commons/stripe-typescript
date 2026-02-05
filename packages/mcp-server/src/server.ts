@@ -7,15 +7,15 @@ import {
   ListToolsRequestSchema,
   SetLevelRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
-import { ClientOptions } from 'stripe-minimal';
-import StripeMinimal from 'stripe-minimal';
+import { ClientOptions } from '@stainless-commons/stripe-minimal';
+import Stripe from '@stainless-commons/stripe-minimal';
 import { codeTool } from './code-tool';
 import docsSearchTool from './docs-search-tool';
 import { McpOptions } from './options';
 import { HandlerFunction, McpTool } from './types';
 
 export { McpOptions } from './options';
-export { ClientOptions } from 'stripe-minimal';
+export { ClientOptions } from '@stainless-commons/stripe-minimal';
 
 async function getInstructions() {
   // This API key is optional; providing it allows the server to fetch instructions for unreleased versions.
@@ -56,7 +56,7 @@ async function getInstructions() {
 export const newMcpServer = async () =>
   new McpServer(
     {
-      name: 'stripe_minimal_api',
+      name: 'stainless_commons_stripe_minimal_api',
       version: '0.0.1',
     },
     {
@@ -91,7 +91,7 @@ export async function initMcpServer(params: {
     error: logAtLevel('error'),
   };
 
-  let client = new StripeMinimal({
+  let client = new Stripe({
     logger,
     ...params.clientOptions,
     defaultHeaders: {
@@ -159,7 +159,7 @@ export function selectTools(options?: McpOptions): McpTool[] {
  */
 export async function executeHandler(
   handler: HandlerFunction,
-  client: StripeMinimal,
+  client: Stripe,
   args: Record<string, unknown> | undefined,
 ) {
   return await handler(client, args || {});

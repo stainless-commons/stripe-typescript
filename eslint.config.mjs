@@ -25,7 +25,7 @@ export default tseslint.config(
         {
           patterns: [
             {
-              regex: '^stripe-minimal(/.*)?',
+              regex: '^@stainless-commons/stripe-minimal(/.*)?',
               message: 'Use a relative import, not a package import.',
             },
           ],

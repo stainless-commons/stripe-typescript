@@ -1,4 +1,4 @@
-# Stripe Minimal TypeScript MCP Server
+# Stripe TypeScript MCP Server
 
 It is generated with [Stainless](https://www.stainless.com/).
 
@@ -38,7 +38,7 @@ For clients with a configuration JSON, it might look something like this:
 ```json
 {
   "mcpServers": {
-    "stripe_minimal_api": {
+    "stainless_commons_stripe_minimal_api": {
       "command": "node",
       "args": ["/path/to/local/stripe-minimal-typescript/packages/mcp-server"],
       "env": {
@@ -82,7 +82,7 @@ A configuration JSON for this server might look like this, assuming the server i
 ```json
 {
   "mcpServers": {
-    "stripe_minimal_api": {
+    "stainless_commons_stripe_minimal_api": {
       "url": "http://localhost:3000",
       "headers": {
         "Authorization": "Bearer <auth value>"

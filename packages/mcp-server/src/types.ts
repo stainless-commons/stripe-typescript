@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import StripeMinimal from 'stripe-minimal';
+import Stripe from '@stainless-commons/stripe-minimal';
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
 
 type TextContentBlock = {
@@ -43,7 +43,7 @@ export type ToolCallResult = {
 };
 
 export type HandlerFunction = (
-  client: StripeMinimal,
+  client: Stripe,
   args: Record<string, unknown> | undefined,
 ) => Promise<ToolCallResult>;
 

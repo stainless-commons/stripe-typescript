@@ -223,7 +223,7 @@ export interface ClientOptions {
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
-   * Defaults to process.env['STRIPE_MINIMAL_BASE_URL'].
+   * Defaults to process.env['STRIPE_BASE_URL'].
    */
   baseURL?: string | null | undefined;
 
@@ -277,7 +277,7 @@ export interface ClientOptions {
   /**
    * Set the log level.
    *
-   * Defaults to process.env['STRIPE_MINIMAL_LOG'] or 'warn' if it isn't set.
+   * Defaults to process.env['STRIPE_LOG'] or 'warn' if it isn't set.
    */
   logLevel?: LogLevel | undefined;
 
@@ -290,9 +290,9 @@ export interface ClientOptions {
 }
 
 /**
- * API Client for interfacing with the Stripe Minimal API.
+ * API Client for interfacing with the Stripe API.
  */
-export class StripeMinimal {
+export class Stripe {
   apiKey: string | null;
 
   baseURL: string;
@@ -308,10 +308,10 @@ export class StripeMinimal {
   private _options: ClientOptions;
 
   /**
-   * API Client for interfacing with the Stripe Minimal API.
+   * API Client for interfacing with the Stripe API.
    *
    * @param {string | null | undefined} [opts.apiKey=process.env['STRIPE_SECRET_KEY'] ?? null]
-   * @param {string} [opts.baseURL=process.env['STRIPE_MINIMAL_BASE_URL'] ?? https://api.stripe.com/] - Override the default base URL for the API.
+   * @param {string} [opts.baseURL=process.env['STRIPE_BASE_URL'] ?? https://api.stripe.com/] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -320,7 +320,7 @@ export class StripeMinimal {
    * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
    */
   constructor({
-    baseURL = readEnv('STRIPE_MINIMAL_BASE_URL'),
+    baseURL = readEnv('STRIPE_BASE_URL'),
     apiKey = readEnv('STRIPE_SECRET_KEY') ?? null,
     ...opts
   }: ClientOptions = {}) {
@@ -331,14 +331,14 @@ export class StripeMinimal {
     };
 
     this.baseURL = options.baseURL!;
-    this.timeout = options.timeout ?? StripeMinimal.DEFAULT_TIMEOUT /* 1 minute */;
+    this.timeout = options.timeout ?? Stripe.DEFAULT_TIMEOUT /* 1 minute */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
     this.logLevel = defaultLogLevel;
     this.logLevel =
       parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this) ??
-      parseLogLevel(readEnv('STRIPE_MINIMAL_LOG'), "process.env['STRIPE_MINIMAL_LOG']", this) ??
+      parseLogLevel(readEnv('STRIPE_LOG'), "process.env['STRIPE_LOG']", this) ??
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
     this.maxRetries = options.maxRetries ?? 2;
@@ -876,10 +876,10 @@ export class StripeMinimal {
     }
   }
 
-  static StripeMinimal = this;
+  static Stripe = this;
   static DEFAULT_TIMEOUT = 60000; // 1 minute
 
-  static StripeMinimalError = Errors.StripeMinimalError;
+  static StripeError = Errors.StripeError;
   static APIError = Errors.APIError;
   static APIConnectionError = Errors.APIConnectionError;
   static APIConnectionTimeoutError = Errors.APIConnectionTimeoutError;
@@ -910,21 +910,21 @@ export class StripeMinimal {
   subscriptions: API.Subscriptions = new API.Subscriptions(this);
 }
 
-StripeMinimal.AccountResource = AccountResource;
-StripeMinimal.Balance = Balance;
-StripeMinimal.Coupons = Coupons;
-StripeMinimal.Customers = Customers;
-StripeMinimal.Disputes = Disputes;
-StripeMinimal.Invoices = Invoices;
-StripeMinimal.Invoiceitems = Invoiceitems;
-StripeMinimal.PaymentLinks = PaymentLinks;
-StripeMinimal.PaymentIntents = PaymentIntents;
-StripeMinimal.Prices = Prices;
-StripeMinimal.Products = Products;
-StripeMinimal.Refunds = Refunds;
-StripeMinimal.Subscriptions = Subscriptions;
+Stripe.AccountResource = AccountResource;
+Stripe.Balance = Balance;
+Stripe.Coupons = Coupons;
+Stripe.Customers = Customers;
+Stripe.Disputes = Disputes;
+Stripe.Invoices = Invoices;
+Stripe.Invoiceitems = Invoiceitems;
+Stripe.PaymentLinks = PaymentLinks;
+Stripe.PaymentIntents = PaymentIntents;
+Stripe.Prices = Prices;
+Stripe.Products = Products;
+Stripe.Refunds = Refunds;
+Stripe.Subscriptions = Subscriptions;
 
-export declare namespace StripeMinimal {
+export declare namespace Stripe {
   export type RequestOptions = Opts.RequestOptions;
 
   export {

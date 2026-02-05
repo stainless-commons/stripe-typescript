@@ -1,12 +1,12 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { StripeMinimal as default } from './client';
+export { Stripe as default } from './client';
 
 export { type Uploadable, toFile } from './core/uploads';
 export { APIPromise } from './core/api-promise';
-export { StripeMinimal, type ClientOptions } from './client';
+export { Stripe, type ClientOptions } from './client';
 export {
-  StripeMinimalError,
+  StripeError,
   APIError,
   APIConnectionError,
   APIConnectionTimeoutError,

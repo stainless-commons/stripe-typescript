@@ -1,8 +1,8 @@
-# Stripe Minimal TypeScript API Library
+# Stripe TypeScript API Library
 
-[![NPM version](<https://img.shields.io/npm/v/stripe-minimal.svg?label=npm%20(stable)>)](https://npmjs.org/package/stripe-minimal) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/stripe-minimal)
+[![NPM version](<https://img.shields.io/npm/v/@stainless-commons/stripe-minimal.svg?label=npm%20(stable)>)](https://npmjs.org/package/@stainless-commons/stripe-minimal) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@stainless-commons/stripe-minimal)
 
-This library provides convenient access to the Stripe Minimal REST API from server-side TypeScript or JavaScript.
+This library provides convenient access to the Stripe REST API from server-side TypeScript or JavaScript.
 
 The REST API documentation can be found on [stripe.com](https://stripe.com). The full API of this library can be found in [api.md](api.md).
 
@@ -10,7 +10,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 ## MCP Server
 
-Use the Stripe Minimal MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.
+Use the Stripe MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.
 
 [![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=stripe-minimal-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsInN0cmlwZS1taW5pbWFsLW1jcCJdLCJlbnYiOnsiU1RSSVBFX1NFQ1JFVF9LRVkiOiJNeSBBUEkgS2V5In19)
 [![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22stripe-minimal-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22stripe-minimal-mcp%22%5D%2C%22env%22%3A%7B%22STRIPE_SECRET_KEY%22%3A%22My%20API%20Key%22%7D%7D)
@@ -24,7 +24,7 @@ npm install git+ssh://git@github.com:stainless-sdks/stripe-minimal-typescript.gi
 ```
 
 > [!NOTE]
-> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npm install stripe-minimal`
+> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npm install @stainless-commons/stripe-minimal`
 
 ## Usage
 
@@ -32,9 +32,9 @@ The full API of this library can be found in [api.md](api.md).
 
 <!-- prettier-ignore -->
 ```js
-import StripeMinimal from 'stripe-minimal';
+import Stripe from '@stainless-commons/stripe-minimal';
 
-const client = new StripeMinimal({
+const client = new Stripe({
   apiKey: process.env['STRIPE_SECRET_KEY'], // This is the default and can be omitted
 });
 
@@ -49,13 +49,13 @@ This library includes TypeScript definitions for all request params and response
 
 <!-- prettier-ignore -->
 ```ts
-import StripeMinimal from 'stripe-minimal';
+import Stripe from '@stainless-commons/stripe-minimal';
 
-const client = new StripeMinimal({
+const client = new Stripe({
   apiKey: process.env['STRIPE_SECRET_KEY'], // This is the default and can be omitted
 });
 
-const account: StripeMinimal.Account = await client.account.retrieve();
+const account: Stripe.Account = await client.account.retrieve();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -69,7 +69,7 @@ a subclass of `APIError` will be thrown:
 <!-- prettier-ignore -->
 ```ts
 const account = await client.account.retrieve().catch(async (err) => {
-  if (err instanceof StripeMinimal.APIError) {
+  if (err instanceof Stripe.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
     console.log(err.headers); // {server: 'nginx', ...}
@@ -103,7 +103,7 @@ You can use the `maxRetries` option to configure or disable this:
 <!-- prettier-ignore -->
 ```js
 // Configure the default for all requests:
-const client = new StripeMinimal({
+const client = new Stripe({
   maxRetries: 0, // default is 2
 });
 
@@ -120,7 +120,7 @@ Requests time out after 1 minute by default. You can configure this with a `time
 <!-- prettier-ignore -->
 ```ts
 // Configure the default for all requests:
-const client = new StripeMinimal({
+const client = new Stripe({
   timeout: 20 * 1000, // 20 seconds (default is 1 minute)
 });
 
@@ -146,7 +146,7 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 
 <!-- prettier-ignore -->
 ```ts
-const client = new StripeMinimal();
+const client = new Stripe();
 
 const response = await client.account.retrieve().asResponse();
 console.log(response.headers.get('X-My-Header'));
@@ -167,13 +167,13 @@ console.log(account.id);
 
 The log level can be configured in two ways:
 
-1. Via the `STRIPE_MINIMAL_LOG` environment variable
+1. Via the `STRIPE_LOG` environment variable
 2. Using the `logLevel` client option (overrides the environment variable if set)
 
 ```ts
-import StripeMinimal from 'stripe-minimal';
+import Stripe from '@stainless-commons/stripe-minimal';
 
-const client = new StripeMinimal({
+const client = new Stripe({
   logLevel: 'debug', // Show all log messages
 });
 ```
@@ -199,13 +199,13 @@ When providing a custom logger, the `logLevel` option still controls which messa
 below the configured level will not be sent to your logger.
 
 ```ts
-import StripeMinimal from 'stripe-minimal';
+import Stripe from '@stainless-commons/stripe-minimal';
 import pino from 'pino';
 
 const logger = pino();
 
-const client = new StripeMinimal({
-  logger: logger.child({ name: 'StripeMinimal' }),
+const client = new Stripe({
+  logger: logger.child({ name: 'Stripe' }),
   logLevel: 'debug', // Send all messages to pino, allowing it to filter
 });
 ```
@@ -268,10 +268,10 @@ globalThis.fetch = fetch;
 Or pass it to the client:
 
 ```ts
-import StripeMinimal from 'stripe-minimal';
+import Stripe from '@stainless-commons/stripe-minimal';
 import fetch from 'my-fetch';
 
-const client = new StripeMinimal({ fetch });
+const client = new Stripe({ fetch });
 ```
 
 ### Fetch options
@@ -279,9 +279,9 @@ const client = new StripeMinimal({ fetch });
 If you want to set custom `fetch` options without overriding the `fetch` function, you can provide a `fetchOptions` object when instantiating the client or making a request. (Request-specific options override client options.)
 
 ```ts
-import StripeMinimal from 'stripe-minimal';
+import Stripe from '@stainless-commons/stripe-minimal';
 
-const client = new StripeMinimal({
+const client = new Stripe({
   fetchOptions: {
     // `RequestInit` options
   },
@@ -296,11 +296,11 @@ options to requests:
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/node.svg" align="top" width="18" height="21"> **Node** <sup>[[docs](https://github.com/nodejs/undici/blob/main/docs/docs/api/ProxyAgent.md#example---proxyagent-with-fetch)]</sup>
 
 ```ts
-import StripeMinimal from 'stripe-minimal';
+import Stripe from '@stainless-commons/stripe-minimal';
 import * as undici from 'undici';
 
 const proxyAgent = new undici.ProxyAgent('http://localhost:8888');
-const client = new StripeMinimal({
+const client = new Stripe({
   fetchOptions: {
     dispatcher: proxyAgent,
   },
@@ -310,9 +310,9 @@ const client = new StripeMinimal({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/bun.svg" align="top" width="18" height="21"> **Bun** <sup>[[docs](https://bun.sh/guides/http/proxy)]</sup>
 
 ```ts
-import StripeMinimal from 'stripe-minimal';
+import Stripe from '@stainless-commons/stripe-minimal';
 
-const client = new StripeMinimal({
+const client = new Stripe({
   fetchOptions: {
     proxy: 'http://localhost:8888',
   },
@@ -322,10 +322,10 @@ const client = new StripeMinimal({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/deno.svg" align="top" width="18" height="21"> **Deno** <sup>[[docs](https://docs.deno.com/api/deno/~/Deno.createHttpClient)]</sup>
 
 ```ts
-import StripeMinimal from 'npm:stripe-minimal';
+import Stripe from 'npm:@stainless-commons/stripe-minimal';
 
 const httpClient = Deno.createHttpClient({ proxy: { url: 'http://localhost:8888' } });
-const client = new StripeMinimal({
+const client = new Stripe({
   fetchOptions: {
     client: httpClient,
   },
