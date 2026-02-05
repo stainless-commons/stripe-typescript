@@ -14,7 +14,7 @@ For example:
 
 \`\`\`
 async function run(client) {
-  const account = await client.account.retrieve();
+  const account = await client.accounts.retrieve();
 
   console.log(account.id);
 }

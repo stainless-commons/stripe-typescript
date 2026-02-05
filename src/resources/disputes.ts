@@ -2,7 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import * as DisputesAPI from './disputes';
-import * as AccountAPI from './account';
+import * as AccountsAPI from './accounts';
 import * as CustomersAPI from './customers';
 import * as InvoicesAPI from './invoices';
 import * as PaymentIntentsAPI from './payment-intents';
@@ -52,7 +52,7 @@ export interface ApplicationFee {
   /**
    * ID of the Stripe account this fee was taken from.
    */
-  account: string | AccountAPI.Account;
+  account: string | AccountsAPI.Account;
 
   /**
    * Amount earned, in cents (or local equivalent).
@@ -620,7 +620,7 @@ export interface Charge {
    * [Connect documentation](https://docs.stripe.com/connect/separate-charges-and-transfers)
    * for details.
    */
-  on_behalf_of?: string | AccountAPI.Account | null;
+  on_behalf_of?: string | AccountsAPI.Account | null;
 
   outcome?: Charge.Outcome | null;
 
@@ -903,7 +903,7 @@ export interface ChargeTransferData {
    * ID of an existing, connected Stripe account to transfer funds to if
    * `transfer_data` was specified in the charge request.
    */
-  destination: string | AccountAPI.Account;
+  destination: string | AccountsAPI.Account;
 
   /**
    * The amount transferred to the destination account, if specified. By default, the
@@ -933,7 +933,7 @@ export interface ConnectCollectionTransfer {
   /**
    * ID of the account that funds are being collected for.
    */
-  destination: string | AccountAPI.Account;
+  destination: string | AccountsAPI.Account;
 
   /**
    * Has the value `true` if the object exists in live mode or the value `false` if
@@ -8919,7 +8919,7 @@ export interface Transfer {
   /**
    * ID of the Stripe account the transfer was sent to.
    */
-  destination?: string | AccountAPI.Account | null;
+  destination?: string | AccountsAPI.Account | null;
 
   /**
    * If the destination is a Stripe account, this will be the ID of the payment that

@@ -2,7 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import * as PaymentIntentsAPI from './payment-intents';
-import * as AccountAPI from './account';
+import * as AccountsAPI from './accounts';
 import * as CustomersAPI from './customers';
 import * as DisputesAPI from './disputes';
 import * as InvoicesAPI from './invoices';
@@ -299,7 +299,7 @@ export interface PaymentIntent {
    * `on_behalf_of` attribute on the charge. See the PaymentIntents
    * [use case for connected accounts](/payments/connected-accounts) for details.
    */
-  on_behalf_of?: string | AccountAPI.Account | null;
+  on_behalf_of?: string | AccountsAPI.Account | null;
 
   payment_details?: PaymentIntent.PaymentDetails;
 
@@ -3518,7 +3518,7 @@ export interface PaymentTransferData {
    * The account (if any) that the payment is attributed to for tax reporting, and
    * where funds from the payment are transferred to after payment success.
    */
-  destination: string | AccountAPI.Account;
+  destination: string | AccountsAPI.Account;
 
   /**
    * The amount transferred to the destination account. This transfer will occur

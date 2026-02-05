@@ -21,11 +21,11 @@ import {
   Account,
   AccountInvoicesSettings,
   AccountRequirementsAlternative,
-  AccountResource,
   AccountRetrieveParams,
   AccountSettings,
+  Accounts,
   LegalEntityJapanAddress,
-} from './resources/account';
+} from './resources/accounts';
 import {
   Balance,
   BalanceAmount,
@@ -895,7 +895,7 @@ export class Stripe {
 
   static toFile = Uploads.toFile;
 
-  account: API.AccountResource = new API.AccountResource(this);
+  accounts: API.Accounts = new API.Accounts(this);
   balance: API.Balance = new API.Balance(this);
   coupons: API.Coupons = new API.Coupons(this);
   customers: API.Customers = new API.Customers(this);
@@ -910,7 +910,7 @@ export class Stripe {
   subscriptions: API.Subscriptions = new API.Subscriptions(this);
 }
 
-Stripe.AccountResource = AccountResource;
+Stripe.Accounts = Accounts;
 Stripe.Balance = Balance;
 Stripe.Coupons = Coupons;
 Stripe.Customers = Customers;
@@ -928,7 +928,7 @@ export declare namespace Stripe {
   export type RequestOptions = Opts.RequestOptions;
 
   export {
-    AccountResource as AccountResource,
+    Accounts as Accounts,
     type Account as Account,
     type AccountInvoicesSettings as AccountInvoicesSettings,
     type AccountRequirementsAlternative as AccountRequirementsAlternative,

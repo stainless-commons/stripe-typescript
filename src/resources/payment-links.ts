@@ -2,7 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import * as PaymentLinksAPI from './payment-links';
-import * as AccountAPI from './account';
+import * as AccountsAPI from './accounts';
 import * as CustomersAPI from './customers';
 import * as InvoicesAPI from './invoices';
 import * as PricesAPI from './prices';
@@ -173,7 +173,7 @@ export interface PaymentLinkCreateResponse {
    * [Connect documentation](https://support.stripe.com/questions/sending-invoices-on-behalf-of-connected-accounts)
    * for details.
    */
-  on_behalf_of?: string | AccountAPI.Account | null;
+  on_behalf_of?: string | AccountsAPI.Account | null;
 
   /**
    * The optional items presented to the customer at checkout.
@@ -1256,7 +1256,7 @@ export namespace PaymentLinkCreateResponse {
     /**
      * The connected account receiving the transfer.
      */
-    destination: string | AccountAPI.Account;
+    destination: string | AccountsAPI.Account;
 
     /**
      * The amount in cents (or local equivalent) that will be transferred to the

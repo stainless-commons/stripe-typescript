@@ -47,19 +47,19 @@ Types:
 - <code><a href="./src/resources/shared.ts">TaxCode</a></code>
 - <code><a href="./src/resources/shared.ts">TestHelpersTestClock</a></code>
 
-# Account
+# Accounts
 
 Types:
 
-- <code><a href="./src/resources/account.ts">Account</a></code>
-- <code><a href="./src/resources/account.ts">AccountInvoicesSettings</a></code>
-- <code><a href="./src/resources/account.ts">AccountRequirementsAlternative</a></code>
-- <code><a href="./src/resources/account.ts">AccountSettings</a></code>
-- <code><a href="./src/resources/account.ts">LegalEntityJapanAddress</a></code>
+- <code><a href="./src/resources/accounts.ts">Account</a></code>
+- <code><a href="./src/resources/accounts.ts">AccountInvoicesSettings</a></code>
+- <code><a href="./src/resources/accounts.ts">AccountRequirementsAlternative</a></code>
+- <code><a href="./src/resources/accounts.ts">AccountSettings</a></code>
+- <code><a href="./src/resources/accounts.ts">LegalEntityJapanAddress</a></code>
 
 Methods:
 
-- <code title="get /v1/account">client.account.<a href="./src/resources/account.ts">retrieve</a>({ ...params }) -> Account</code>
+- <code title="get /v1/account">client.accounts.<a href="./src/resources/accounts.ts">retrieve</a>({ ...params }) -> Account</code>
 
 # Balance
 

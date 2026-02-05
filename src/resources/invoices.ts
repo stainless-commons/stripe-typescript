@@ -2,7 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import * as InvoicesAPI from './invoices';
-import * as AccountAPI from './account';
+import * as AccountsAPI from './accounts';
 import * as CouponsAPI from './coupons';
 import * as CustomersAPI from './customers';
 import * as DisputesAPI from './disputes';
@@ -532,7 +532,7 @@ export interface ConnectAccountReference {
   /**
    * The connected account being referenced when `type` is `account`.
    */
-  account?: string | AccountAPI.Account;
+  account?: string | AccountsAPI.Account;
 }
 
 export interface DeletedDiscount {
@@ -1052,7 +1052,7 @@ export interface Invoice {
    * [Invoices with Connect](https://docs.stripe.com/billing/invoices/connect)
    * documentation for details.
    */
-  on_behalf_of?: string | AccountAPI.Account | null;
+  on_behalf_of?: string | AccountsAPI.Account | null;
 
   parent?: BillingBillResourceInvoicingParentsInvoiceParent | null;
 
