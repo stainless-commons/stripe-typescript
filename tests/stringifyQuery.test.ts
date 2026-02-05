@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { StripeMinimal } from 'stripe-minimal';
+import { Stripe } from '@stainless-commons/stripe-minimal';
 
-const { stringifyQuery } = StripeMinimal.prototype as any;
+const { stringifyQuery } = Stripe.prototype as any;
 
 describe(stringifyQuery, () => {
   for (const [input, expected] of [

@@ -4,9 +4,9 @@ import { McpTool, Metadata, ToolCallResult, asErrorResult, asTextContentResult }
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import { readEnv } from './server';
 import { WorkerInput, WorkerOutput } from './code-tool-types';
-import { StripeMinimal } from 'stripe-minimal';
+import { Stripe } from '@stainless-commons/stripe-minimal';
 
-const prompt = `Runs JavaScript code to interact with the Stripe Minimal API.
+const prompt = `Runs JavaScript code to interact with the Stripe API.
 
 You are a skilled programmer writing code to interface with the service.
 Define an async function named "run" that takes a single parameter of an initialized SDK client and it will be run.
@@ -55,7 +55,7 @@ export function codeTool(): McpTool {
       required: ['code'],
     },
   };
-  const handler = async (client: StripeMinimal, args: any): Promise<ToolCallResult> => {
+  const handler = async (client: Stripe, args: any): Promise<ToolCallResult> => {
     const code = args.code as string;
     const intent = args.intent as string | undefined;
 
@@ -72,7 +72,7 @@ export function codeTool(): McpTool {
         'Content-Type': 'application/json',
         client_envs: JSON.stringify({
           STRIPE_SECRET_KEY: readEnv('STRIPE_SECRET_KEY') ?? client.apiKey ?? undefined,
-          STRIPE_MINIMAL_BASE_URL: readEnv('STRIPE_MINIMAL_BASE_URL') ?? client.baseURL ?? undefined,
+          STRIPE_BASE_URL: readEnv('STRIPE_BASE_URL') ?? client.baseURL ?? undefined,
         }),
       },
       body: JSON.stringify({

@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "stripe-minimal/*": ["./dist/src/*"],
-      "stripe-minimal": ["./dist/src/index.ts"]
+      "@stainless-commons/stripe-minimal/*": ["./dist/src/*"],
+      "@stainless-commons/stripe-minimal": ["./dist/src/index.ts"]
     },
     "noEmit": false,
     "declaration": true,

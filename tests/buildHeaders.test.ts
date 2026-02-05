@@ -1,5 +1,9 @@
 import { inspect } from 'node:util';
-import { buildHeaders, type HeadersLike, type NullableHeaders } from 'stripe-minimal/internal/headers';
+import {
+  buildHeaders,
+  type HeadersLike,
+  type NullableHeaders,
+} from '@stainless-commons/stripe-minimal/internal/headers';
 
 function inspectNullableHeaders(headers: NullableHeaders) {
   return `NullableHeaders {${[

@@ -2,9 +2,9 @@
   "dxt_version": "0.2",
   "name": "stripe-minimal-mcp",
   "version": "0.0.1",
-  "description": "The official MCP Server for the Stripe Minimal API",
+  "description": "The official MCP Server for the Stripe API",
   "author": {
-    "name": "Stripe Minimal",
+    "name": "Stripe",
     "email": "dev-platform@stripe.com"
   },
   "repository": {
