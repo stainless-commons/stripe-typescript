@@ -20,9 +20,11 @@ import { APIPromise } from './core/api-promise';
 import {
   Account,
   AccountInvoicesSettings,
+  AccountRequirementsAlternative,
   AccountResource,
   AccountRetrieveParams,
   AccountSettings,
+  LegalEntityJapanAddress,
 } from './resources/account';
 import {
   Balance,
@@ -73,7 +75,20 @@ import {
   File,
   FileLink,
   IssuingAuthorization,
+  IssuingAuthorizationAmountDetails,
   IssuingCard,
+  IssuingCardholder,
+  IssuingCardholderAddress,
+  IssuingCardholderAuthorizationControls,
+  IssuingCardholderCardIssuing,
+  IssuingCardholderCompany,
+  IssuingCardholderIDDocument,
+  IssuingCardholderIndividual,
+  IssuingCardholderIndividualDob,
+  IssuingCardholderRequirements,
+  IssuingCardholderSpendingLimit,
+  IssuingCardholderUserTermsAcceptance,
+  IssuingCardholderVerification,
   IssuingDispute,
   IssuingTransaction,
   PaymentMethodDetails,
@@ -93,10 +108,12 @@ import {
   BillingBillResourceInvoicingParentsInvoiceSubscriptionParent,
   BillingCreditBalanceTransaction,
   BillingCreditGrant,
+  BillingCreditGrantsResourceAmount,
   BillingCreditGrantsResourceBalanceCredit,
   BillingCreditGrantsResourceBalanceCreditsApplicationInvoiceVoided,
   BillingCreditGrantsResourceBalanceCreditsApplied,
   BillingCreditGrantsResourceBalanceDebit,
+  BillingCreditGrantsResourceMonetaryAmount,
   ConnectAccountReference,
   DeletedDiscount,
   DiscountsResourceDiscountAmount,
@@ -117,16 +134,21 @@ import {
   PaymentMethodDetailsPaymentRecordUsBankAccount,
   PaymentMethodSepaDebit,
   PaymentRecord,
+  PaymentsPrimitivesPaymentRecordsResourceAmount,
   PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails,
   SepaDebitGeneratedFrom,
   ShippingRateDeliveryEstimateBound,
   TaxRate,
 } from './resources/invoices';
 import {
+  PaymentFlowsInstallmentOptions,
   PaymentIntent,
   PaymentIntentListParams,
   PaymentIntentListResponse,
+  PaymentIntentPaymentMethodOptionsMandateOptionsPayto,
+  PaymentIntentTypeSpecificPaymentMethodOptionsClient,
   PaymentIntents,
+  PaymentMethodOptionsCardPresentRouting,
   PaymentTransferData,
   Review,
 } from './resources/payment-intents';
@@ -151,7 +173,6 @@ import {
   DefaultSettingsAutomaticTax,
   Mandate,
   PaymentMethodDetailsBancontactSetupAttempt,
-  PaymentMethodDetailsCardPresent,
   PaymentMethodDetailsIdealSetupAttempt,
   PaymentMethodDetailsSofortSetupAttempt,
   PendingUpdate,
@@ -165,8 +186,11 @@ import {
   SetupAttempt,
   SetupAttemptPaymentMethodDetails,
   SetupIntent,
+  SetupIntentPaymentMethodOptionsMandateOptionsPayto,
+  SetupIntentTypeSpecificPaymentMethodOptionsClient,
   StackableDiscount,
   Subscription,
+  SubscriptionBillingThresholds,
   SubscriptionCancelParams,
   SubscriptionInvoiceSettings,
   SubscriptionItem,
@@ -954,7 +978,9 @@ export declare namespace StripeMinimal {
     AccountResource as AccountResource,
     type Account as Account,
     type AccountInvoicesSettings as AccountInvoicesSettings,
+    type AccountRequirementsAlternative as AccountRequirementsAlternative,
     type AccountSettings as AccountSettings,
+    type LegalEntityJapanAddress as LegalEntityJapanAddress,
     type AccountRetrieveParams as AccountRetrieveParams,
   };
 
@@ -1007,7 +1033,20 @@ export declare namespace StripeMinimal {
     type File as File,
     type FileLink as FileLink,
     type IssuingAuthorization as IssuingAuthorization,
+    type IssuingAuthorizationAmountDetails as IssuingAuthorizationAmountDetails,
     type IssuingCard as IssuingCard,
+    type IssuingCardholder as IssuingCardholder,
+    type IssuingCardholderAddress as IssuingCardholderAddress,
+    type IssuingCardholderAuthorizationControls as IssuingCardholderAuthorizationControls,
+    type IssuingCardholderCardIssuing as IssuingCardholderCardIssuing,
+    type IssuingCardholderCompany as IssuingCardholderCompany,
+    type IssuingCardholderIDDocument as IssuingCardholderIDDocument,
+    type IssuingCardholderIndividual as IssuingCardholderIndividual,
+    type IssuingCardholderIndividualDob as IssuingCardholderIndividualDob,
+    type IssuingCardholderRequirements as IssuingCardholderRequirements,
+    type IssuingCardholderSpendingLimit as IssuingCardholderSpendingLimit,
+    type IssuingCardholderUserTermsAcceptance as IssuingCardholderUserTermsAcceptance,
+    type IssuingCardholderVerification as IssuingCardholderVerification,
     type IssuingDispute as IssuingDispute,
     type IssuingTransaction as IssuingTransaction,
     type PaymentMethodDetails as PaymentMethodDetails,
@@ -1031,10 +1070,12 @@ export declare namespace StripeMinimal {
     type BillingBillResourceInvoicingParentsInvoiceSubscriptionParent as BillingBillResourceInvoicingParentsInvoiceSubscriptionParent,
     type BillingCreditBalanceTransaction as BillingCreditBalanceTransaction,
     type BillingCreditGrant as BillingCreditGrant,
+    type BillingCreditGrantsResourceAmount as BillingCreditGrantsResourceAmount,
     type BillingCreditGrantsResourceBalanceCredit as BillingCreditGrantsResourceBalanceCredit,
     type BillingCreditGrantsResourceBalanceCreditsApplicationInvoiceVoided as BillingCreditGrantsResourceBalanceCreditsApplicationInvoiceVoided,
     type BillingCreditGrantsResourceBalanceCreditsApplied as BillingCreditGrantsResourceBalanceCreditsApplied,
     type BillingCreditGrantsResourceBalanceDebit as BillingCreditGrantsResourceBalanceDebit,
+    type BillingCreditGrantsResourceMonetaryAmount as BillingCreditGrantsResourceMonetaryAmount,
     type ConnectAccountReference as ConnectAccountReference,
     type DeletedDiscount as DeletedDiscount,
     type DiscountsResourceDiscountAmount as DiscountsResourceDiscountAmount,
@@ -1050,6 +1091,7 @@ export declare namespace StripeMinimal {
     type PaymentMethodDetailsPaymentRecordUsBankAccount as PaymentMethodDetailsPaymentRecordUsBankAccount,
     type PaymentMethodSepaDebit as PaymentMethodSepaDebit,
     type PaymentRecord as PaymentRecord,
+    type PaymentsPrimitivesPaymentRecordsResourceAmount as PaymentsPrimitivesPaymentRecordsResourceAmount,
     type PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails as PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails,
     type SepaDebitGeneratedFrom as SepaDebitGeneratedFrom,
     type ShippingRateDeliveryEstimateBound as ShippingRateDeliveryEstimateBound,
@@ -1075,7 +1117,11 @@ export declare namespace StripeMinimal {
 
   export {
     PaymentIntents as PaymentIntents,
+    type PaymentFlowsInstallmentOptions as PaymentFlowsInstallmentOptions,
     type PaymentIntent as PaymentIntent,
+    type PaymentIntentPaymentMethodOptionsMandateOptionsPayto as PaymentIntentPaymentMethodOptionsMandateOptionsPayto,
+    type PaymentIntentTypeSpecificPaymentMethodOptionsClient as PaymentIntentTypeSpecificPaymentMethodOptionsClient,
+    type PaymentMethodOptionsCardPresentRouting as PaymentMethodOptionsCardPresentRouting,
     type PaymentTransferData as PaymentTransferData,
     type Review as Review,
     type PaymentIntentListResponse as PaymentIntentListResponse,
@@ -1126,8 +1172,11 @@ export declare namespace StripeMinimal {
     type SetupAttempt as SetupAttempt,
     type SetupAttemptPaymentMethodDetails as SetupAttemptPaymentMethodDetails,
     type SetupIntent as SetupIntent,
+    type SetupIntentPaymentMethodOptionsMandateOptionsPayto as SetupIntentPaymentMethodOptionsMandateOptionsPayto,
+    type SetupIntentTypeSpecificPaymentMethodOptionsClient as SetupIntentTypeSpecificPaymentMethodOptionsClient,
     type StackableDiscount as StackableDiscount,
     type Subscription as Subscription,
+    type SubscriptionBillingThresholds as SubscriptionBillingThresholds,
     type SubscriptionInvoiceSettings as SubscriptionInvoiceSettings,
     type SubscriptionItem as SubscriptionItem,
     type SubscriptionTransferData as SubscriptionTransferData,
@@ -1136,4 +1185,52 @@ export declare namespace StripeMinimal {
     type SubscriptionListParams as SubscriptionListParams,
     type SubscriptionCancelParams as SubscriptionCancelParams,
   };
+
+  export type AccountRequirementsError = API.AccountRequirementsError;
+  export type Address = API.Address;
+  export type Application = API.Application;
+  export type BillingClocksResourceStatusDetailsAdvancingStatusDetails =
+    API.BillingClocksResourceStatusDetailsAdvancingStatusDetails;
+  export type BillingClocksResourceStatusDetailsStatusDetails =
+    API.BillingClocksResourceStatusDetailsStatusDetails;
+  export type DeletedApplication = API.DeletedApplication;
+  export type DeletedCustomer = API.DeletedCustomer;
+  export type DeletedTaxID = API.DeletedTaxID;
+  export type InvoiceSettingCustomField = API.InvoiceSettingCustomField;
+  export type PaymentFlowsPaymentIntentPresentmentDetails = API.PaymentFlowsPaymentIntentPresentmentDetails;
+  export type PaymentFlowsPrivatePaymentMethodsCardPresentCommonWallet =
+    API.PaymentFlowsPrivatePaymentMethodsCardPresentCommonWallet;
+  export type PaymentMethodDetailsCardInstallmentsPlan = API.PaymentMethodDetailsCardInstallmentsPlan;
+  export type PaymentMethodDetailsCardPresent = API.PaymentMethodDetailsCardPresent;
+  export type PaymentMethodDetailsCardPresentOffline = API.PaymentMethodDetailsCardPresentOffline;
+  export type PaymentMethodDetailsCardPresentReceipt = API.PaymentMethodDetailsCardPresentReceipt;
+  export type PaymentMethodDetailsPassthroughCard = API.PaymentMethodDetailsPassthroughCard;
+  export type Shipping = API.Shipping;
+  export type Source = API.Source;
+  export type SourceCodeVerificationFlow = API.SourceCodeVerificationFlow;
+  export type SourceOrder = API.SourceOrder;
+  export type SourceOrderItem = API.SourceOrderItem;
+  export type SourceOwner = API.SourceOwner;
+  export type SourceReceiverFlow = API.SourceReceiverFlow;
+  export type SourceRedirectFlow = API.SourceRedirectFlow;
+  export type SourceTypeACHCreditTransfer = API.SourceTypeACHCreditTransfer;
+  export type SourceTypeACHDebit = API.SourceTypeACHDebit;
+  export type SourceTypeAcssDebit = API.SourceTypeAcssDebit;
+  export type SourceTypeAlipay = API.SourceTypeAlipay;
+  export type SourceTypeAuBecsDebit = API.SourceTypeAuBecsDebit;
+  export type SourceTypeBancontact = API.SourceTypeBancontact;
+  export type SourceTypeCard = API.SourceTypeCard;
+  export type SourceTypeCardPresent = API.SourceTypeCardPresent;
+  export type SourceTypeEps = API.SourceTypeEps;
+  export type SourceTypeGiropay = API.SourceTypeGiropay;
+  export type SourceTypeIdeal = API.SourceTypeIdeal;
+  export type SourceTypeKlarna = API.SourceTypeKlarna;
+  export type SourceTypeMultibanco = API.SourceTypeMultibanco;
+  export type SourceTypeP24 = API.SourceTypeP24;
+  export type SourceTypeSepaDebit = API.SourceTypeSepaDebit;
+  export type SourceTypeSofort = API.SourceTypeSofort;
+  export type SourceTypeThreeDSecure = API.SourceTypeThreeDSecure;
+  export type SourceTypeWechat = API.SourceTypeWechat;
+  export type TaxCode = API.TaxCode;
+  export type TestHelpersTestClock = API.TestHelpersTestClock;
 }

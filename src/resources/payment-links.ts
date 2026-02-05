@@ -6,6 +6,7 @@ import * as AccountAPI from './account';
 import * as CustomersAPI from './customers';
 import * as InvoicesAPI from './invoices';
 import * as PricesAPI from './prices';
+import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
@@ -136,11 +137,7 @@ export interface PaymentLinkCreateResponse {
   /**
    * The ID of the Connect application that created the Payment Link.
    */
-  application?:
-    | string
-    | PaymentLinkCreateResponse.Application
-    | PaymentLinkCreateResponse.DeletedApplication
-    | null;
+  application?: string | Shared.Application | Shared.DeletedApplication | null;
 
   /**
    * The amount of the application fee (if any) that will be requested to be applied
@@ -477,7 +474,7 @@ export namespace PaymentLinkCreateResponse {
        * A [tax code](https://docs.stripe.com/tax/tax-categories) ID. The Shipping tax
        * code is `txcd_92010001`.
        */
-      tax_code?: string | ShippingRate.TaxCode | null;
+      tax_code?: string | Shared.TaxCode | null;
     }
 
     export namespace ShippingRate {
@@ -523,33 +520,6 @@ export namespace PaymentLinkCreateResponse {
           tax_behavior: 'exclusive' | 'inclusive' | 'unspecified';
         }
       }
-
-      /**
-       * [Tax codes](https://stripe.com/docs/tax/tax-categories) classify goods and
-       * services for tax purposes.
-       */
-      export interface TaxCode {
-        /**
-         * Unique identifier for the object.
-         */
-        id: string;
-
-        /**
-         * A detailed description of which types of products the tax code represents.
-         */
-        description: string;
-
-        /**
-         * A short name for the tax code.
-         */
-        name: string;
-
-        /**
-         * String representing the object's type. Objects of the same type share the same
-         * value.
-         */
-        object: 'tax_code';
-      }
     }
   }
 
@@ -560,47 +530,6 @@ export namespace PaymentLinkCreateResponse {
     enabled: boolean;
 
     required: 'if_supported' | 'never';
-  }
-
-  export interface Application {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'application';
-
-    /**
-     * The name of the application.
-     */
-    name?: string | null;
-  }
-
-  export interface DeletedApplication {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * Always true for a deleted object
-     */
-    deleted: true;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'application';
-
-    /**
-     * The name of the application.
-     */
-    name?: string | null;
   }
 
   export interface ConsentCollection {
@@ -647,12 +576,12 @@ export namespace PaymentLinkCreateResponse {
       /**
        * The account tax IDs associated with the invoice.
        */
-      account_tax_ids?: Array<string | CustomersAPI.TaxID | InvoiceData.DeletedTaxID> | null;
+      account_tax_ids?: Array<string | CustomersAPI.TaxID | Shared.DeletedTaxID> | null;
 
       /**
        * A list of up to 4 custom fields to be displayed on the invoice.
        */
-      custom_fields?: Array<InvoiceData.CustomField> | null;
+      custom_fields?: Array<Shared.InvoiceSettingCustomField> | null;
 
       /**
        * An arbitrary string attached to the object. Often useful for displaying to
@@ -678,36 +607,6 @@ export namespace PaymentLinkCreateResponse {
     }
 
     export namespace InvoiceData {
-      export interface DeletedTaxID {
-        /**
-         * Unique identifier for the object.
-         */
-        id: string;
-
-        /**
-         * Always true for a deleted object
-         */
-        deleted: true;
-
-        /**
-         * String representing the object's type. Objects of the same type share the same
-         * value.
-         */
-        object: 'tax_id';
-      }
-
-      export interface CustomField {
-        /**
-         * The name of the custom field.
-         */
-        name: string;
-
-        /**
-         * The value of the custom field.
-         */
-        value: string;
-      }
-
       export interface RenderingOptions {
         /**
          * How line-item prices and amounts will be displayed with respect to tax on

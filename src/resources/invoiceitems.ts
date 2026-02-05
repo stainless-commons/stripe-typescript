@@ -4,6 +4,7 @@ import { APIResource } from '../core/resource';
 import * as CustomersAPI from './customers';
 import * as InvoicesAPI from './invoices';
 import * as PricesAPI from './prices';
+import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
@@ -65,7 +66,7 @@ export interface InvoiceitemCreateResponse {
   /**
    * The ID of the customer to bill for this invoice item.
    */
-  customer: string | CustomersAPI.Customer | InvoiceitemCreateResponse.DeletedCustomer;
+  customer: string | CustomersAPI.Customer | Shared.DeletedCustomer;
 
   /**
    * Time at which the object was created. Measured in seconds since the Unix epoch.
@@ -153,28 +154,10 @@ export interface InvoiceitemCreateResponse {
   /**
    * ID of the test clock this invoice item belongs to.
    */
-  test_clock?: string | InvoiceitemCreateResponse.TestHelpersTestClock | null;
+  test_clock?: string | Shared.TestHelpersTestClock | null;
 }
 
 export namespace InvoiceitemCreateResponse {
-  export interface DeletedCustomer {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * Always true for a deleted object
-     */
-    deleted: true;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'customer';
-  }
-
   export interface Period {
     /**
      * The end of the period, which must be greater than or equal to the start. This
@@ -245,75 +228,6 @@ export namespace InvoiceitemCreateResponse {
      * Discount amounts applied when the proration was created.
      */
     discount_amounts: Array<InvoicesAPI.DiscountsResourceDiscountAmount>;
-  }
-
-  /**
-   * A test clock enables deterministic control over objects in testmode. With a test
-   * clock, you can create objects at a frozen time in the past or future, and
-   * advance to a specific future time to observe webhooks and state changes. After
-   * the clock advances, you can either validate the current state of your scenario
-   * (and test your assumptions), change the current state of your scenario (and test
-   * more complex scenarios), or keep advancing forward in time.
-   */
-  export interface TestHelpersTestClock {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * Time at which the object was created. Measured in seconds since the Unix epoch.
-     */
-    created: number;
-
-    /**
-     * Time at which this clock is scheduled to auto delete.
-     */
-    deletes_after: number;
-
-    /**
-     * Time at which all objects belonging to this clock are frozen.
-     */
-    frozen_time: number;
-
-    /**
-     * Has the value `true` if the object exists in live mode or the value `false` if
-     * the object exists in test mode.
-     */
-    livemode: boolean;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'test_helpers.test_clock';
-
-    /**
-     * The status of the Test Clock.
-     */
-    status: 'advancing' | 'internal_failure' | 'ready';
-
-    status_details: TestHelpersTestClock.StatusDetails;
-
-    /**
-     * The custom name supplied at creation.
-     */
-    name?: string | null;
-  }
-
-  export namespace TestHelpersTestClock {
-    export interface StatusDetails {
-      advancing?: StatusDetails.Advancing;
-    }
-
-    export namespace StatusDetails {
-      export interface Advancing {
-        /**
-         * The `frozen_time` that the Test Clock is advancing towards.
-         */
-        target_frozen_time: number;
-      }
-    }
   }
 }
 

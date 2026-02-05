@@ -8,6 +8,7 @@ import * as CustomersAPI from './customers';
 import * as DisputesAPI from './disputes';
 import * as PaymentIntentsAPI from './payment-intents';
 import * as PricesAPI from './prices';
+import * as Shared from './shared';
 import * as SubscriptionsAPI from './subscriptions';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
@@ -200,862 +201,7 @@ export interface APIErrors {
    * The [source object](https://docs.stripe.com/api/sources/object) for errors
    * returned on a request involving a source.
    */
-  source?: CustomersAPI.BankAccount | CustomersAPI.Card | APIErrors.Source;
-}
-
-export namespace APIErrors {
-  /**
-   * `Source` objects allow you to accept a variety of payment methods. They
-   * represent a customer's payment instrument, and can be used with the Stripe API
-   * just like a `Card` object: once chargeable, they can be charged, or can be
-   * attached to customers.
-   *
-   * Stripe doesn't recommend using the deprecated
-   * [Sources API](https://docs.stripe.com/api/sources). We recommend that you adopt
-   * the [PaymentMethods API](https://docs.stripe.com/api/payment_methods). This
-   * newer API provides access to our latest features and payment method types.
-   *
-   * Related guides: [Sources API](https://docs.stripe.com/sources) and
-   * [Sources & Customers](https://docs.stripe.com/sources/customers).
-   */
-  export interface Source {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * The client secret of the source. Used for client-side retrieval using a
-     * publishable key.
-     */
-    client_secret: string;
-
-    /**
-     * Time at which the object was created. Measured in seconds since the Unix epoch.
-     */
-    created: number;
-
-    /**
-     * The authentication `flow` of the source. `flow` is one of `redirect`,
-     * `receiver`, `code_verification`, `none`.
-     */
-    flow: string;
-
-    /**
-     * Has the value `true` if the object exists in live mode or the value `false` if
-     * the object exists in test mode.
-     */
-    livemode: boolean;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'source';
-
-    /**
-     * The status of the source, one of `canceled`, `chargeable`, `consumed`, `failed`,
-     * or `pending`. Only `chargeable` sources can be used to create a charge.
-     */
-    status: string;
-
-    /**
-     * The `type` of the source. The `type` is a payment method, one of
-     * `ach_credit_transfer`, `ach_debit`, `alipay`, `bancontact`, `card`,
-     * `card_present`, `eps`, `giropay`, `ideal`, `multibanco`, `klarna`, `p24`,
-     * `sepa_debit`, `sofort`, `three_d_secure`, or `wechat`. An additional hash is
-     * included on the source with a name matching this value. It contains additional
-     * information specific to the [payment method](https://docs.stripe.com/sources)
-     * used.
-     */
-    type:
-      | 'ach_credit_transfer'
-      | 'ach_debit'
-      | 'acss_debit'
-      | 'alipay'
-      | 'au_becs_debit'
-      | 'bancontact'
-      | 'card'
-      | 'card_present'
-      | 'eps'
-      | 'giropay'
-      | 'ideal'
-      | 'klarna'
-      | 'multibanco'
-      | 'p24'
-      | 'sepa_debit'
-      | 'sofort'
-      | 'three_d_secure'
-      | 'wechat';
-
-    ach_credit_transfer?: Source.ACHCreditTransfer;
-
-    ach_debit?: Source.ACHDebit;
-
-    acss_debit?: Source.AcssDebit;
-
-    alipay?: Source.Alipay;
-
-    /**
-     * This field indicates whether this payment method can be shown again to its
-     * customer in a checkout flow. Stripe products such as Checkout and Elements use
-     * this field to determine whether a payment method can be shown as a saved payment
-     * method in a checkout flow. The field defaults to “unspecified”.
-     */
-    allow_redisplay?: 'always' | 'limited' | 'unspecified' | null;
-
-    /**
-     * A positive integer in the smallest currency unit (that is, 100 cents for $1.00,
-     * or 1 for ¥1, Japanese Yen being a zero-decimal currency) representing the total
-     * amount associated with the source. This is the amount for which the source will
-     * be chargeable once ready. Required for `single_use` sources.
-     */
-    amount?: number | null;
-
-    au_becs_debit?: Source.AuBecsDebit;
-
-    bancontact?: Source.Bancontact;
-
-    card?: Source.Card;
-
-    card_present?: Source.CardPresent;
-
-    code_verification?: Source.CodeVerification;
-
-    /**
-     * Three-letter [ISO code for the currency](https://stripe.com/docs/currencies)
-     * associated with the source. This is the currency for which the source will be
-     * chargeable once ready. Required for `single_use` sources.
-     */
-    currency?: string | null;
-
-    /**
-     * The ID of the customer to which this source is attached. This will not be
-     * present when the source has not been attached to a customer.
-     */
-    customer?: string;
-
-    eps?: Source.Eps;
-
-    giropay?: Source.Giropay;
-
-    ideal?: Source.Ideal;
-
-    klarna?: Source.Klarna;
-
-    /**
-     * Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can
-     * attach to an object. This can be useful for storing additional information about
-     * the object in a structured format.
-     */
-    metadata?: { [key: string]: string } | null;
-
-    multibanco?: Source.Multibanco;
-
-    owner?: Source.Owner | null;
-
-    p24?: Source.P24;
-
-    receiver?: Source.Receiver;
-
-    redirect?: Source.Redirect;
-
-    sepa_debit?: Source.SepaDebit;
-
-    sofort?: Source.Sofort;
-
-    source_order?: Source.SourceOrder;
-
-    /**
-     * Extra information about a source. This will appear on your customer's statement
-     * every time you charge the source.
-     */
-    statement_descriptor?: string | null;
-
-    three_d_secure?: Source.ThreeDSecure;
-
-    /**
-     * Either `reusable` or `single_use`. Whether this source should be reusable or
-     * not. Some source types may or may not be reusable by construction, while others
-     * may leave the option at creation. If an incompatible value is passed, an error
-     * will be returned.
-     */
-    usage?: string | null;
-
-    wechat?: Source.Wechat;
-  }
-
-  export namespace Source {
-    export interface ACHCreditTransfer {
-      account_number?: string | null;
-
-      bank_name?: string | null;
-
-      fingerprint?: string | null;
-
-      refund_account_holder_name?: string | null;
-
-      refund_account_holder_type?: string | null;
-
-      refund_routing_number?: string | null;
-
-      routing_number?: string | null;
-
-      swift_code?: string | null;
-    }
-
-    export interface ACHDebit {
-      bank_name?: string | null;
-
-      country?: string | null;
-
-      fingerprint?: string | null;
-
-      last4?: string | null;
-
-      routing_number?: string | null;
-
-      type?: string | null;
-    }
-
-    export interface AcssDebit {
-      bank_address_city?: string | null;
-
-      bank_address_line_1?: string | null;
-
-      bank_address_line_2?: string | null;
-
-      bank_address_postal_code?: string | null;
-
-      bank_name?: string | null;
-
-      category?: string | null;
-
-      country?: string | null;
-
-      fingerprint?: string | null;
-
-      last4?: string | null;
-
-      routing_number?: string | null;
-    }
-
-    export interface Alipay {
-      data_string?: string | null;
-
-      native_url?: string | null;
-
-      statement_descriptor?: string | null;
-    }
-
-    export interface AuBecsDebit {
-      bsb_number?: string | null;
-
-      fingerprint?: string | null;
-
-      last4?: string | null;
-    }
-
-    export interface Bancontact {
-      bank_code?: string | null;
-
-      bank_name?: string | null;
-
-      bic?: string | null;
-
-      iban_last4?: string | null;
-
-      preferred_language?: string | null;
-
-      statement_descriptor?: string | null;
-    }
-
-    export interface Card {
-      address_line1_check?: string | null;
-
-      address_zip_check?: string | null;
-
-      brand?: string | null;
-
-      country?: string | null;
-
-      cvc_check?: string | null;
-
-      dynamic_last4?: string | null;
-
-      exp_month?: number | null;
-
-      exp_year?: number | null;
-
-      fingerprint?: string;
-
-      funding?: string | null;
-
-      last4?: string | null;
-
-      name?: string | null;
-
-      three_d_secure?: string;
-
-      tokenization_method?: string | null;
-    }
-
-    export interface CardPresent {
-      application_cryptogram?: string;
-
-      application_preferred_name?: string;
-
-      authorization_code?: string | null;
-
-      authorization_response_code?: string;
-
-      brand?: string | null;
-
-      country?: string | null;
-
-      cvm_type?: string;
-
-      data_type?: string | null;
-
-      dedicated_file_name?: string;
-
-      emv_auth_data?: string;
-
-      evidence_customer_signature?: string | null;
-
-      evidence_transaction_certificate?: string | null;
-
-      exp_month?: number | null;
-
-      exp_year?: number | null;
-
-      fingerprint?: string;
-
-      funding?: string | null;
-
-      last4?: string | null;
-
-      pos_device_id?: string | null;
-
-      pos_entry_mode?: string;
-
-      read_method?: string | null;
-
-      reader?: string | null;
-
-      terminal_verification_results?: string;
-
-      transaction_status_information?: string;
-    }
-
-    export interface CodeVerification {
-      /**
-       * The number of attempts remaining to authenticate the source object with a
-       * verification code.
-       */
-      attempts_remaining: number;
-
-      /**
-       * The status of the code verification, either `pending` (awaiting verification,
-       * `attempts_remaining` should be greater than 0), `succeeded` (successful
-       * verification) or `failed` (failed verification, cannot be verified anymore as
-       * `attempts_remaining` should be 0).
-       */
-      status: string;
-    }
-
-    export interface Eps {
-      reference?: string | null;
-
-      statement_descriptor?: string | null;
-    }
-
-    export interface Giropay {
-      bank_code?: string | null;
-
-      bank_name?: string | null;
-
-      bic?: string | null;
-
-      statement_descriptor?: string | null;
-    }
-
-    export interface Ideal {
-      bank?: string | null;
-
-      bic?: string | null;
-
-      iban_last4?: string | null;
-
-      statement_descriptor?: string | null;
-    }
-
-    export interface Klarna {
-      background_image_url?: string;
-
-      client_token?: string | null;
-
-      first_name?: string;
-
-      last_name?: string;
-
-      locale?: string;
-
-      logo_url?: string;
-
-      page_title?: string;
-
-      pay_later_asset_urls_descriptive?: string;
-
-      pay_later_asset_urls_standard?: string;
-
-      pay_later_name?: string;
-
-      pay_later_redirect_url?: string;
-
-      pay_now_asset_urls_descriptive?: string;
-
-      pay_now_asset_urls_standard?: string;
-
-      pay_now_name?: string;
-
-      pay_now_redirect_url?: string;
-
-      pay_over_time_asset_urls_descriptive?: string;
-
-      pay_over_time_asset_urls_standard?: string;
-
-      pay_over_time_name?: string;
-
-      pay_over_time_redirect_url?: string;
-
-      payment_method_categories?: string;
-
-      purchase_country?: string;
-
-      purchase_type?: string;
-
-      redirect_url?: string;
-
-      shipping_delay?: number;
-
-      shipping_first_name?: string;
-
-      shipping_last_name?: string;
-    }
-
-    export interface Multibanco {
-      entity?: string | null;
-
-      reference?: string | null;
-
-      refund_account_holder_address_city?: string | null;
-
-      refund_account_holder_address_country?: string | null;
-
-      refund_account_holder_address_line1?: string | null;
-
-      refund_account_holder_address_line2?: string | null;
-
-      refund_account_holder_address_postal_code?: string | null;
-
-      refund_account_holder_address_state?: string | null;
-
-      refund_account_holder_name?: string | null;
-
-      refund_iban?: string | null;
-    }
-
-    export interface Owner {
-      address?: Owner.Address | null;
-
-      /**
-       * Owner's email address.
-       */
-      email?: string | null;
-
-      /**
-       * Owner's full name.
-       */
-      name?: string | null;
-
-      /**
-       * Owner's phone number (including extension).
-       */
-      phone?: string | null;
-
-      verified_address?: Owner.VerifiedAddress | null;
-
-      /**
-       * Verified owner's email address. Verified values are verified or provided by the
-       * payment method directly (and if supported) at the time of authorization or
-       * settlement. They cannot be set or mutated.
-       */
-      verified_email?: string | null;
-
-      /**
-       * Verified owner's full name. Verified values are verified or provided by the
-       * payment method directly (and if supported) at the time of authorization or
-       * settlement. They cannot be set or mutated.
-       */
-      verified_name?: string | null;
-
-      /**
-       * Verified owner's phone number (including extension). Verified values are
-       * verified or provided by the payment method directly (and if supported) at the
-       * time of authorization or settlement. They cannot be set or mutated.
-       */
-      verified_phone?: string | null;
-    }
-
-    export namespace Owner {
-      export interface Address {
-        /**
-         * City, district, suburb, town, or village.
-         */
-        city?: string | null;
-
-        /**
-         * Two-letter country code
-         * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-         */
-        country?: string | null;
-
-        /**
-         * Address line 1, such as the street, PO Box, or company name.
-         */
-        line1?: string | null;
-
-        /**
-         * Address line 2, such as the apartment, suite, unit, or building.
-         */
-        line2?: string | null;
-
-        /**
-         * ZIP or postal code.
-         */
-        postal_code?: string | null;
-
-        /**
-         * State, county, province, or region
-         * ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
-         */
-        state?: string | null;
-      }
-
-      export interface VerifiedAddress {
-        /**
-         * City, district, suburb, town, or village.
-         */
-        city?: string | null;
-
-        /**
-         * Two-letter country code
-         * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-         */
-        country?: string | null;
-
-        /**
-         * Address line 1, such as the street, PO Box, or company name.
-         */
-        line1?: string | null;
-
-        /**
-         * Address line 2, such as the apartment, suite, unit, or building.
-         */
-        line2?: string | null;
-
-        /**
-         * ZIP or postal code.
-         */
-        postal_code?: string | null;
-
-        /**
-         * State, county, province, or region
-         * ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
-         */
-        state?: string | null;
-      }
-    }
-
-    export interface P24 {
-      reference?: string | null;
-    }
-
-    export interface Receiver {
-      /**
-       * The total amount that was moved to your balance. This is almost always equal to
-       * the amount charged. In rare cases when customers deposit excess funds and we are
-       * unable to refund those, those funds get moved to your balance and show up in
-       * amount_charged as well. The amount charged is expressed in the source's
-       * currency.
-       */
-      amount_charged: number;
-
-      /**
-       * The total amount received by the receiver source.
-       * `amount_received = amount_returned + amount_charged` should be true for consumed
-       * sources unless customers deposit excess funds. The amount received is expressed
-       * in the source's currency.
-       */
-      amount_received: number;
-
-      /**
-       * The total amount that was returned to the customer. The amount returned is
-       * expressed in the source's currency.
-       */
-      amount_returned: number;
-
-      /**
-       * Type of refund attribute method, one of `email`, `manual`, or `none`.
-       */
-      refund_attributes_method: string;
-
-      /**
-       * Type of refund attribute status, one of `missing`, `requested`, or `available`.
-       */
-      refund_attributes_status: string;
-
-      /**
-       * The address of the receiver source. This is the value that should be
-       * communicated to the customer to send their funds to.
-       */
-      address?: string | null;
-    }
-
-    export interface Redirect {
-      /**
-       * The URL you provide to redirect the customer to after they authenticated their
-       * payment.
-       */
-      return_url: string;
-
-      /**
-       * The status of the redirect, either `pending` (ready to be used by your customer
-       * to authenticate the transaction), `succeeded` (successful authentication, cannot
-       * be reused) or `not_required` (redirect should not be used) or `failed` (failed
-       * authentication, cannot be reused).
-       */
-      status: string;
-
-      /**
-       * The URL provided to you to redirect a customer to as part of a `redirect`
-       * authentication flow.
-       */
-      url: string;
-
-      /**
-       * The failure reason for the redirect, either `user_abort` (the customer aborted
-       * or dropped out of the redirect flow), `declined` (the authentication failed or
-       * the transaction was declined), or `processing_error` (the redirect failed due to
-       * a technical error). Present only if the redirect status is `failed`.
-       */
-      failure_reason?: string | null;
-    }
-
-    export interface SepaDebit {
-      bank_code?: string | null;
-
-      branch_code?: string | null;
-
-      country?: string | null;
-
-      fingerprint?: string | null;
-
-      last4?: string | null;
-
-      mandate_reference?: string | null;
-
-      mandate_url?: string | null;
-    }
-
-    export interface Sofort {
-      bank_code?: string | null;
-
-      bank_name?: string | null;
-
-      bic?: string | null;
-
-      country?: string | null;
-
-      iban_last4?: string | null;
-
-      preferred_language?: string | null;
-
-      statement_descriptor?: string | null;
-    }
-
-    export interface SourceOrder {
-      /**
-       * A positive integer in the smallest currency unit (that is, 100 cents for $1.00,
-       * or 1 for ¥1, Japanese Yen being a zero-decimal currency) representing the total
-       * amount for the order.
-       */
-      amount: number;
-
-      /**
-       * Three-letter
-       * [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in
-       * lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-       */
-      currency: string;
-
-      /**
-       * The email address of the customer placing the order.
-       */
-      email?: string;
-
-      /**
-       * List of items constituting the order.
-       */
-      items?: Array<SourceOrder.Item> | null;
-
-      shipping?: SourceOrder.Shipping;
-    }
-
-    export namespace SourceOrder {
-      export interface Item {
-        /**
-         * The amount (price) for this order item.
-         */
-        amount?: number | null;
-
-        /**
-         * This currency of this order item. Required when `amount` is present.
-         */
-        currency?: string | null;
-
-        /**
-         * Human-readable description for this order item.
-         */
-        description?: string | null;
-
-        /**
-         * The ID of the associated object for this line item. Expandable if not null
-         * (e.g., expandable to a SKU).
-         */
-        parent?: string | null;
-
-        /**
-         * The quantity of this order item. When type is `sku`, this is the number of
-         * instances of the SKU to be ordered.
-         */
-        quantity?: number;
-
-        /**
-         * The type of this order item. Must be `sku`, `tax`, or `shipping`.
-         */
-        type?: string | null;
-      }
-
-      export interface Shipping {
-        address?: Shipping.Address;
-
-        /**
-         * The delivery service that shipped a physical product, such as Fedex, UPS, USPS,
-         * etc.
-         */
-        carrier?: string | null;
-
-        /**
-         * Recipient name.
-         */
-        name?: string;
-
-        /**
-         * Recipient phone (including extension).
-         */
-        phone?: string | null;
-
-        /**
-         * The tracking number for a physical product, obtained from the delivery service.
-         * If multiple tracking numbers were generated for this purchase, please separate
-         * them with commas.
-         */
-        tracking_number?: string | null;
-      }
-
-      export namespace Shipping {
-        export interface Address {
-          /**
-           * City, district, suburb, town, or village.
-           */
-          city?: string | null;
-
-          /**
-           * Two-letter country code
-           * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-           */
-          country?: string | null;
-
-          /**
-           * Address line 1, such as the street, PO Box, or company name.
-           */
-          line1?: string | null;
-
-          /**
-           * Address line 2, such as the apartment, suite, unit, or building.
-           */
-          line2?: string | null;
-
-          /**
-           * ZIP or postal code.
-           */
-          postal_code?: string | null;
-
-          /**
-           * State, county, province, or region
-           * ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
-           */
-          state?: string | null;
-        }
-      }
-    }
-
-    export interface ThreeDSecure {
-      address_line1_check?: string | null;
-
-      address_zip_check?: string | null;
-
-      authenticated?: boolean | null;
-
-      brand?: string | null;
-
-      card?: string | null;
-
-      country?: string | null;
-
-      customer?: string | null;
-
-      cvc_check?: string | null;
-
-      dynamic_last4?: string | null;
-
-      exp_month?: number | null;
-
-      exp_year?: number | null;
-
-      fingerprint?: string;
-
-      funding?: string | null;
-
-      last4?: string | null;
-
-      name?: string | null;
-
-      three_d_secure?: string;
-
-      tokenization_method?: string | null;
-    }
-
-    export interface Wechat {
-      prepay_id?: string;
-
-      qr_code_url?: string | null;
-
-      statement_descriptor?: string;
-    }
-  }
+  source?: CustomersAPI.BankAccount | CustomersAPI.Card | Shared.Source;
 }
 
 export interface AutomaticTaxInvoice {
@@ -1170,83 +316,12 @@ export interface BillingCreditBalanceTransaction {
   /**
    * ID of the test clock this credit balance transaction belongs to.
    */
-  test_clock?: string | BillingCreditBalanceTransaction.TestHelpersTestClock | null;
+  test_clock?: string | Shared.TestHelpersTestClock | null;
 
   /**
    * The type of credit balance transaction (credit or debit).
    */
   type?: 'credit' | 'debit' | null;
-}
-
-export namespace BillingCreditBalanceTransaction {
-  /**
-   * A test clock enables deterministic control over objects in testmode. With a test
-   * clock, you can create objects at a frozen time in the past or future, and
-   * advance to a specific future time to observe webhooks and state changes. After
-   * the clock advances, you can either validate the current state of your scenario
-   * (and test your assumptions), change the current state of your scenario (and test
-   * more complex scenarios), or keep advancing forward in time.
-   */
-  export interface TestHelpersTestClock {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * Time at which the object was created. Measured in seconds since the Unix epoch.
-     */
-    created: number;
-
-    /**
-     * Time at which this clock is scheduled to auto delete.
-     */
-    deletes_after: number;
-
-    /**
-     * Time at which all objects belonging to this clock are frozen.
-     */
-    frozen_time: number;
-
-    /**
-     * Has the value `true` if the object exists in live mode or the value `false` if
-     * the object exists in test mode.
-     */
-    livemode: boolean;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'test_helpers.test_clock';
-
-    /**
-     * The status of the Test Clock.
-     */
-    status: 'advancing' | 'internal_failure' | 'ready';
-
-    status_details: TestHelpersTestClock.StatusDetails;
-
-    /**
-     * The custom name supplied at creation.
-     */
-    name?: string | null;
-  }
-
-  export namespace TestHelpersTestClock {
-    export interface StatusDetails {
-      advancing?: StatusDetails.Advancing;
-    }
-
-    export namespace StatusDetails {
-      export interface Advancing {
-        /**
-         * The `frozen_time` that the Test Clock is advancing towards.
-         */
-        target_frozen_time: number;
-      }
-    }
-  }
 }
 
 /**
@@ -1262,7 +337,7 @@ export interface BillingCreditGrant {
    */
   id: string;
 
-  amount: BillingCreditGrant.Amount;
+  amount: BillingCreditGrantsResourceAmount;
 
   applicability_config: BillingCreditGrant.ApplicabilityConfig;
 
@@ -1280,7 +355,7 @@ export interface BillingCreditGrant {
   /**
    * ID of the customer receiving the billing credits.
    */
-  customer: string | CustomersAPI.Customer | BillingCreditGrant.DeletedCustomer;
+  customer: string | CustomersAPI.Customer | Shared.DeletedCustomer;
 
   /**
    * Has the value `true` if the object exists in live mode or the value `false` if
@@ -1338,7 +413,7 @@ export interface BillingCreditGrant {
   /**
    * ID of the test clock this credit grant belongs to.
    */
-  test_clock?: string | BillingCreditGrant.TestHelpersTestClock | null;
+  test_clock?: string | Shared.TestHelpersTestClock | null;
 
   /**
    * The time when this credit grant was voided. If not present, the credit grant
@@ -1348,31 +423,6 @@ export interface BillingCreditGrant {
 }
 
 export namespace BillingCreditGrant {
-  export interface Amount {
-    /**
-     * The type of this amount. We currently only support `monetary` billing credits.
-     */
-    type: 'monetary';
-
-    monetary?: Amount.Monetary | null;
-  }
-
-  export namespace Amount {
-    export interface Monetary {
-      /**
-       * Three-letter
-       * [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in
-       * lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-       */
-      currency: string;
-
-      /**
-       * A positive integer representing the amount.
-       */
-      value: number;
-    }
-  }
-
   export interface ApplicabilityConfig {
     scope: ApplicabilityConfig.Scope;
   }
@@ -1405,97 +455,19 @@ export namespace BillingCreditGrant {
       }
     }
   }
+}
 
-  export interface DeletedCustomer {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * Always true for a deleted object
-     */
-    deleted: true;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'customer';
-  }
-
+export interface BillingCreditGrantsResourceAmount {
   /**
-   * A test clock enables deterministic control over objects in testmode. With a test
-   * clock, you can create objects at a frozen time in the past or future, and
-   * advance to a specific future time to observe webhooks and state changes. After
-   * the clock advances, you can either validate the current state of your scenario
-   * (and test your assumptions), change the current state of your scenario (and test
-   * more complex scenarios), or keep advancing forward in time.
+   * The type of this amount. We currently only support `monetary` billing credits.
    */
-  export interface TestHelpersTestClock {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
+  type: 'monetary';
 
-    /**
-     * Time at which the object was created. Measured in seconds since the Unix epoch.
-     */
-    created: number;
-
-    /**
-     * Time at which this clock is scheduled to auto delete.
-     */
-    deletes_after: number;
-
-    /**
-     * Time at which all objects belonging to this clock are frozen.
-     */
-    frozen_time: number;
-
-    /**
-     * Has the value `true` if the object exists in live mode or the value `false` if
-     * the object exists in test mode.
-     */
-    livemode: boolean;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'test_helpers.test_clock';
-
-    /**
-     * The status of the Test Clock.
-     */
-    status: 'advancing' | 'internal_failure' | 'ready';
-
-    status_details: TestHelpersTestClock.StatusDetails;
-
-    /**
-     * The custom name supplied at creation.
-     */
-    name?: string | null;
-  }
-
-  export namespace TestHelpersTestClock {
-    export interface StatusDetails {
-      advancing?: StatusDetails.Advancing;
-    }
-
-    export namespace StatusDetails {
-      export interface Advancing {
-        /**
-         * The `frozen_time` that the Test Clock is advancing towards.
-         */
-        target_frozen_time: number;
-      }
-    }
-  }
+  monetary?: BillingCreditGrantsResourceMonetaryAmount | null;
 }
 
 export interface BillingCreditGrantsResourceBalanceCredit {
-  amount: BillingCreditGrantsResourceBalanceCredit.Amount;
+  amount: BillingCreditGrantsResourceAmount;
 
   /**
    * The type of credit transaction.
@@ -1503,33 +475,6 @@ export interface BillingCreditGrantsResourceBalanceCredit {
   type: 'credits_application_invoice_voided' | 'credits_granted';
 
   credits_application_invoice_voided?: BillingCreditGrantsResourceBalanceCreditsApplicationInvoiceVoided | null;
-}
-
-export namespace BillingCreditGrantsResourceBalanceCredit {
-  export interface Amount {
-    /**
-     * The type of this amount. We currently only support `monetary` billing credits.
-     */
-    type: 'monetary';
-
-    monetary?: Amount.Monetary | null;
-  }
-
-  export namespace Amount {
-    export interface Monetary {
-      /**
-       * Three-letter
-       * [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in
-       * lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-       */
-      currency: string;
-
-      /**
-       * A positive integer representing the amount.
-       */
-      value: number;
-    }
-  }
 }
 
 export interface BillingCreditGrantsResourceBalanceCreditsApplicationInvoiceVoided {
@@ -1558,7 +503,7 @@ export interface BillingCreditGrantsResourceBalanceCreditsApplied {
 }
 
 export interface BillingCreditGrantsResourceBalanceDebit {
-  amount: BillingCreditGrantsResourceBalanceDebit.Amount;
+  amount: BillingCreditGrantsResourceAmount;
 
   /**
    * The type of debit transaction.
@@ -1568,31 +513,18 @@ export interface BillingCreditGrantsResourceBalanceDebit {
   credits_applied?: BillingCreditGrantsResourceBalanceCreditsApplied | null;
 }
 
-export namespace BillingCreditGrantsResourceBalanceDebit {
-  export interface Amount {
-    /**
-     * The type of this amount. We currently only support `monetary` billing credits.
-     */
-    type: 'monetary';
+export interface BillingCreditGrantsResourceMonetaryAmount {
+  /**
+   * Three-letter
+   * [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in
+   * lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+   */
+  currency: string;
 
-    monetary?: Amount.Monetary | null;
-  }
-
-  export namespace Amount {
-    export interface Monetary {
-      /**
-       * Three-letter
-       * [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in
-       * lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-       */
-      currency: string;
-
-      /**
-       * A positive integer representing the amount.
-       */
-      value: number;
-    }
-  }
+  /**
+   * A positive integer representing the amount.
+   */
+  value: number;
 }
 
 export interface ConnectAccountReference {
@@ -1641,7 +573,7 @@ export interface DeletedDiscount {
   /**
    * The ID of the customer associated with this discount.
    */
-  customer?: string | CustomersAPI.Customer | DeletedDiscount.DeletedCustomer | null;
+  customer?: string | CustomersAPI.Customer | Shared.DeletedCustomer | null;
 
   /**
    * The ID of the account representing the customer associated with this discount.
@@ -1690,24 +622,6 @@ export namespace DeletedDiscount {
      * The coupon that was redeemed to create this discount.
      */
     coupon?: string | CouponsAPI.Coupon | null;
-  }
-
-  export interface DeletedCustomer {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * Always true for a deleted object
-     */
-    deleted: true;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'customer';
   }
 }
 
@@ -1851,7 +765,7 @@ export interface Invoice {
   /**
    * The ID of the customer to bill.
    */
-  customer: string | CustomersAPI.Customer | Invoice.DeletedCustomer;
+  customer: string | CustomersAPI.Customer | Shared.DeletedCustomer;
 
   /**
    * The tax rates applied to this invoice, if any.
@@ -1952,12 +866,12 @@ export interface Invoice {
    * The account tax IDs associated with the invoice. Only editable when the invoice
    * is a draft.
    */
-  account_tax_ids?: Array<string | CustomersAPI.TaxID | Invoice.DeletedTaxID> | null;
+  account_tax_ids?: Array<string | CustomersAPI.TaxID | Shared.DeletedTaxID> | null;
 
   /**
    * ID of the Connect Application that created the invoice.
    */
-  application?: string | Invoice.Application | Invoice.DeletedApplication | null;
+  application?: string | Shared.Application | Shared.DeletedApplication | null;
 
   /**
    * The time when this invoice is currently scheduled to be automatically finalized.
@@ -2000,14 +914,14 @@ export interface Invoice {
   /**
    * Custom fields displayed on the invoice.
    */
-  custom_fields?: Array<Invoice.CustomField> | null;
+  custom_fields?: Array<Shared.InvoiceSettingCustomField> | null;
 
   /**
    * The ID of the account representing the customer to bill.
    */
   customer_account?: string | null;
 
-  customer_address?: Invoice.CustomerAddress | null;
+  customer_address?: Shared.Address | null;
 
   /**
    * The customer's email. Until the invoice is finalized, this field will equal
@@ -2030,7 +944,7 @@ export interface Invoice {
    */
   customer_phone?: string | null;
 
-  customer_shipping?: Invoice.CustomerShipping | null;
+  customer_shipping?: Shared.Shipping | null;
 
   /**
    * The customer's tax exempt status. Until the invoice is finalized, this field
@@ -2060,7 +974,7 @@ export interface Invoice {
    * to the subscription's default source, if any, or to the customer's default
    * source.
    */
-  default_source?: string | CustomersAPI.BankAccount | CustomersAPI.Card | Invoice.Source | null;
+  default_source?: string | CustomersAPI.BankAccount | CustomersAPI.Card | Shared.Source | null;
 
   /**
    * An arbitrary string attached to the object. Often useful for displaying to
@@ -2161,7 +1075,7 @@ export interface Invoice {
 
   shipping_cost?: Invoice.ShippingCost | null;
 
-  shipping_details?: Invoice.ShippingDetails | null;
+  shipping_details?: Shared.Shipping | null;
 
   /**
    * Extra information about an invoice for the customer's credit card statement.
@@ -2185,7 +1099,7 @@ export interface Invoice {
   /**
    * ID of the test clock this invoice belongs to.
    */
-  test_clock?: string | Invoice.TestHelpersTestClock | null;
+  test_clock?: string | Shared.TestHelpersTestClock | null;
 
   threshold_reason?: Invoice.ThresholdReason;
 
@@ -2224,24 +1138,6 @@ export interface Invoice {
 }
 
 export namespace Invoice {
-  export interface DeletedCustomer {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * Always true for a deleted object
-     */
-    deleted: true;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'customer';
-  }
-
   /**
    * The individual line items that make up the invoice. `lines` is sorted as
    * follows: (1) pending invoice items (including prorations) in reverse
@@ -2534,65 +1430,6 @@ export namespace Invoice {
     voided_at?: number | null;
   }
 
-  export interface DeletedTaxID {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * Always true for a deleted object
-     */
-    deleted: true;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'tax_id';
-  }
-
-  export interface Application {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'application';
-
-    /**
-     * The name of the application.
-     */
-    name?: string | null;
-  }
-
-  export interface DeletedApplication {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * Always true for a deleted object
-     */
-    deleted: true;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'application';
-
-    /**
-     * The name of the application.
-     */
-    name?: string | null;
-  }
-
   export interface ConfirmationSecret {
     /**
      * The client_secret of the payment that Stripe creates for the invoice after
@@ -2605,115 +1442,6 @@ export namespace Invoice {
      * the default payment_intent that Stripe creates during invoice finalization
      */
     type: string;
-  }
-
-  export interface CustomField {
-    /**
-     * The name of the custom field.
-     */
-    name: string;
-
-    /**
-     * The value of the custom field.
-     */
-    value: string;
-  }
-
-  export interface CustomerAddress {
-    /**
-     * City, district, suburb, town, or village.
-     */
-    city?: string | null;
-
-    /**
-     * Two-letter country code
-     * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-     */
-    country?: string | null;
-
-    /**
-     * Address line 1, such as the street, PO Box, or company name.
-     */
-    line1?: string | null;
-
-    /**
-     * Address line 2, such as the apartment, suite, unit, or building.
-     */
-    line2?: string | null;
-
-    /**
-     * ZIP or postal code.
-     */
-    postal_code?: string | null;
-
-    /**
-     * State, county, province, or region
-     * ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
-     */
-    state?: string | null;
-  }
-
-  export interface CustomerShipping {
-    address?: CustomerShipping.Address;
-
-    /**
-     * The delivery service that shipped a physical product, such as Fedex, UPS, USPS,
-     * etc.
-     */
-    carrier?: string | null;
-
-    /**
-     * Recipient name.
-     */
-    name?: string;
-
-    /**
-     * Recipient phone (including extension).
-     */
-    phone?: string | null;
-
-    /**
-     * The tracking number for a physical product, obtained from the delivery service.
-     * If multiple tracking numbers were generated for this purchase, please separate
-     * them with commas.
-     */
-    tracking_number?: string | null;
-  }
-
-  export namespace CustomerShipping {
-    export interface Address {
-      /**
-       * City, district, suburb, town, or village.
-       */
-      city?: string | null;
-
-      /**
-       * Two-letter country code
-       * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-       */
-      country?: string | null;
-
-      /**
-       * Address line 1, such as the street, PO Box, or company name.
-       */
-      line1?: string | null;
-
-      /**
-       * Address line 2, such as the apartment, suite, unit, or building.
-       */
-      line2?: string | null;
-
-      /**
-       * ZIP or postal code.
-       */
-      postal_code?: string | null;
-
-      /**
-       * State, county, province, or region
-       * ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
-       */
-      state?: string | null;
-    }
   }
 
   export interface CustomerTaxID {
@@ -2853,859 +1581,6 @@ export namespace Invoice {
      * The value of the tax ID.
      */
     value?: string | null;
-  }
-
-  /**
-   * `Source` objects allow you to accept a variety of payment methods. They
-   * represent a customer's payment instrument, and can be used with the Stripe API
-   * just like a `Card` object: once chargeable, they can be charged, or can be
-   * attached to customers.
-   *
-   * Stripe doesn't recommend using the deprecated
-   * [Sources API](https://docs.stripe.com/api/sources). We recommend that you adopt
-   * the [PaymentMethods API](https://docs.stripe.com/api/payment_methods). This
-   * newer API provides access to our latest features and payment method types.
-   *
-   * Related guides: [Sources API](https://docs.stripe.com/sources) and
-   * [Sources & Customers](https://docs.stripe.com/sources/customers).
-   */
-  export interface Source {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * The client secret of the source. Used for client-side retrieval using a
-     * publishable key.
-     */
-    client_secret: string;
-
-    /**
-     * Time at which the object was created. Measured in seconds since the Unix epoch.
-     */
-    created: number;
-
-    /**
-     * The authentication `flow` of the source. `flow` is one of `redirect`,
-     * `receiver`, `code_verification`, `none`.
-     */
-    flow: string;
-
-    /**
-     * Has the value `true` if the object exists in live mode or the value `false` if
-     * the object exists in test mode.
-     */
-    livemode: boolean;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'source';
-
-    /**
-     * The status of the source, one of `canceled`, `chargeable`, `consumed`, `failed`,
-     * or `pending`. Only `chargeable` sources can be used to create a charge.
-     */
-    status: string;
-
-    /**
-     * The `type` of the source. The `type` is a payment method, one of
-     * `ach_credit_transfer`, `ach_debit`, `alipay`, `bancontact`, `card`,
-     * `card_present`, `eps`, `giropay`, `ideal`, `multibanco`, `klarna`, `p24`,
-     * `sepa_debit`, `sofort`, `three_d_secure`, or `wechat`. An additional hash is
-     * included on the source with a name matching this value. It contains additional
-     * information specific to the [payment method](https://docs.stripe.com/sources)
-     * used.
-     */
-    type:
-      | 'ach_credit_transfer'
-      | 'ach_debit'
-      | 'acss_debit'
-      | 'alipay'
-      | 'au_becs_debit'
-      | 'bancontact'
-      | 'card'
-      | 'card_present'
-      | 'eps'
-      | 'giropay'
-      | 'ideal'
-      | 'klarna'
-      | 'multibanco'
-      | 'p24'
-      | 'sepa_debit'
-      | 'sofort'
-      | 'three_d_secure'
-      | 'wechat';
-
-    ach_credit_transfer?: Source.ACHCreditTransfer;
-
-    ach_debit?: Source.ACHDebit;
-
-    acss_debit?: Source.AcssDebit;
-
-    alipay?: Source.Alipay;
-
-    /**
-     * This field indicates whether this payment method can be shown again to its
-     * customer in a checkout flow. Stripe products such as Checkout and Elements use
-     * this field to determine whether a payment method can be shown as a saved payment
-     * method in a checkout flow. The field defaults to “unspecified”.
-     */
-    allow_redisplay?: 'always' | 'limited' | 'unspecified' | null;
-
-    /**
-     * A positive integer in the smallest currency unit (that is, 100 cents for $1.00,
-     * or 1 for ¥1, Japanese Yen being a zero-decimal currency) representing the total
-     * amount associated with the source. This is the amount for which the source will
-     * be chargeable once ready. Required for `single_use` sources.
-     */
-    amount?: number | null;
-
-    au_becs_debit?: Source.AuBecsDebit;
-
-    bancontact?: Source.Bancontact;
-
-    card?: Source.Card;
-
-    card_present?: Source.CardPresent;
-
-    code_verification?: Source.CodeVerification;
-
-    /**
-     * Three-letter [ISO code for the currency](https://stripe.com/docs/currencies)
-     * associated with the source. This is the currency for which the source will be
-     * chargeable once ready. Required for `single_use` sources.
-     */
-    currency?: string | null;
-
-    /**
-     * The ID of the customer to which this source is attached. This will not be
-     * present when the source has not been attached to a customer.
-     */
-    customer?: string;
-
-    eps?: Source.Eps;
-
-    giropay?: Source.Giropay;
-
-    ideal?: Source.Ideal;
-
-    klarna?: Source.Klarna;
-
-    /**
-     * Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can
-     * attach to an object. This can be useful for storing additional information about
-     * the object in a structured format.
-     */
-    metadata?: { [key: string]: string } | null;
-
-    multibanco?: Source.Multibanco;
-
-    owner?: Source.Owner | null;
-
-    p24?: Source.P24;
-
-    receiver?: Source.Receiver;
-
-    redirect?: Source.Redirect;
-
-    sepa_debit?: Source.SepaDebit;
-
-    sofort?: Source.Sofort;
-
-    source_order?: Source.SourceOrder;
-
-    /**
-     * Extra information about a source. This will appear on your customer's statement
-     * every time you charge the source.
-     */
-    statement_descriptor?: string | null;
-
-    three_d_secure?: Source.ThreeDSecure;
-
-    /**
-     * Either `reusable` or `single_use`. Whether this source should be reusable or
-     * not. Some source types may or may not be reusable by construction, while others
-     * may leave the option at creation. If an incompatible value is passed, an error
-     * will be returned.
-     */
-    usage?: string | null;
-
-    wechat?: Source.Wechat;
-  }
-
-  export namespace Source {
-    export interface ACHCreditTransfer {
-      account_number?: string | null;
-
-      bank_name?: string | null;
-
-      fingerprint?: string | null;
-
-      refund_account_holder_name?: string | null;
-
-      refund_account_holder_type?: string | null;
-
-      refund_routing_number?: string | null;
-
-      routing_number?: string | null;
-
-      swift_code?: string | null;
-    }
-
-    export interface ACHDebit {
-      bank_name?: string | null;
-
-      country?: string | null;
-
-      fingerprint?: string | null;
-
-      last4?: string | null;
-
-      routing_number?: string | null;
-
-      type?: string | null;
-    }
-
-    export interface AcssDebit {
-      bank_address_city?: string | null;
-
-      bank_address_line_1?: string | null;
-
-      bank_address_line_2?: string | null;
-
-      bank_address_postal_code?: string | null;
-
-      bank_name?: string | null;
-
-      category?: string | null;
-
-      country?: string | null;
-
-      fingerprint?: string | null;
-
-      last4?: string | null;
-
-      routing_number?: string | null;
-    }
-
-    export interface Alipay {
-      data_string?: string | null;
-
-      native_url?: string | null;
-
-      statement_descriptor?: string | null;
-    }
-
-    export interface AuBecsDebit {
-      bsb_number?: string | null;
-
-      fingerprint?: string | null;
-
-      last4?: string | null;
-    }
-
-    export interface Bancontact {
-      bank_code?: string | null;
-
-      bank_name?: string | null;
-
-      bic?: string | null;
-
-      iban_last4?: string | null;
-
-      preferred_language?: string | null;
-
-      statement_descriptor?: string | null;
-    }
-
-    export interface Card {
-      address_line1_check?: string | null;
-
-      address_zip_check?: string | null;
-
-      brand?: string | null;
-
-      country?: string | null;
-
-      cvc_check?: string | null;
-
-      dynamic_last4?: string | null;
-
-      exp_month?: number | null;
-
-      exp_year?: number | null;
-
-      fingerprint?: string;
-
-      funding?: string | null;
-
-      last4?: string | null;
-
-      name?: string | null;
-
-      three_d_secure?: string;
-
-      tokenization_method?: string | null;
-    }
-
-    export interface CardPresent {
-      application_cryptogram?: string;
-
-      application_preferred_name?: string;
-
-      authorization_code?: string | null;
-
-      authorization_response_code?: string;
-
-      brand?: string | null;
-
-      country?: string | null;
-
-      cvm_type?: string;
-
-      data_type?: string | null;
-
-      dedicated_file_name?: string;
-
-      emv_auth_data?: string;
-
-      evidence_customer_signature?: string | null;
-
-      evidence_transaction_certificate?: string | null;
-
-      exp_month?: number | null;
-
-      exp_year?: number | null;
-
-      fingerprint?: string;
-
-      funding?: string | null;
-
-      last4?: string | null;
-
-      pos_device_id?: string | null;
-
-      pos_entry_mode?: string;
-
-      read_method?: string | null;
-
-      reader?: string | null;
-
-      terminal_verification_results?: string;
-
-      transaction_status_information?: string;
-    }
-
-    export interface CodeVerification {
-      /**
-       * The number of attempts remaining to authenticate the source object with a
-       * verification code.
-       */
-      attempts_remaining: number;
-
-      /**
-       * The status of the code verification, either `pending` (awaiting verification,
-       * `attempts_remaining` should be greater than 0), `succeeded` (successful
-       * verification) or `failed` (failed verification, cannot be verified anymore as
-       * `attempts_remaining` should be 0).
-       */
-      status: string;
-    }
-
-    export interface Eps {
-      reference?: string | null;
-
-      statement_descriptor?: string | null;
-    }
-
-    export interface Giropay {
-      bank_code?: string | null;
-
-      bank_name?: string | null;
-
-      bic?: string | null;
-
-      statement_descriptor?: string | null;
-    }
-
-    export interface Ideal {
-      bank?: string | null;
-
-      bic?: string | null;
-
-      iban_last4?: string | null;
-
-      statement_descriptor?: string | null;
-    }
-
-    export interface Klarna {
-      background_image_url?: string;
-
-      client_token?: string | null;
-
-      first_name?: string;
-
-      last_name?: string;
-
-      locale?: string;
-
-      logo_url?: string;
-
-      page_title?: string;
-
-      pay_later_asset_urls_descriptive?: string;
-
-      pay_later_asset_urls_standard?: string;
-
-      pay_later_name?: string;
-
-      pay_later_redirect_url?: string;
-
-      pay_now_asset_urls_descriptive?: string;
-
-      pay_now_asset_urls_standard?: string;
-
-      pay_now_name?: string;
-
-      pay_now_redirect_url?: string;
-
-      pay_over_time_asset_urls_descriptive?: string;
-
-      pay_over_time_asset_urls_standard?: string;
-
-      pay_over_time_name?: string;
-
-      pay_over_time_redirect_url?: string;
-
-      payment_method_categories?: string;
-
-      purchase_country?: string;
-
-      purchase_type?: string;
-
-      redirect_url?: string;
-
-      shipping_delay?: number;
-
-      shipping_first_name?: string;
-
-      shipping_last_name?: string;
-    }
-
-    export interface Multibanco {
-      entity?: string | null;
-
-      reference?: string | null;
-
-      refund_account_holder_address_city?: string | null;
-
-      refund_account_holder_address_country?: string | null;
-
-      refund_account_holder_address_line1?: string | null;
-
-      refund_account_holder_address_line2?: string | null;
-
-      refund_account_holder_address_postal_code?: string | null;
-
-      refund_account_holder_address_state?: string | null;
-
-      refund_account_holder_name?: string | null;
-
-      refund_iban?: string | null;
-    }
-
-    export interface Owner {
-      address?: Owner.Address | null;
-
-      /**
-       * Owner's email address.
-       */
-      email?: string | null;
-
-      /**
-       * Owner's full name.
-       */
-      name?: string | null;
-
-      /**
-       * Owner's phone number (including extension).
-       */
-      phone?: string | null;
-
-      verified_address?: Owner.VerifiedAddress | null;
-
-      /**
-       * Verified owner's email address. Verified values are verified or provided by the
-       * payment method directly (and if supported) at the time of authorization or
-       * settlement. They cannot be set or mutated.
-       */
-      verified_email?: string | null;
-
-      /**
-       * Verified owner's full name. Verified values are verified or provided by the
-       * payment method directly (and if supported) at the time of authorization or
-       * settlement. They cannot be set or mutated.
-       */
-      verified_name?: string | null;
-
-      /**
-       * Verified owner's phone number (including extension). Verified values are
-       * verified or provided by the payment method directly (and if supported) at the
-       * time of authorization or settlement. They cannot be set or mutated.
-       */
-      verified_phone?: string | null;
-    }
-
-    export namespace Owner {
-      export interface Address {
-        /**
-         * City, district, suburb, town, or village.
-         */
-        city?: string | null;
-
-        /**
-         * Two-letter country code
-         * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-         */
-        country?: string | null;
-
-        /**
-         * Address line 1, such as the street, PO Box, or company name.
-         */
-        line1?: string | null;
-
-        /**
-         * Address line 2, such as the apartment, suite, unit, or building.
-         */
-        line2?: string | null;
-
-        /**
-         * ZIP or postal code.
-         */
-        postal_code?: string | null;
-
-        /**
-         * State, county, province, or region
-         * ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
-         */
-        state?: string | null;
-      }
-
-      export interface VerifiedAddress {
-        /**
-         * City, district, suburb, town, or village.
-         */
-        city?: string | null;
-
-        /**
-         * Two-letter country code
-         * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-         */
-        country?: string | null;
-
-        /**
-         * Address line 1, such as the street, PO Box, or company name.
-         */
-        line1?: string | null;
-
-        /**
-         * Address line 2, such as the apartment, suite, unit, or building.
-         */
-        line2?: string | null;
-
-        /**
-         * ZIP or postal code.
-         */
-        postal_code?: string | null;
-
-        /**
-         * State, county, province, or region
-         * ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
-         */
-        state?: string | null;
-      }
-    }
-
-    export interface P24 {
-      reference?: string | null;
-    }
-
-    export interface Receiver {
-      /**
-       * The total amount that was moved to your balance. This is almost always equal to
-       * the amount charged. In rare cases when customers deposit excess funds and we are
-       * unable to refund those, those funds get moved to your balance and show up in
-       * amount_charged as well. The amount charged is expressed in the source's
-       * currency.
-       */
-      amount_charged: number;
-
-      /**
-       * The total amount received by the receiver source.
-       * `amount_received = amount_returned + amount_charged` should be true for consumed
-       * sources unless customers deposit excess funds. The amount received is expressed
-       * in the source's currency.
-       */
-      amount_received: number;
-
-      /**
-       * The total amount that was returned to the customer. The amount returned is
-       * expressed in the source's currency.
-       */
-      amount_returned: number;
-
-      /**
-       * Type of refund attribute method, one of `email`, `manual`, or `none`.
-       */
-      refund_attributes_method: string;
-
-      /**
-       * Type of refund attribute status, one of `missing`, `requested`, or `available`.
-       */
-      refund_attributes_status: string;
-
-      /**
-       * The address of the receiver source. This is the value that should be
-       * communicated to the customer to send their funds to.
-       */
-      address?: string | null;
-    }
-
-    export interface Redirect {
-      /**
-       * The URL you provide to redirect the customer to after they authenticated their
-       * payment.
-       */
-      return_url: string;
-
-      /**
-       * The status of the redirect, either `pending` (ready to be used by your customer
-       * to authenticate the transaction), `succeeded` (successful authentication, cannot
-       * be reused) or `not_required` (redirect should not be used) or `failed` (failed
-       * authentication, cannot be reused).
-       */
-      status: string;
-
-      /**
-       * The URL provided to you to redirect a customer to as part of a `redirect`
-       * authentication flow.
-       */
-      url: string;
-
-      /**
-       * The failure reason for the redirect, either `user_abort` (the customer aborted
-       * or dropped out of the redirect flow), `declined` (the authentication failed or
-       * the transaction was declined), or `processing_error` (the redirect failed due to
-       * a technical error). Present only if the redirect status is `failed`.
-       */
-      failure_reason?: string | null;
-    }
-
-    export interface SepaDebit {
-      bank_code?: string | null;
-
-      branch_code?: string | null;
-
-      country?: string | null;
-
-      fingerprint?: string | null;
-
-      last4?: string | null;
-
-      mandate_reference?: string | null;
-
-      mandate_url?: string | null;
-    }
-
-    export interface Sofort {
-      bank_code?: string | null;
-
-      bank_name?: string | null;
-
-      bic?: string | null;
-
-      country?: string | null;
-
-      iban_last4?: string | null;
-
-      preferred_language?: string | null;
-
-      statement_descriptor?: string | null;
-    }
-
-    export interface SourceOrder {
-      /**
-       * A positive integer in the smallest currency unit (that is, 100 cents for $1.00,
-       * or 1 for ¥1, Japanese Yen being a zero-decimal currency) representing the total
-       * amount for the order.
-       */
-      amount: number;
-
-      /**
-       * Three-letter
-       * [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in
-       * lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-       */
-      currency: string;
-
-      /**
-       * The email address of the customer placing the order.
-       */
-      email?: string;
-
-      /**
-       * List of items constituting the order.
-       */
-      items?: Array<SourceOrder.Item> | null;
-
-      shipping?: SourceOrder.Shipping;
-    }
-
-    export namespace SourceOrder {
-      export interface Item {
-        /**
-         * The amount (price) for this order item.
-         */
-        amount?: number | null;
-
-        /**
-         * This currency of this order item. Required when `amount` is present.
-         */
-        currency?: string | null;
-
-        /**
-         * Human-readable description for this order item.
-         */
-        description?: string | null;
-
-        /**
-         * The ID of the associated object for this line item. Expandable if not null
-         * (e.g., expandable to a SKU).
-         */
-        parent?: string | null;
-
-        /**
-         * The quantity of this order item. When type is `sku`, this is the number of
-         * instances of the SKU to be ordered.
-         */
-        quantity?: number;
-
-        /**
-         * The type of this order item. Must be `sku`, `tax`, or `shipping`.
-         */
-        type?: string | null;
-      }
-
-      export interface Shipping {
-        address?: Shipping.Address;
-
-        /**
-         * The delivery service that shipped a physical product, such as Fedex, UPS, USPS,
-         * etc.
-         */
-        carrier?: string | null;
-
-        /**
-         * Recipient name.
-         */
-        name?: string;
-
-        /**
-         * Recipient phone (including extension).
-         */
-        phone?: string | null;
-
-        /**
-         * The tracking number for a physical product, obtained from the delivery service.
-         * If multiple tracking numbers were generated for this purchase, please separate
-         * them with commas.
-         */
-        tracking_number?: string | null;
-      }
-
-      export namespace Shipping {
-        export interface Address {
-          /**
-           * City, district, suburb, town, or village.
-           */
-          city?: string | null;
-
-          /**
-           * Two-letter country code
-           * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-           */
-          country?: string | null;
-
-          /**
-           * Address line 1, such as the street, PO Box, or company name.
-           */
-          line1?: string | null;
-
-          /**
-           * Address line 2, such as the apartment, suite, unit, or building.
-           */
-          line2?: string | null;
-
-          /**
-           * ZIP or postal code.
-           */
-          postal_code?: string | null;
-
-          /**
-           * State, county, province, or region
-           * ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
-           */
-          state?: string | null;
-        }
-      }
-    }
-
-    export interface ThreeDSecure {
-      address_line1_check?: string | null;
-
-      address_zip_check?: string | null;
-
-      authenticated?: boolean | null;
-
-      brand?: string | null;
-
-      card?: string | null;
-
-      country?: string | null;
-
-      customer?: string | null;
-
-      cvc_check?: string | null;
-
-      dynamic_last4?: string | null;
-
-      exp_month?: number | null;
-
-      exp_year?: number | null;
-
-      fingerprint?: string;
-
-      funding?: string | null;
-
-      last4?: string | null;
-
-      name?: string | null;
-
-      three_d_secure?: string;
-
-      tokenization_method?: string | null;
-    }
-
-    export interface Wechat {
-      prepay_id?: string;
-
-      qr_code_url?: string | null;
-
-      statement_descriptor?: string;
-    }
   }
 
   /**
@@ -3858,7 +1733,7 @@ export namespace Invoice {
        * A [tax code](https://docs.stripe.com/tax/tax-categories) ID. The Shipping tax
        * code is `txcd_92010001`.
        */
-      tax_code?: string | ShippingRate.TaxCode | null;
+      tax_code?: string | Shared.TaxCode | null;
     }
 
     export namespace ShippingRate {
@@ -3904,33 +1779,6 @@ export namespace Invoice {
           tax_behavior: 'exclusive' | 'inclusive' | 'unspecified';
         }
       }
-
-      /**
-       * [Tax codes](https://stripe.com/docs/tax/tax-categories) classify goods and
-       * services for tax purposes.
-       */
-      export interface TaxCode {
-        /**
-         * Unique identifier for the object.
-         */
-        id: string;
-
-        /**
-         * A detailed description of which types of products the tax code represents.
-         */
-        description: string;
-
-        /**
-         * A short name for the tax code.
-         */
-        name: string;
-
-        /**
-         * String representing the object's type. Objects of the same type share the same
-         * value.
-         */
-        object: 'tax_code';
-      }
     }
 
     export interface Tax {
@@ -3974,138 +1822,6 @@ export namespace Invoice {
        * The amount on which tax is calculated, in cents (or local equivalent).
        */
       taxable_amount?: number | null;
-    }
-  }
-
-  export interface ShippingDetails {
-    address?: ShippingDetails.Address;
-
-    /**
-     * The delivery service that shipped a physical product, such as Fedex, UPS, USPS,
-     * etc.
-     */
-    carrier?: string | null;
-
-    /**
-     * Recipient name.
-     */
-    name?: string;
-
-    /**
-     * Recipient phone (including extension).
-     */
-    phone?: string | null;
-
-    /**
-     * The tracking number for a physical product, obtained from the delivery service.
-     * If multiple tracking numbers were generated for this purchase, please separate
-     * them with commas.
-     */
-    tracking_number?: string | null;
-  }
-
-  export namespace ShippingDetails {
-    export interface Address {
-      /**
-       * City, district, suburb, town, or village.
-       */
-      city?: string | null;
-
-      /**
-       * Two-letter country code
-       * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-       */
-      country?: string | null;
-
-      /**
-       * Address line 1, such as the street, PO Box, or company name.
-       */
-      line1?: string | null;
-
-      /**
-       * Address line 2, such as the apartment, suite, unit, or building.
-       */
-      line2?: string | null;
-
-      /**
-       * ZIP or postal code.
-       */
-      postal_code?: string | null;
-
-      /**
-       * State, county, province, or region
-       * ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
-       */
-      state?: string | null;
-    }
-  }
-
-  /**
-   * A test clock enables deterministic control over objects in testmode. With a test
-   * clock, you can create objects at a frozen time in the past or future, and
-   * advance to a specific future time to observe webhooks and state changes. After
-   * the clock advances, you can either validate the current state of your scenario
-   * (and test your assumptions), change the current state of your scenario (and test
-   * more complex scenarios), or keep advancing forward in time.
-   */
-  export interface TestHelpersTestClock {
-    /**
-     * Unique identifier for the object.
-     */
-    id: string;
-
-    /**
-     * Time at which the object was created. Measured in seconds since the Unix epoch.
-     */
-    created: number;
-
-    /**
-     * Time at which this clock is scheduled to auto delete.
-     */
-    deletes_after: number;
-
-    /**
-     * Time at which all objects belonging to this clock are frozen.
-     */
-    frozen_time: number;
-
-    /**
-     * Has the value `true` if the object exists in live mode or the value `false` if
-     * the object exists in test mode.
-     */
-    livemode: boolean;
-
-    /**
-     * String representing the object's type. Objects of the same type share the same
-     * value.
-     */
-    object: 'test_helpers.test_clock';
-
-    /**
-     * The status of the Test Clock.
-     */
-    status: 'advancing' | 'internal_failure' | 'ready';
-
-    status_details: TestHelpersTestClock.StatusDetails;
-
-    /**
-     * The custom name supplied at creation.
-     */
-    name?: string | null;
-  }
-
-  export namespace TestHelpersTestClock {
-    export interface StatusDetails {
-      advancing?: StatusDetails.Advancing;
-    }
-
-    export namespace StatusDetails {
-      export interface Advancing {
-        /**
-         * The `frozen_time` that the Test Clock is advancing towards.
-         */
-        target_frozen_time: number;
-      }
     }
   }
 
@@ -4909,7 +2625,7 @@ export interface PaymentMethod {
 
 export namespace PaymentMethod {
   export interface BillingDetails {
-    address?: BillingDetails.Address | null;
+    address?: Shared.Address | null;
 
     /**
      * Email address.
@@ -4931,42 +2647,6 @@ export namespace PaymentMethod {
      * and non-LATAM sellers.
      */
     tax_id?: string | null;
-  }
-
-  export namespace BillingDetails {
-    export interface Address {
-      /**
-       * City, district, suburb, town, or village.
-       */
-      city?: string | null;
-
-      /**
-       * Two-letter country code
-       * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-       */
-      country?: string | null;
-
-      /**
-       * Address line 1, such as the street, PO Box, or company name.
-       */
-      line1?: string | null;
-
-      /**
-       * Address line 2, such as the apartment, suite, unit, or building.
-       */
-      line2?: string | null;
-
-      /**
-       * ZIP or postal code.
-       */
-      postal_code?: string | null;
-
-      /**
-       * State, county, province, or region
-       * ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
-       */
-      state?: string | null;
-    }
   }
 
   export interface AcssDebit {
@@ -5115,7 +2795,7 @@ export namespace PaymentMethod {
 
     networks?: CardPresent.Networks | null;
 
-    offline?: CardPresent.Offline | null;
+    offline?: Shared.PaymentMethodDetailsCardPresentOffline | null;
 
     /**
      * The languages that the issuing bank recommends using for localizing any
@@ -5135,7 +2815,7 @@ export namespace PaymentMethod {
       | 'magnetic_stripe_track2'
       | null;
 
-    wallet?: CardPresent.Wallet;
+    wallet?: Shared.PaymentFlowsPrivatePaymentMethodsCardPresentCommonWallet;
   }
 
   export namespace CardPresent {
@@ -5150,27 +2830,6 @@ export namespace PaymentMethod {
        * The preferred network for the card.
        */
       preferred?: string | null;
-    }
-
-    export interface Offline {
-      /**
-       * Time at which the payment was collected while offline
-       */
-      stored_at?: number | null;
-
-      /**
-       * The method used to process this payment method offline. Only deferred is
-       * allowed.
-       */
-      type?: 'deferred' | null;
-    }
-
-    export interface Wallet {
-      /**
-       * The type of mobile wallet, one of `apple_pay`, `google_pay`, `samsung_pay`, or
-       * `unknown`.
-       */
-      type: 'apple_pay' | 'google_pay' | 'samsung_pay' | 'unknown';
     }
   }
 
@@ -5907,7 +3566,7 @@ export namespace PaymentMethodCard {
 
   export namespace Wallet {
     export interface Masterpass {
-      billing_address?: Masterpass.BillingAddress | null;
+      billing_address?: Shared.Address | null;
 
       /**
        * Owner's verified email. Values are verified or provided by the wallet directly
@@ -5923,81 +3582,11 @@ export namespace PaymentMethodCard {
        */
       name?: string | null;
 
-      shipping_address?: Masterpass.ShippingAddress | null;
-    }
-
-    export namespace Masterpass {
-      export interface BillingAddress {
-        /**
-         * City, district, suburb, town, or village.
-         */
-        city?: string | null;
-
-        /**
-         * Two-letter country code
-         * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-         */
-        country?: string | null;
-
-        /**
-         * Address line 1, such as the street, PO Box, or company name.
-         */
-        line1?: string | null;
-
-        /**
-         * Address line 2, such as the apartment, suite, unit, or building.
-         */
-        line2?: string | null;
-
-        /**
-         * ZIP or postal code.
-         */
-        postal_code?: string | null;
-
-        /**
-         * State, county, province, or region
-         * ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
-         */
-        state?: string | null;
-      }
-
-      export interface ShippingAddress {
-        /**
-         * City, district, suburb, town, or village.
-         */
-        city?: string | null;
-
-        /**
-         * Two-letter country code
-         * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-         */
-        country?: string | null;
-
-        /**
-         * Address line 1, such as the street, PO Box, or company name.
-         */
-        line1?: string | null;
-
-        /**
-         * Address line 2, such as the apartment, suite, unit, or building.
-         */
-        line2?: string | null;
-
-        /**
-         * ZIP or postal code.
-         */
-        postal_code?: string | null;
-
-        /**
-         * State, county, province, or region
-         * ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
-         */
-        state?: string | null;
-      }
+      shipping_address?: Shared.Address | null;
     }
 
     export interface VisaCheckout {
-      billing_address?: VisaCheckout.BillingAddress | null;
+      billing_address?: Shared.Address | null;
 
       /**
        * Owner's verified email. Values are verified or provided by the wallet directly
@@ -6013,77 +3602,7 @@ export namespace PaymentMethodCard {
        */
       name?: string | null;
 
-      shipping_address?: VisaCheckout.ShippingAddress | null;
-    }
-
-    export namespace VisaCheckout {
-      export interface BillingAddress {
-        /**
-         * City, district, suburb, town, or village.
-         */
-        city?: string | null;
-
-        /**
-         * Two-letter country code
-         * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-         */
-        country?: string | null;
-
-        /**
-         * Address line 1, such as the street, PO Box, or company name.
-         */
-        line1?: string | null;
-
-        /**
-         * Address line 2, such as the apartment, suite, unit, or building.
-         */
-        line2?: string | null;
-
-        /**
-         * ZIP or postal code.
-         */
-        postal_code?: string | null;
-
-        /**
-         * State, county, province, or region
-         * ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
-         */
-        state?: string | null;
-      }
-
-      export interface ShippingAddress {
-        /**
-         * City, district, suburb, town, or village.
-         */
-        city?: string | null;
-
-        /**
-         * Two-letter country code
-         * ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
-         */
-        country?: string | null;
-
-        /**
-         * Address line 1, such as the street, PO Box, or company name.
-         */
-        line1?: string | null;
-
-        /**
-         * Address line 2, such as the apartment, suite, unit, or building.
-         */
-        line2?: string | null;
-
-        /**
-         * ZIP or postal code.
-         */
-        postal_code?: string | null;
-
-        /**
-         * State, county, province, or region
-         * ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
-         */
-        state?: string | null;
-      }
+      shipping_address?: Shared.Address | null;
     }
   }
 }
@@ -6110,237 +3629,7 @@ export namespace PaymentMethodCardGeneratedCard {
      */
     type: string;
 
-    card_present?: PaymentMethodDetails.CardPresent;
-  }
-
-  export namespace PaymentMethodDetails {
-    export interface CardPresent {
-      /**
-       * Two-digit number representing the card's expiration month.
-       */
-      exp_month: number;
-
-      /**
-       * Four-digit number representing the card's expiration year.
-       */
-      exp_year: number;
-
-      /**
-       * Whether this [PaymentIntent](https://docs.stripe.com/api/payment_intents) is
-       * eligible for incremental authorizations. Request support using
-       * [request_incremental_authorization_support](https://docs.stripe.com/api/payment_intents/create#create_payment_intent-payment_method_options-card_present-request_incremental_authorization_support).
-       */
-      incremental_authorization_supported: boolean;
-
-      /**
-       * Defines whether the authorized amount can be over-captured or not
-       */
-      overcapture_supported: boolean;
-
-      /**
-       * The authorized amount
-       */
-      amount_authorized?: number | null;
-
-      /**
-       * Card brand. Can be `amex`, `cartes_bancaires`, `diners`, `discover`,
-       * `eftpos_au`, `jcb`, `link`, `mastercard`, `unionpay`, `visa` or `unknown`.
-       */
-      brand?: string | null;
-
-      /**
-       * The [product code](https://stripe.com/docs/card-product-codes) that identifies
-       * the specific program or product associated with a card.
-       */
-      brand_product?: string | null;
-
-      /**
-       * When using manual capture, a future timestamp after which the charge will be
-       * automatically refunded if uncaptured.
-       */
-      capture_before?: number;
-
-      /**
-       * The cardholder name as read from the card, in
-       * [ISO 7813](https://en.wikipedia.org/wiki/ISO/IEC_7813) format. May include
-       * alphanumeric characters, special characters and first/last name separator (`/`).
-       * In some cases, the cardholder name may not be available depending on how the
-       * issuer has configured the card. Cardholder name is typically not available on
-       * swipe or contactless payments, such as those made with Apple Pay and Google Pay.
-       */
-      cardholder_name?: string | null;
-
-      /**
-       * Two-letter ISO code representing the country of the card. You could use this
-       * attribute to get a sense of the international breakdown of cards you've
-       * collected.
-       */
-      country?: string | null;
-
-      /**
-       * A high-level description of the type of cards issued in this range.
-       */
-      description?: string | null;
-
-      /**
-       * Authorization response cryptogram.
-       */
-      emv_auth_data?: string | null;
-
-      /**
-       * Uniquely identifies this particular card number. You can use this attribute to
-       * check whether two customers who’ve signed up with you are using the same card
-       * number, for example. For payment methods that tokenize card information (Apple
-       * Pay, Google Pay), the tokenized number might be provided instead of the
-       * underlying card number.
-       *
-       * _As of May 1, 2021, card fingerprint in India for Connect changed to allow two
-       * fingerprints for the same card---one for India and one for the rest of the
-       * world._
-       */
-      fingerprint?: string | null;
-
-      /**
-       * Card funding type. Can be `credit`, `debit`, `prepaid`, or `unknown`.
-       */
-      funding?: string | null;
-
-      /**
-       * ID of a card PaymentMethod generated from the card_present PaymentMethod that
-       * may be attached to a Customer for future transactions. Only present if it was
-       * possible to generate a card PaymentMethod.
-       */
-      generated_card?: string | null;
-
-      /**
-       * The name of the card's issuing bank.
-       */
-      issuer?: string | null;
-
-      /**
-       * The last four digits of the card.
-       */
-      last4?: string | null;
-
-      /**
-       * Identifies which network this charge was processed on. Can be `amex`,
-       * `cartes_bancaires`, `diners`, `discover`, `eftpos_au`, `interac`, `jcb`, `link`,
-       * `mastercard`, `unionpay`, `visa`, or `unknown`.
-       */
-      network?: string | null;
-
-      /**
-       * This is used by the financial networks to identify a transaction. Visa calls
-       * this the Transaction ID, Mastercard calls this the Trace ID, and American
-       * Express calls this the Acquirer Reference Data. This value will be present if it
-       * is returned by the financial network in the authorization response, and null
-       * otherwise.
-       */
-      network_transaction_id?: string | null;
-
-      offline?: CardPresent.Offline | null;
-
-      /**
-       * The languages that the issuing bank recommends using for localizing any
-       * customer-facing text, as read from the card. Referenced from EMV tag 5F2D, data
-       * encoded on the card's chip.
-       */
-      preferred_locales?: Array<string> | null;
-
-      /**
-       * How card details were read in this transaction.
-       */
-      read_method?:
-        | 'contact_emv'
-        | 'contactless_emv'
-        | 'contactless_magstripe_mode'
-        | 'magnetic_stripe_fallback'
-        | 'magnetic_stripe_track2'
-        | null;
-
-      receipt?: CardPresent.Receipt | null;
-
-      wallet?: CardPresent.Wallet;
-    }
-
-    export namespace CardPresent {
-      export interface Offline {
-        /**
-         * Time at which the payment was collected while offline
-         */
-        stored_at?: number | null;
-
-        /**
-         * The method used to process this payment method offline. Only deferred is
-         * allowed.
-         */
-        type?: 'deferred' | null;
-      }
-
-      export interface Receipt {
-        /**
-         * The type of account being debited or credited
-         */
-        account_type?: 'checking' | 'credit' | 'prepaid' | 'unknown';
-
-        /**
-         * The Application Cryptogram, a unique value generated by the card to authenticate
-         * the transaction with issuers.
-         */
-        application_cryptogram?: string | null;
-
-        /**
-         * The Application Identifier (AID) on the card used to determine which networks
-         * are eligible to process the transaction. Referenced from EMV tag 9F12, data
-         * encoded on the card's chip.
-         */
-        application_preferred_name?: string | null;
-
-        /**
-         * Identifier for this transaction.
-         */
-        authorization_code?: string | null;
-
-        /**
-         * EMV tag 8A. A code returned by the card issuer.
-         */
-        authorization_response_code?: string | null;
-
-        /**
-         * Describes the method used by the cardholder to verify ownership of the card. One
-         * of the following: `approval`, `failure`, `none`, `offline_pin`,
-         * `offline_pin_and_signature`, `online_pin`, or `signature`.
-         */
-        cardholder_verification_method?: string | null;
-
-        /**
-         * Similar to the application_preferred_name, identifying the applications (AIDs)
-         * available on the card. Referenced from EMV tag 84.
-         */
-        dedicated_file_name?: string | null;
-
-        /**
-         * A 5-byte string that records the checks and validations that occur between the
-         * card and the terminal. These checks determine how the terminal processes the
-         * transaction and what risk tolerance is acceptable. Referenced from EMV Tag 95.
-         */
-        terminal_verification_results?: string | null;
-
-        /**
-         * An indication of which steps were completed during the card read process.
-         * Referenced from EMV Tag 9B.
-         */
-        transaction_status_information?: string | null;
-      }
-
-      export interface Wallet {
-        /**
-         * The type of mobile wallet, one of `apple_pay`, `google_pay`, `samsung_pay`, or
-         * `unknown`.
-         */
-        type: 'apple_pay' | 'google_pay' | 'samsung_pay' | 'unknown';
-      }
-    }
+    card_present?: Shared.PaymentMethodDetailsCardPresent;
   }
 }
 
@@ -6441,37 +3730,37 @@ export interface PaymentRecord {
   /**
    * A representation of an amount of money, consisting of an amount and a currency.
    */
-  amount: PaymentRecord.Amount;
+  amount: PaymentsPrimitivesPaymentRecordsResourceAmount;
 
   /**
    * A representation of an amount of money, consisting of an amount and a currency.
    */
-  amount_authorized: PaymentRecord.AmountAuthorized;
+  amount_authorized: PaymentsPrimitivesPaymentRecordsResourceAmount;
 
   /**
    * A representation of an amount of money, consisting of an amount and a currency.
    */
-  amount_canceled: PaymentRecord.AmountCanceled;
+  amount_canceled: PaymentsPrimitivesPaymentRecordsResourceAmount;
 
   /**
    * A representation of an amount of money, consisting of an amount and a currency.
    */
-  amount_failed: PaymentRecord.AmountFailed;
+  amount_failed: PaymentsPrimitivesPaymentRecordsResourceAmount;
 
   /**
    * A representation of an amount of money, consisting of an amount and a currency.
    */
-  amount_guaranteed: PaymentRecord.AmountGuaranteed;
+  amount_guaranteed: PaymentsPrimitivesPaymentRecordsResourceAmount;
 
   /**
    * A representation of an amount of money, consisting of an amount and a currency.
    */
-  amount_refunded: PaymentRecord.AmountRefunded;
+  amount_refunded: PaymentsPrimitivesPaymentRecordsResourceAmount;
 
   /**
    * A representation of an amount of money, consisting of an amount and a currency.
    */
-  amount_requested: PaymentRecord.AmountRequested;
+  amount_requested: PaymentsPrimitivesPaymentRecordsResourceAmount;
 
   /**
    * Time at which the object was created. Measured in seconds since the Unix epoch.
@@ -6546,139 +3835,6 @@ export interface PaymentRecord {
 }
 
 export namespace PaymentRecord {
-  /**
-   * A representation of an amount of money, consisting of an amount and a currency.
-   */
-  export interface Amount {
-    /**
-     * Three-letter
-     * [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in
-     * lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-     */
-    currency: string;
-
-    /**
-     * A positive integer representing the amount in the currency's
-     * [minor unit](https://docs.stripe.com/currencies#zero-decimal). For example,
-     * `100` can represent 1 USD or 100 JPY.
-     */
-    value: number;
-  }
-
-  /**
-   * A representation of an amount of money, consisting of an amount and a currency.
-   */
-  export interface AmountAuthorized {
-    /**
-     * Three-letter
-     * [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in
-     * lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-     */
-    currency: string;
-
-    /**
-     * A positive integer representing the amount in the currency's
-     * [minor unit](https://docs.stripe.com/currencies#zero-decimal). For example,
-     * `100` can represent 1 USD or 100 JPY.
-     */
-    value: number;
-  }
-
-  /**
-   * A representation of an amount of money, consisting of an amount and a currency.
-   */
-  export interface AmountCanceled {
-    /**
-     * Three-letter
-     * [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in
-     * lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-     */
-    currency: string;
-
-    /**
-     * A positive integer representing the amount in the currency's
-     * [minor unit](https://docs.stripe.com/currencies#zero-decimal). For example,
-     * `100` can represent 1 USD or 100 JPY.
-     */
-    value: number;
-  }
-
-  /**
-   * A representation of an amount of money, consisting of an amount and a currency.
-   */
-  export interface AmountFailed {
-    /**
-     * Three-letter
-     * [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in
-     * lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-     */
-    currency: string;
-
-    /**
-     * A positive integer representing the amount in the currency's
-     * [minor unit](https://docs.stripe.com/currencies#zero-decimal). For example,
-     * `100` can represent 1 USD or 100 JPY.
-     */
-    value: number;
-  }
-
-  /**
-   * A representation of an amount of money, consisting of an amount and a currency.
-   */
-  export interface AmountGuaranteed {
-    /**
-     * Three-letter
-     * [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in
-     * lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-     */
-    currency: string;
-
-    /**
-     * A positive integer representing the amount in the currency's
-     * [minor unit](https://docs.stripe.com/currencies#zero-decimal). For example,
-     * `100` can represent 1 USD or 100 JPY.
-     */
-    value: number;
-  }
-
-  /**
-   * A representation of an amount of money, consisting of an amount and a currency.
-   */
-  export interface AmountRefunded {
-    /**
-     * Three-letter
-     * [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in
-     * lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-     */
-    currency: string;
-
-    /**
-     * A positive integer representing the amount in the currency's
-     * [minor unit](https://docs.stripe.com/currencies#zero-decimal). For example,
-     * `100` can represent 1 USD or 100 JPY.
-     */
-    value: number;
-  }
-
-  /**
-   * A representation of an amount of money, consisting of an amount and a currency.
-   */
-  export interface AmountRequested {
-    /**
-     * Three-letter
-     * [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in
-     * lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
-     */
-    currency: string;
-
-    /**
-     * A positive integer representing the amount in the currency's
-     * [minor unit](https://docs.stripe.com/currencies#zero-decimal). For example,
-     * `100` can represent 1 USD or 100 JPY.
-     */
-    value: number;
-  }
-
   /**
    * Processor information associated with this payment.
    */
@@ -6797,6 +3953,25 @@ export namespace PaymentRecord {
 }
 
 /**
+ * A representation of an amount of money, consisting of an amount and a currency.
+ */
+export interface PaymentsPrimitivesPaymentRecordsResourceAmount {
+  /**
+   * Three-letter
+   * [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in
+   * lowercase. Must be a [supported currency](https://stripe.com/docs/currencies).
+   */
+  currency: string;
+
+  /**
+   * A positive integer representing the amount in the currency's
+   * [minor unit](https://docs.stripe.com/currencies#zero-decimal). For example,
+   * `100` can represent 1 USD or 100 JPY.
+   */
+  value: number;
+}
+
+/**
  * Details about the Payment Method used in this payment attempt.
  */
 export interface PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails {
@@ -6848,7 +4023,7 @@ export interface PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails {
    */
   card?: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails.Card;
 
-  card_present?: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails.CardPresent;
+  card_present?: Shared.PaymentMethodDetailsCardPresent;
 
   cashapp?: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails.Cashapp;
 
@@ -7118,49 +4293,12 @@ export namespace PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails {
 
   export namespace AmazonPay {
     export interface Funding {
-      card?: Funding.Card;
+      card?: Shared.PaymentMethodDetailsPassthroughCard;
 
       /**
        * funding type of the underlying payment method.
        */
       type?: 'card' | null;
-    }
-
-    export namespace Funding {
-      export interface Card {
-        /**
-         * Card brand. Can be `amex`, `cartes_bancaires`, `diners`, `discover`,
-         * `eftpos_au`, `jcb`, `link`, `mastercard`, `unionpay`, `visa` or `unknown`.
-         */
-        brand?: string | null;
-
-        /**
-         * Two-letter ISO code representing the country of the card. You could use this
-         * attribute to get a sense of the international breakdown of cards you've
-         * collected.
-         */
-        country?: string | null;
-
-        /**
-         * Two-digit number representing the card's expiration month.
-         */
-        exp_month?: number | null;
-
-        /**
-         * Four-digit number representing the card's expiration year.
-         */
-        exp_year?: number | null;
-
-        /**
-         * Card funding type. Can be `credit`, `debit`, `prepaid`, or `unknown`.
-         */
-        funding?: string | null;
-
-        /**
-         * The last four digits of the card.
-         */
-        last4?: string | null;
-      }
     }
   }
 
@@ -7544,234 +4682,6 @@ export namespace PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails {
          */
         type: string;
       }
-    }
-  }
-
-  export interface CardPresent {
-    /**
-     * Two-digit number representing the card's expiration month.
-     */
-    exp_month: number;
-
-    /**
-     * Four-digit number representing the card's expiration year.
-     */
-    exp_year: number;
-
-    /**
-     * Whether this [PaymentIntent](https://docs.stripe.com/api/payment_intents) is
-     * eligible for incremental authorizations. Request support using
-     * [request_incremental_authorization_support](https://docs.stripe.com/api/payment_intents/create#create_payment_intent-payment_method_options-card_present-request_incremental_authorization_support).
-     */
-    incremental_authorization_supported: boolean;
-
-    /**
-     * Defines whether the authorized amount can be over-captured or not
-     */
-    overcapture_supported: boolean;
-
-    /**
-     * The authorized amount
-     */
-    amount_authorized?: number | null;
-
-    /**
-     * Card brand. Can be `amex`, `cartes_bancaires`, `diners`, `discover`,
-     * `eftpos_au`, `jcb`, `link`, `mastercard`, `unionpay`, `visa` or `unknown`.
-     */
-    brand?: string | null;
-
-    /**
-     * The [product code](https://stripe.com/docs/card-product-codes) that identifies
-     * the specific program or product associated with a card.
-     */
-    brand_product?: string | null;
-
-    /**
-     * When using manual capture, a future timestamp after which the charge will be
-     * automatically refunded if uncaptured.
-     */
-    capture_before?: number;
-
-    /**
-     * The cardholder name as read from the card, in
-     * [ISO 7813](https://en.wikipedia.org/wiki/ISO/IEC_7813) format. May include
-     * alphanumeric characters, special characters and first/last name separator (`/`).
-     * In some cases, the cardholder name may not be available depending on how the
-     * issuer has configured the card. Cardholder name is typically not available on
-     * swipe or contactless payments, such as those made with Apple Pay and Google Pay.
-     */
-    cardholder_name?: string | null;
-
-    /**
-     * Two-letter ISO code representing the country of the card. You could use this
-     * attribute to get a sense of the international breakdown of cards you've
-     * collected.
-     */
-    country?: string | null;
-
-    /**
-     * A high-level description of the type of cards issued in this range.
-     */
-    description?: string | null;
-
-    /**
-     * Authorization response cryptogram.
-     */
-    emv_auth_data?: string | null;
-
-    /**
-     * Uniquely identifies this particular card number. You can use this attribute to
-     * check whether two customers who’ve signed up with you are using the same card
-     * number, for example. For payment methods that tokenize card information (Apple
-     * Pay, Google Pay), the tokenized number might be provided instead of the
-     * underlying card number.
-     *
-     * _As of May 1, 2021, card fingerprint in India for Connect changed to allow two
-     * fingerprints for the same card---one for India and one for the rest of the
-     * world._
-     */
-    fingerprint?: string | null;
-
-    /**
-     * Card funding type. Can be `credit`, `debit`, `prepaid`, or `unknown`.
-     */
-    funding?: string | null;
-
-    /**
-     * ID of a card PaymentMethod generated from the card_present PaymentMethod that
-     * may be attached to a Customer for future transactions. Only present if it was
-     * possible to generate a card PaymentMethod.
-     */
-    generated_card?: string | null;
-
-    /**
-     * The name of the card's issuing bank.
-     */
-    issuer?: string | null;
-
-    /**
-     * The last four digits of the card.
-     */
-    last4?: string | null;
-
-    /**
-     * Identifies which network this charge was processed on. Can be `amex`,
-     * `cartes_bancaires`, `diners`, `discover`, `eftpos_au`, `interac`, `jcb`, `link`,
-     * `mastercard`, `unionpay`, `visa`, or `unknown`.
-     */
-    network?: string | null;
-
-    /**
-     * This is used by the financial networks to identify a transaction. Visa calls
-     * this the Transaction ID, Mastercard calls this the Trace ID, and American
-     * Express calls this the Acquirer Reference Data. This value will be present if it
-     * is returned by the financial network in the authorization response, and null
-     * otherwise.
-     */
-    network_transaction_id?: string | null;
-
-    offline?: CardPresent.Offline | null;
-
-    /**
-     * The languages that the issuing bank recommends using for localizing any
-     * customer-facing text, as read from the card. Referenced from EMV tag 5F2D, data
-     * encoded on the card's chip.
-     */
-    preferred_locales?: Array<string> | null;
-
-    /**
-     * How card details were read in this transaction.
-     */
-    read_method?:
-      | 'contact_emv'
-      | 'contactless_emv'
-      | 'contactless_magstripe_mode'
-      | 'magnetic_stripe_fallback'
-      | 'magnetic_stripe_track2'
-      | null;
-
-    receipt?: CardPresent.Receipt | null;
-
-    wallet?: CardPresent.Wallet;
-  }
-
-  export namespace CardPresent {
-    export interface Offline {
-      /**
-       * Time at which the payment was collected while offline
-       */
-      stored_at?: number | null;
-
-      /**
-       * The method used to process this payment method offline. Only deferred is
-       * allowed.
-       */
-      type?: 'deferred' | null;
-    }
-
-    export interface Receipt {
-      /**
-       * The type of account being debited or credited
-       */
-      account_type?: 'checking' | 'credit' | 'prepaid' | 'unknown';
-
-      /**
-       * The Application Cryptogram, a unique value generated by the card to authenticate
-       * the transaction with issuers.
-       */
-      application_cryptogram?: string | null;
-
-      /**
-       * The Application Identifier (AID) on the card used to determine which networks
-       * are eligible to process the transaction. Referenced from EMV tag 9F12, data
-       * encoded on the card's chip.
-       */
-      application_preferred_name?: string | null;
-
-      /**
-       * Identifier for this transaction.
-       */
-      authorization_code?: string | null;
-
-      /**
-       * EMV tag 8A. A code returned by the card issuer.
-       */
-      authorization_response_code?: string | null;
-
-      /**
-       * Describes the method used by the cardholder to verify ownership of the card. One
-       * of the following: `approval`, `failure`, `none`, `offline_pin`,
-       * `offline_pin_and_signature`, `online_pin`, or `signature`.
-       */
-      cardholder_verification_method?: string | null;
-
-      /**
-       * Similar to the application_preferred_name, identifying the applications (AIDs)
-       * available on the card. Referenced from EMV tag 84.
-       */
-      dedicated_file_name?: string | null;
-
-      /**
-       * A 5-byte string that records the checks and validations that occur between the
-       * card and the terminal. These checks determine how the terminal processes the
-       * transaction and what risk tolerance is acceptable. Referenced from EMV Tag 95.
-       */
-      terminal_verification_results?: string | null;
-
-      /**
-       * An indication of which steps were completed during the card read process.
-       * Referenced from EMV Tag 9B.
-       */
-      transaction_status_information?: string | null;
-    }
-
-    export interface Wallet {
-      /**
-       * The type of mobile wallet, one of `apple_pay`, `google_pay`, `samsung_pay`, or
-       * `unknown`.
-       */
-      type: 'apple_pay' | 'google_pay' | 'samsung_pay' | 'unknown';
     }
   }
 
@@ -8526,49 +5436,12 @@ export namespace PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails {
 
   export namespace RevolutPay {
     export interface Funding {
-      card?: Funding.Card;
+      card?: Shared.PaymentMethodDetailsPassthroughCard;
 
       /**
        * funding type of the underlying payment method.
        */
       type?: 'card' | null;
-    }
-
-    export namespace Funding {
-      export interface Card {
-        /**
-         * Card brand. Can be `amex`, `cartes_bancaires`, `diners`, `discover`,
-         * `eftpos_au`, `jcb`, `link`, `mastercard`, `unionpay`, `visa` or `unknown`.
-         */
-        brand?: string | null;
-
-        /**
-         * Two-letter ISO code representing the country of the card. You could use this
-         * attribute to get a sense of the international breakdown of cards you've
-         * collected.
-         */
-        country?: string | null;
-
-        /**
-         * Two-digit number representing the card's expiration month.
-         */
-        exp_month?: number | null;
-
-        /**
-         * Four-digit number representing the card's expiration year.
-         */
-        exp_year?: number | null;
-
-        /**
-         * Card funding type. Can be `credit`, `debit`, `prepaid`, or `unknown`.
-         */
-        funding?: string | null;
-
-        /**
-         * The last four digits of the card.
-         */
-        last4?: string | null;
-      }
     }
   }
 
@@ -9574,10 +6447,12 @@ export declare namespace Invoices {
     type BillingBillResourceInvoicingParentsInvoiceSubscriptionParent as BillingBillResourceInvoicingParentsInvoiceSubscriptionParent,
     type BillingCreditBalanceTransaction as BillingCreditBalanceTransaction,
     type BillingCreditGrant as BillingCreditGrant,
+    type BillingCreditGrantsResourceAmount as BillingCreditGrantsResourceAmount,
     type BillingCreditGrantsResourceBalanceCredit as BillingCreditGrantsResourceBalanceCredit,
     type BillingCreditGrantsResourceBalanceCreditsApplicationInvoiceVoided as BillingCreditGrantsResourceBalanceCreditsApplicationInvoiceVoided,
     type BillingCreditGrantsResourceBalanceCreditsApplied as BillingCreditGrantsResourceBalanceCreditsApplied,
     type BillingCreditGrantsResourceBalanceDebit as BillingCreditGrantsResourceBalanceDebit,
+    type BillingCreditGrantsResourceMonetaryAmount as BillingCreditGrantsResourceMonetaryAmount,
     type ConnectAccountReference as ConnectAccountReference,
     type DeletedDiscount as DeletedDiscount,
     type DiscountsResourceDiscountAmount as DiscountsResourceDiscountAmount,
@@ -9593,6 +6468,7 @@ export declare namespace Invoices {
     type PaymentMethodDetailsPaymentRecordUsBankAccount as PaymentMethodDetailsPaymentRecordUsBankAccount,
     type PaymentMethodSepaDebit as PaymentMethodSepaDebit,
     type PaymentRecord as PaymentRecord,
+    type PaymentsPrimitivesPaymentRecordsResourceAmount as PaymentsPrimitivesPaymentRecordsResourceAmount,
     type PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails as PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails,
     type SepaDebitGeneratedFrom as SepaDebitGeneratedFrom,
     type ShippingRateDeliveryEstimateBound as ShippingRateDeliveryEstimateBound,

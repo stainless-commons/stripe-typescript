@@ -1,10 +1,61 @@
+# Shared
+
+Types:
+
+- <code><a href="./src/resources/shared.ts">AccountRequirementsError</a></code>
+- <code><a href="./src/resources/shared.ts">Address</a></code>
+- <code><a href="./src/resources/shared.ts">Application</a></code>
+- <code><a href="./src/resources/shared.ts">BillingClocksResourceStatusDetailsAdvancingStatusDetails</a></code>
+- <code><a href="./src/resources/shared.ts">BillingClocksResourceStatusDetailsStatusDetails</a></code>
+- <code><a href="./src/resources/shared.ts">DeletedApplication</a></code>
+- <code><a href="./src/resources/shared.ts">DeletedCustomer</a></code>
+- <code><a href="./src/resources/shared.ts">DeletedTaxID</a></code>
+- <code><a href="./src/resources/shared.ts">InvoiceSettingCustomField</a></code>
+- <code><a href="./src/resources/shared.ts">PaymentFlowsPaymentIntentPresentmentDetails</a></code>
+- <code><a href="./src/resources/shared.ts">PaymentFlowsPrivatePaymentMethodsCardPresentCommonWallet</a></code>
+- <code><a href="./src/resources/shared.ts">PaymentMethodDetailsCardInstallmentsPlan</a></code>
+- <code><a href="./src/resources/shared.ts">PaymentMethodDetailsCardPresent</a></code>
+- <code><a href="./src/resources/shared.ts">PaymentMethodDetailsCardPresentOffline</a></code>
+- <code><a href="./src/resources/shared.ts">PaymentMethodDetailsCardPresentReceipt</a></code>
+- <code><a href="./src/resources/shared.ts">PaymentMethodDetailsPassthroughCard</a></code>
+- <code><a href="./src/resources/shared.ts">Shipping</a></code>
+- <code><a href="./src/resources/shared.ts">Source</a></code>
+- <code><a href="./src/resources/shared.ts">SourceCodeVerificationFlow</a></code>
+- <code><a href="./src/resources/shared.ts">SourceOrder</a></code>
+- <code><a href="./src/resources/shared.ts">SourceOrderItem</a></code>
+- <code><a href="./src/resources/shared.ts">SourceOwner</a></code>
+- <code><a href="./src/resources/shared.ts">SourceReceiverFlow</a></code>
+- <code><a href="./src/resources/shared.ts">SourceRedirectFlow</a></code>
+- <code><a href="./src/resources/shared.ts">SourceTypeACHCreditTransfer</a></code>
+- <code><a href="./src/resources/shared.ts">SourceTypeACHDebit</a></code>
+- <code><a href="./src/resources/shared.ts">SourceTypeAcssDebit</a></code>
+- <code><a href="./src/resources/shared.ts">SourceTypeAlipay</a></code>
+- <code><a href="./src/resources/shared.ts">SourceTypeAuBecsDebit</a></code>
+- <code><a href="./src/resources/shared.ts">SourceTypeBancontact</a></code>
+- <code><a href="./src/resources/shared.ts">SourceTypeCard</a></code>
+- <code><a href="./src/resources/shared.ts">SourceTypeCardPresent</a></code>
+- <code><a href="./src/resources/shared.ts">SourceTypeEps</a></code>
+- <code><a href="./src/resources/shared.ts">SourceTypeGiropay</a></code>
+- <code><a href="./src/resources/shared.ts">SourceTypeIdeal</a></code>
+- <code><a href="./src/resources/shared.ts">SourceTypeKlarna</a></code>
+- <code><a href="./src/resources/shared.ts">SourceTypeMultibanco</a></code>
+- <code><a href="./src/resources/shared.ts">SourceTypeP24</a></code>
+- <code><a href="./src/resources/shared.ts">SourceTypeSepaDebit</a></code>
+- <code><a href="./src/resources/shared.ts">SourceTypeSofort</a></code>
+- <code><a href="./src/resources/shared.ts">SourceTypeThreeDSecure</a></code>
+- <code><a href="./src/resources/shared.ts">SourceTypeWechat</a></code>
+- <code><a href="./src/resources/shared.ts">TaxCode</a></code>
+- <code><a href="./src/resources/shared.ts">TestHelpersTestClock</a></code>
+
 # Account
 
 Types:
 
 - <code><a href="./src/resources/account.ts">Account</a></code>
 - <code><a href="./src/resources/account.ts">AccountInvoicesSettings</a></code>
+- <code><a href="./src/resources/account.ts">AccountRequirementsAlternative</a></code>
 - <code><a href="./src/resources/account.ts">AccountSettings</a></code>
+- <code><a href="./src/resources/account.ts">LegalEntityJapanAddress</a></code>
 
 Methods:
 
@@ -73,7 +124,20 @@ Types:
 - <code><a href="./src/resources/disputes.ts">File</a></code>
 - <code><a href="./src/resources/disputes.ts">FileLink</a></code>
 - <code><a href="./src/resources/disputes.ts">IssuingAuthorization</a></code>
+- <code><a href="./src/resources/disputes.ts">IssuingAuthorizationAmountDetails</a></code>
 - <code><a href="./src/resources/disputes.ts">IssuingCard</a></code>
+- <code><a href="./src/resources/disputes.ts">IssuingCardholder</a></code>
+- <code><a href="./src/resources/disputes.ts">IssuingCardholderAddress</a></code>
+- <code><a href="./src/resources/disputes.ts">IssuingCardholderAuthorizationControls</a></code>
+- <code><a href="./src/resources/disputes.ts">IssuingCardholderCardIssuing</a></code>
+- <code><a href="./src/resources/disputes.ts">IssuingCardholderCompany</a></code>
+- <code><a href="./src/resources/disputes.ts">IssuingCardholderIDDocument</a></code>
+- <code><a href="./src/resources/disputes.ts">IssuingCardholderIndividual</a></code>
+- <code><a href="./src/resources/disputes.ts">IssuingCardholderIndividualDob</a></code>
+- <code><a href="./src/resources/disputes.ts">IssuingCardholderRequirements</a></code>
+- <code><a href="./src/resources/disputes.ts">IssuingCardholderSpendingLimit</a></code>
+- <code><a href="./src/resources/disputes.ts">IssuingCardholderUserTermsAcceptance</a></code>
+- <code><a href="./src/resources/disputes.ts">IssuingCardholderVerification</a></code>
 - <code><a href="./src/resources/disputes.ts">IssuingDispute</a></code>
 - <code><a href="./src/resources/disputes.ts">IssuingTransaction</a></code>
 - <code><a href="./src/resources/disputes.ts">PaymentMethodDetails</a></code>
@@ -101,10 +165,12 @@ Types:
 - <code><a href="./src/resources/invoices.ts">BillingBillResourceInvoicingParentsInvoiceSubscriptionParent</a></code>
 - <code><a href="./src/resources/invoices.ts">BillingCreditBalanceTransaction</a></code>
 - <code><a href="./src/resources/invoices.ts">BillingCreditGrant</a></code>
+- <code><a href="./src/resources/invoices.ts">BillingCreditGrantsResourceAmount</a></code>
 - <code><a href="./src/resources/invoices.ts">BillingCreditGrantsResourceBalanceCredit</a></code>
 - <code><a href="./src/resources/invoices.ts">BillingCreditGrantsResourceBalanceCreditsApplicationInvoiceVoided</a></code>
 - <code><a href="./src/resources/invoices.ts">BillingCreditGrantsResourceBalanceCreditsApplied</a></code>
 - <code><a href="./src/resources/invoices.ts">BillingCreditGrantsResourceBalanceDebit</a></code>
+- <code><a href="./src/resources/invoices.ts">BillingCreditGrantsResourceMonetaryAmount</a></code>
 - <code><a href="./src/resources/invoices.ts">ConnectAccountReference</a></code>
 - <code><a href="./src/resources/invoices.ts">DeletedDiscount</a></code>
 - <code><a href="./src/resources/invoices.ts">DiscountsResourceDiscountAmount</a></code>
@@ -120,6 +186,7 @@ Types:
 - <code><a href="./src/resources/invoices.ts">PaymentMethodDetailsPaymentRecordUsBankAccount</a></code>
 - <code><a href="./src/resources/invoices.ts">PaymentMethodSepaDebit</a></code>
 - <code><a href="./src/resources/invoices.ts">PaymentRecord</a></code>
+- <code><a href="./src/resources/invoices.ts">PaymentsPrimitivesPaymentRecordsResourceAmount</a></code>
 - <code><a href="./src/resources/invoices.ts">PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails</a></code>
 - <code><a href="./src/resources/invoices.ts">SepaDebitGeneratedFrom</a></code>
 - <code><a href="./src/resources/invoices.ts">ShippingRateDeliveryEstimateBound</a></code>
@@ -157,7 +224,11 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/payment-intents.ts">PaymentFlowsInstallmentOptions</a></code>
 - <code><a href="./src/resources/payment-intents.ts">PaymentIntent</a></code>
+- <code><a href="./src/resources/payment-intents.ts">PaymentIntentPaymentMethodOptionsMandateOptionsPayto</a></code>
+- <code><a href="./src/resources/payment-intents.ts">PaymentIntentTypeSpecificPaymentMethodOptionsClient</a></code>
+- <code><a href="./src/resources/payment-intents.ts">PaymentMethodOptionsCardPresentRouting</a></code>
 - <code><a href="./src/resources/payment-intents.ts">PaymentTransferData</a></code>
 - <code><a href="./src/resources/payment-intents.ts">Review</a></code>
 - <code><a href="./src/resources/payment-intents.ts">PaymentIntentListResponse</a></code>
@@ -224,8 +295,11 @@ Types:
 - <code><a href="./src/resources/subscriptions.ts">SetupAttempt</a></code>
 - <code><a href="./src/resources/subscriptions.ts">SetupAttemptPaymentMethodDetails</a></code>
 - <code><a href="./src/resources/subscriptions.ts">SetupIntent</a></code>
+- <code><a href="./src/resources/subscriptions.ts">SetupIntentPaymentMethodOptionsMandateOptionsPayto</a></code>
+- <code><a href="./src/resources/subscriptions.ts">SetupIntentTypeSpecificPaymentMethodOptionsClient</a></code>
 - <code><a href="./src/resources/subscriptions.ts">StackableDiscount</a></code>
 - <code><a href="./src/resources/subscriptions.ts">Subscription</a></code>
+- <code><a href="./src/resources/subscriptions.ts">SubscriptionBillingThresholds</a></code>
 - <code><a href="./src/resources/subscriptions.ts">SubscriptionInvoiceSettings</a></code>
 - <code><a href="./src/resources/subscriptions.ts">SubscriptionItem</a></code>
 - <code><a href="./src/resources/subscriptions.ts">SubscriptionTransferData</a></code>
