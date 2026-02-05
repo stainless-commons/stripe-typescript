@@ -5,6 +5,7 @@ import { NullableHeaders } from './headers';
 import type { BodyInit } from './builtin-types';
 import type { HTTPMethod, MergedRequestInit } from './types';
 import { type HeadersLike } from './headers';
+import { stringify } from './qs';
 
 export type FinalRequestOptions = RequestOptions & { method: HTTPMethod; path: string };
 
@@ -84,8 +85,8 @@ export type RequestEncoder = (request: { headers: NullableHeaders; body: unknown
 export const FallbackEncoder: RequestEncoder = ({ headers, body }) => {
   return {
     bodyHeaders: {
-      'content-type': 'application/json',
+      'content-type': 'application/x-www-form-urlencoded',
     },
-    body: JSON.stringify(body),
+    body: stringify(body as Record<string, unknown>),
   };
 };
