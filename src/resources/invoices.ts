@@ -1235,11 +1235,11 @@ export namespace Invoice {
 
       customer_balance?: PaymentMethodOptions.CustomerBalance | null;
 
-      konbini?: unknown | null;
+      konbini?: PaymentMethodOptions.Konbini | null;
 
       payto?: PaymentMethodOptions.Payto | null;
 
-      sepa_debit?: unknown | null;
+      sepa_debit?: PaymentMethodOptions.SepaDebit | null;
 
       us_bank_account?: PaymentMethodOptions.UsBankAccount | null;
     }
@@ -1329,6 +1329,8 @@ export namespace Invoice {
         }
       }
 
+      export interface Konbini {}
+
       export interface Payto {
         mandate_options?: Payto.MandateOptions;
       }
@@ -1365,6 +1367,8 @@ export namespace Invoice {
             | null;
         }
       }
+
+      export interface SepaDebit {}
 
       export interface UsBankAccount {
         financial_connections?: UsBankAccount.FinancialConnections;
@@ -2484,11 +2488,11 @@ export interface PaymentMethod {
 
   acss_debit?: PaymentMethod.AcssDebit;
 
-  affirm?: unknown;
+  affirm?: PaymentMethod.Affirm;
 
-  afterpay_clearpay?: unknown;
+  afterpay_clearpay?: PaymentMethod.AfterpayClearpay;
 
-  alipay?: unknown;
+  alipay?: PaymentMethod.Alipay;
 
   /**
    * This field indicates whether this payment method can be shown again to its
@@ -2498,19 +2502,19 @@ export interface PaymentMethod {
    */
   allow_redisplay?: 'always' | 'limited' | 'unspecified';
 
-  alma?: unknown;
+  alma?: PaymentMethod.Alma;
 
-  amazon_pay?: unknown;
+  amazon_pay?: PaymentMethod.AmazonPay;
 
   au_becs_debit?: PaymentMethod.AuBecsDebit;
 
   bacs_debit?: PaymentMethod.BacsDebit;
 
-  bancontact?: unknown;
+  bancontact?: PaymentMethod.Bancontact;
 
-  billie?: unknown;
+  billie?: PaymentMethod.Billie;
 
-  blik?: unknown;
+  blik?: PaymentMethod.Blik;
 
   boleto?: PaymentMethod.Boleto;
 
@@ -2520,7 +2524,7 @@ export interface PaymentMethod {
 
   cashapp?: PaymentMethod.Cashapp;
 
-  crypto?: unknown;
+  crypto?: PaymentMethod.Crypto;
 
   custom?: PaymentMethod.Custom;
 
@@ -2532,31 +2536,31 @@ export interface PaymentMethod {
 
   customer_account?: string | null;
 
-  customer_balance?: unknown;
+  customer_balance?: PaymentMethod.CustomerBalance;
 
   eps?: PaymentMethod.Eps;
 
   fpx?: PaymentMethod.Fpx;
 
-  giropay?: unknown;
+  giropay?: PaymentMethod.Giropay;
 
-  grabpay?: unknown;
+  grabpay?: PaymentMethod.Grabpay;
 
   ideal?: PaymentMethod.Ideal;
 
   interac_present?: PaymentMethod.InteracPresent;
 
-  kakao_pay?: unknown;
+  kakao_pay?: PaymentMethod.KakaoPay;
 
   klarna?: PaymentMethod.Klarna;
 
-  konbini?: unknown;
+  konbini?: PaymentMethod.Konbini;
 
   kr_card?: PaymentMethod.KrCard;
 
   link?: PaymentMethod.Link;
 
-  mb_way?: unknown;
+  mb_way?: PaymentMethod.MBWay;
 
   /**
    * Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can
@@ -2565,31 +2569,31 @@ export interface PaymentMethod {
    */
   metadata?: { [key: string]: string } | null;
 
-  mobilepay?: unknown;
+  mobilepay?: PaymentMethod.Mobilepay;
 
-  multibanco?: unknown;
+  multibanco?: PaymentMethod.Multibanco;
 
   naver_pay?: PaymentMethod.NaverPay;
 
   nz_bank_account?: PaymentMethod.NzBankAccount;
 
-  oxxo?: unknown;
+  oxxo?: PaymentMethod.Oxxo;
 
   p24?: PaymentMethod.P24;
 
-  pay_by_bank?: unknown;
+  pay_by_bank?: PaymentMethod.PayByBank;
 
-  payco?: unknown;
+  payco?: PaymentMethod.Payco;
 
-  paynow?: unknown;
+  paynow?: PaymentMethod.Paynow;
 
   paypal?: PaymentMethod.Paypal;
 
   payto?: PaymentMethod.Payto;
 
-  pix?: unknown;
+  pix?: PaymentMethod.Pix;
 
-  promptpay?: unknown;
+  promptpay?: PaymentMethod.Promptpay;
 
   /**
    * Options to configure Radar. See
@@ -2598,25 +2602,25 @@ export interface PaymentMethod {
    */
   radar_options?: PaymentMethod.RadarOptions;
 
-  revolut_pay?: unknown;
+  revolut_pay?: PaymentMethod.RevolutPay;
 
-  samsung_pay?: unknown;
+  samsung_pay?: PaymentMethod.SamsungPay;
 
-  satispay?: unknown;
+  satispay?: PaymentMethod.Satispay;
 
   sepa_debit?: PaymentMethodSepaDebit;
 
   sofort?: PaymentMethod.Sofort;
 
-  swish?: unknown;
+  swish?: PaymentMethod.Swish;
 
-  twint?: unknown;
+  twint?: PaymentMethod.Twint;
 
   us_bank_account?: PaymentMethod.UsBankAccount;
 
-  wechat_pay?: unknown;
+  wechat_pay?: PaymentMethod.WechatPay;
 
-  zip?: unknown;
+  zip?: PaymentMethod.Zip;
 }
 
 export namespace PaymentMethod {
@@ -2673,6 +2677,16 @@ export namespace PaymentMethod {
     transit_number?: string | null;
   }
 
+  export interface Affirm {}
+
+  export interface AfterpayClearpay {}
+
+  export interface Alipay {}
+
+  export interface Alma {}
+
+  export interface AmazonPay {}
+
   export interface AuBecsDebit {
     /**
      * Six-digit number identifying bank and branch associated with this bank account.
@@ -2708,6 +2722,12 @@ export namespace PaymentMethod {
      */
     sort_code?: string | null;
   }
+
+  export interface Bancontact {}
+
+  export interface Billie {}
+
+  export interface Blik {}
 
   export interface Boleto {
     /**
@@ -2841,6 +2861,8 @@ export namespace PaymentMethod {
     cashtag?: string | null;
   }
 
+  export interface Crypto {}
+
   export interface Custom {
     /**
      * ID of the Dashboard-only CustomPaymentMethodType. Not expandable.
@@ -2868,6 +2890,8 @@ export namespace PaymentMethod {
       content_type?: string | null;
     }
   }
+
+  export interface CustomerBalance {}
 
   export interface Eps {
     /**
@@ -2948,6 +2972,10 @@ export namespace PaymentMethod {
       | 'standard_chartered'
       | 'uob';
   }
+
+  export interface Giropay {}
+
+  export interface Grabpay {}
 
   export interface Ideal {
     /**
@@ -3109,6 +3137,8 @@ export namespace PaymentMethod {
     }
   }
 
+  export interface KakaoPay {}
+
   export interface Klarna {
     dob?: Klarna.Dob | null;
   }
@@ -3131,6 +3161,8 @@ export namespace PaymentMethod {
       year?: number | null;
     }
   }
+
+  export interface Konbini {}
 
   export interface KrCard {
     /**
@@ -3174,6 +3206,12 @@ export namespace PaymentMethod {
      */
     email?: string | null;
   }
+
+  export interface MBWay {}
+
+  export interface Mobilepay {}
+
+  export interface Multibanco {}
 
   export interface NaverPay {
     /**
@@ -3222,6 +3260,8 @@ export namespace PaymentMethod {
     suffix?: string | null;
   }
 
+  export interface Oxxo {}
+
   export interface P24 {
     /**
      * The customer's bank, if provided.
@@ -3255,6 +3295,12 @@ export namespace PaymentMethod {
       | 'volkswagen_bank'
       | null;
   }
+
+  export interface PayByBank {}
+
+  export interface Payco {}
+
+  export interface Paynow {}
 
   export interface Paypal {
     /**
@@ -3293,6 +3339,10 @@ export namespace PaymentMethod {
     pay_id?: string | null;
   }
 
+  export interface Pix {}
+
+  export interface Promptpay {}
+
   /**
    * Options to configure Radar. See
    * [Radar Session](https://docs.stripe.com/radar/radar-session) for more
@@ -3307,12 +3357,22 @@ export namespace PaymentMethod {
     session?: string;
   }
 
+  export interface RevolutPay {}
+
+  export interface SamsungPay {}
+
+  export interface Satispay {}
+
   export interface Sofort {
     /**
      * Two-letter ISO code representing the country the bank account is located in.
      */
     country?: string | null;
   }
+
+  export interface Swish {}
+
+  export interface Twint {}
 
   export interface UsBankAccount {
     /**
@@ -3408,6 +3468,10 @@ export namespace PaymentMethod {
       }
     }
   }
+
+  export interface WechatPay {}
+
+  export interface Zip {}
 }
 
 export interface PaymentMethodCard {
@@ -3540,27 +3604,35 @@ export namespace PaymentMethodCard {
       | 'samsung_pay'
       | 'visa_checkout';
 
-    amex_express_checkout?: unknown;
+    amex_express_checkout?: Wallet.AmexExpressCheckout;
 
-    apple_pay?: unknown;
+    apple_pay?: Wallet.ApplePay;
 
     /**
      * (For tokenized numbers only.) The last four digits of the device account number.
      */
     dynamic_last4?: string | null;
 
-    google_pay?: unknown;
+    google_pay?: Wallet.GooglePay;
 
-    link?: unknown;
+    link?: Wallet.Link;
 
     masterpass?: Wallet.Masterpass;
 
-    samsung_pay?: unknown;
+    samsung_pay?: Wallet.SamsungPay;
 
     visa_checkout?: Wallet.VisaCheckout;
   }
 
   export namespace Wallet {
+    export interface AmexExpressCheckout {}
+
+    export interface ApplePay {}
+
+    export interface GooglePay {}
+
+    export interface Link {}
+
     export interface Masterpass {
       billing_address?: Shared.Address | null;
 
@@ -3580,6 +3652,8 @@ export namespace PaymentMethodCard {
 
       shipping_address?: Shared.Address | null;
     }
+
+    export interface SamsungPay {}
 
     export interface VisaCheckout {
       billing_address?: Shared.Address | null;
@@ -4032,7 +4106,7 @@ export interface PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails {
    */
   custom?: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails.Custom;
 
-  customer_balance?: unknown;
+  customer_balance?: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails.CustomerBalance;
 
   eps?: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails.Eps;
 
@@ -4056,7 +4130,7 @@ export interface PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails {
 
   link?: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails.Link;
 
-  mb_way?: unknown;
+  mb_way?: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails.MBWay;
 
   mobilepay?: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails.Mobilepay;
 
@@ -4070,7 +4144,7 @@ export interface PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails {
 
   p24?: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails.P24;
 
-  pay_by_bank?: unknown;
+  pay_by_bank?: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails.PayByBank;
 
   payco?: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails.Payco;
 
@@ -4099,19 +4173,19 @@ export interface PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails {
 
   sofort?: DisputesAPI.PaymentMethodDetailsSofortDispute;
 
-  stripe_account?: unknown;
+  stripe_account?: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails.StripeAccount;
 
   swish?: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails.Swish;
 
-  twint?: unknown;
+  twint?: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails.Twint;
 
   us_bank_account?: PaymentMethodDetailsPaymentRecordUsBankAccount;
 
-  wechat?: unknown;
+  wechat?: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails.Wechat;
 
   wechat_pay?: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails.WechatPay;
 
-  zip?: unknown;
+  zip?: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails.Zip;
 }
 
 export namespace PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails {
@@ -4668,7 +4742,7 @@ export namespace PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails {
        */
       dynamic_last4?: string;
 
-      google_pay?: unknown;
+      google_pay?: Wallet.GooglePay;
     }
 
     export namespace Wallet {
@@ -4678,6 +4752,8 @@ export namespace PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails {
          */
         type: string;
       }
+
+      export interface GooglePay {}
     }
   }
 
@@ -4737,6 +4813,8 @@ export namespace PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails {
      */
     type?: string | null;
   }
+
+  export interface CustomerBalance {}
 
   export interface Eps {
     /**
@@ -5150,6 +5228,8 @@ export namespace PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails {
     country?: string | null;
   }
 
+  export interface MBWay {}
+
   export interface Mobilepay {
     card?: Mobilepay.Card | null;
   }
@@ -5306,6 +5386,8 @@ export namespace PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails {
      */
     verified_name?: string | null;
   }
+
+  export interface PayByBank {}
 
   export interface Payco {
     /**
@@ -5502,6 +5584,8 @@ export namespace PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails {
     mandate?: string | null;
   }
 
+  export interface StripeAccount {}
+
   export interface Swish {
     /**
      * Uniquely identifies the payer's Swish account. You can use this attribute to
@@ -5519,6 +5603,10 @@ export namespace PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails {
      */
     verified_phone_last4?: string | null;
   }
+
+  export interface Twint {}
+
+  export interface Wechat {}
 
   export interface WechatPay {
     /**
@@ -5544,6 +5632,8 @@ export namespace PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails {
      */
     transaction_id?: string | null;
   }
+
+  export interface Zip {}
 }
 
 export interface SepaDebitGeneratedFrom {

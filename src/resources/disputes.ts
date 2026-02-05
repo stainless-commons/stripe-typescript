@@ -6707,7 +6707,7 @@ export interface PaymentMethodDetails {
 
   crypto?: PaymentMethodDetails.Crypto;
 
-  customer_balance?: unknown;
+  customer_balance?: PaymentMethodDetails.CustomerBalance;
 
   eps?: PaymentMethodDetails.Eps;
 
@@ -6731,7 +6731,7 @@ export interface PaymentMethodDetails {
 
   link?: PaymentMethodDetails.Link;
 
-  mb_way?: unknown;
+  mb_way?: PaymentMethodDetails.MBWay;
 
   mobilepay?: PaymentMethodDetails.Mobilepay;
 
@@ -6745,7 +6745,7 @@ export interface PaymentMethodDetails {
 
   p24?: PaymentMethodDetails.P24;
 
-  pay_by_bank?: unknown;
+  pay_by_bank?: PaymentMethodDetails.PayByBank;
 
   payco?: PaymentMethodDetails.Payco;
 
@@ -6769,19 +6769,19 @@ export interface PaymentMethodDetails {
 
   sofort?: PaymentMethodDetailsSofortDispute;
 
-  stripe_account?: unknown;
+  stripe_account?: PaymentMethodDetails.StripeAccount;
 
   swish?: PaymentMethodDetails.Swish;
 
-  twint?: unknown;
+  twint?: PaymentMethodDetails.Twint;
 
   us_bank_account?: PaymentMethodDetailsUsBankAccount;
 
-  wechat?: unknown;
+  wechat?: PaymentMethodDetails.Wechat;
 
   wechat_pay?: PaymentMethodDetails.WechatPay;
 
-  zip?: unknown;
+  zip?: PaymentMethodDetails.Zip;
 }
 
 export namespace PaymentMethodDetails {
@@ -7302,27 +7302,35 @@ export namespace PaymentMethodDetails {
         | 'samsung_pay'
         | 'visa_checkout';
 
-      amex_express_checkout?: unknown;
+      amex_express_checkout?: Wallet.AmexExpressCheckout;
 
-      apple_pay?: unknown;
+      apple_pay?: Wallet.ApplePay;
 
       /**
        * (For tokenized numbers only.) The last four digits of the device account number.
        */
       dynamic_last4?: string | null;
 
-      google_pay?: unknown;
+      google_pay?: Wallet.GooglePay;
 
-      link?: unknown;
+      link?: Wallet.Link;
 
       masterpass?: Wallet.Masterpass;
 
-      samsung_pay?: unknown;
+      samsung_pay?: Wallet.SamsungPay;
 
       visa_checkout?: Wallet.VisaCheckout;
     }
 
     export namespace Wallet {
+      export interface AmexExpressCheckout {}
+
+      export interface ApplePay {}
+
+      export interface GooglePay {}
+
+      export interface Link {}
+
       export interface Masterpass {
         billing_address?: Shared.Address | null;
 
@@ -7342,6 +7350,8 @@ export namespace PaymentMethodDetails {
 
         shipping_address?: Shared.Address | null;
       }
+
+      export interface SamsungPay {}
 
       export interface VisaCheckout {
         billing_address?: Shared.Address | null;
@@ -7403,6 +7413,8 @@ export namespace PaymentMethodDetails {
      */
     transaction_hash?: string;
   }
+
+  export interface CustomerBalance {}
 
   export interface Eps {
     /**
@@ -7816,6 +7828,8 @@ export namespace PaymentMethodDetails {
     country?: string | null;
   }
 
+  export interface MBWay {}
+
   export interface Mobilepay {
     card?: Mobilepay.Card | null;
   }
@@ -7972,6 +7986,8 @@ export namespace PaymentMethodDetails {
      */
     verified_name?: string | null;
   }
+
+  export interface PayByBank {}
 
   export interface Payco {
     /**
@@ -8168,6 +8184,8 @@ export namespace PaymentMethodDetails {
     mandate?: string | null;
   }
 
+  export interface StripeAccount {}
+
   export interface Swish {
     /**
      * Uniquely identifies the payer's Swish account. You can use this attribute to
@@ -8185,6 +8203,10 @@ export namespace PaymentMethodDetails {
      */
     verified_phone_last4?: string | null;
   }
+
+  export interface Twint {}
+
+  export interface Wechat {}
 
   export interface WechatPay {
     /**
@@ -8210,6 +8232,8 @@ export namespace PaymentMethodDetails {
      */
     transaction_id?: string | null;
   }
+
+  export interface Zip {}
 }
 
 export interface PaymentMethodDetailsBancontactDispute {

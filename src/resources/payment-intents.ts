@@ -1574,7 +1574,9 @@ export namespace PaymentIntent {
       | PaymentMethodOptions.PaymentMethodOptionsIdeal
       | PaymentIntentsAPI.PaymentIntentTypeSpecificPaymentMethodOptionsClient;
 
-    interac_present?: unknown | PaymentIntentsAPI.PaymentIntentTypeSpecificPaymentMethodOptionsClient;
+    interac_present?:
+      | PaymentMethodOptions.PaymentMethodOptionsInteracPresent
+      | PaymentIntentsAPI.PaymentIntentTypeSpecificPaymentMethodOptionsClient;
 
     kakao_pay?:
       | PaymentMethodOptions.PaymentFlowsPrivatePaymentMethodsKakaoPayPaymentMethodOptions
@@ -1624,7 +1626,9 @@ export namespace PaymentIntent {
       | PaymentMethodOptions.PaymentMethodOptionsP24
       | PaymentIntentsAPI.PaymentIntentTypeSpecificPaymentMethodOptionsClient;
 
-    pay_by_bank?: unknown | PaymentIntentsAPI.PaymentIntentTypeSpecificPaymentMethodOptionsClient;
+    pay_by_bank?:
+      | PaymentMethodOptions.PaymentMethodOptionsPayByBank
+      | PaymentIntentsAPI.PaymentIntentTypeSpecificPaymentMethodOptionsClient;
 
     payco?:
       | PaymentMethodOptions.PaymentFlowsPrivatePaymentMethodsPaycoPaymentMethodOptions
@@ -2514,6 +2518,8 @@ export namespace PaymentIntent {
       setup_future_usage?: 'none' | 'off_session';
     }
 
+    export interface PaymentMethodOptionsInteracPresent {}
+
     export interface PaymentFlowsPrivatePaymentMethodsKakaoPayPaymentMethodOptions {
       /**
        * Controls when the funds will be captured from the customer's account.
@@ -2876,6 +2882,8 @@ export namespace PaymentIntent {
        */
       setup_future_usage?: 'none';
     }
+
+    export interface PaymentMethodOptionsPayByBank {}
 
     export interface PaymentFlowsPrivatePaymentMethodsPaycoPaymentMethodOptions {
       /**
