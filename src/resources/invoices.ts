@@ -34,11 +34,7 @@ export class Invoices extends APIResource {
     query: InvoiceListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<InvoiceListResponse> {
-    return this._client.get('/v1/invoices', {
-      query,
-      ...options,
-      headers: buildHeaders([{ 'Content-Type': 'application/x-www-form-urlencoded' }, options?.headers]),
-    });
+    return this._client.get('/v1/invoices', { query, ...options });
   }
 
   /**

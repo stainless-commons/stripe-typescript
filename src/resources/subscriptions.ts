@@ -56,11 +56,7 @@ export class Subscriptions extends APIResource {
     query: SubscriptionListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<SubscriptionListResponse> {
-    return this._client.get('/v1/subscriptions', {
-      query,
-      ...options,
-      headers: buildHeaders([{ 'Content-Type': 'application/x-www-form-urlencoded' }, options?.headers]),
-    });
+    return this._client.get('/v1/subscriptions', { query, ...options });
   }
 
   /**

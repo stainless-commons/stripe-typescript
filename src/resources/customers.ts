@@ -30,11 +30,7 @@ export class Customers extends APIResource {
     query: CustomerListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<CustomerListResponse> {
-    return this._client.get('/v1/customers', {
-      query,
-      ...options,
-      headers: buildHeaders([{ 'Content-Type': 'application/x-www-form-urlencoded' }, options?.headers]),
-    });
+    return this._client.get('/v1/customers', { query, ...options });
   }
 }
 

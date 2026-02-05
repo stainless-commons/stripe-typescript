@@ -3,7 +3,6 @@
 import { APIResource } from '../core/resource';
 import * as BalanceAPI from './balance';
 import { APIPromise } from '../core/api-promise';
-import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 
 export class Balance extends APIResource {
@@ -15,11 +14,7 @@ export class Balance extends APIResource {
     query: BalanceRetrieveParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<BalanceRetrieveResponse> {
-    return this._client.get('/v1/balance', {
-      query,
-      ...options,
-      headers: buildHeaders([{ 'Content-Type': 'application/x-www-form-urlencoded' }, options?.headers]),
-    });
+    return this._client.get('/v1/balance', { query, ...options });
   }
 }
 

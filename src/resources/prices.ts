@@ -25,11 +25,7 @@ export class Prices extends APIResource {
     query: PriceListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<PriceListResponse> {
-    return this._client.get('/v1/prices', {
-      query,
-      ...options,
-      headers: buildHeaders([{ 'Content-Type': 'application/x-www-form-urlencoded' }, options?.headers]),
-    });
+    return this._client.get('/v1/prices', { query, ...options });
   }
 }
 
