@@ -3,6 +3,7 @@
 import { APIResource } from '../core/resource';
 import * as ProductsAPI from './products';
 import { APIPromise } from '../core/api-promise';
+import { MyCursorIDPage, type MyCursorIDPageParams, PagePromise } from '../core/pagination';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 
@@ -24,10 +25,12 @@ export class Prices extends APIResource {
   list(
     query: PriceListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<PriceListResponse> {
-    return this._client.get('/v1/prices', { query, ...options });
+  ): PagePromise<PricesMyCursorIDPage, Price> {
+    return this._client.getAPIList('/v1/prices', MyCursorIDPage<Price>, { query, ...options });
   }
 }
+
+export type PricesMyCursorIDPage = MyCursorIDPage<Price>;
 
 /**
  * Prices define the unit cost, currency, and (optional) billing cycle for both
@@ -361,29 +364,6 @@ export namespace Price {
   }
 }
 
-export interface PriceListResponse {
-  /**
-   * Details about each object.
-   */
-  data: Array<Price>;
-
-  /**
-   * True if this list has another page of items after this one that can be fetched.
-   */
-  has_more: boolean;
-
-  /**
-   * String representing the object's type. Objects of the same type share the same
-   * value. Always has the value `list`.
-   */
-  object: 'list';
-
-  /**
-   * The URL where this list can be accessed.
-   */
-  url: string;
-}
-
 export interface PriceCreateParams {
   /**
    * Three-letter
@@ -623,7 +603,7 @@ export namespace PriceCreateParams {
   }
 }
 
-export interface PriceListParams {
+export interface PriceListParams extends MyCursorIDPageParams {
   /**
    * Only return prices that are active or inactive (e.g., pass `false` to list all
    * inactive prices).
@@ -643,23 +623,9 @@ export interface PriceListParams {
   currency?: string;
 
   /**
-   * A cursor for use in pagination. `ending_before` is an object ID that defines
-   * your place in the list. For instance, if you make a list request and receive 100
-   * objects, starting with `obj_bar`, your subsequent call can include
-   * `ending_before=obj_bar` in order to fetch the previous page of the list.
-   */
-  ending_before?: string;
-
-  /**
    * Specifies which fields in the response should be expanded.
    */
   expand?: Array<string>;
-
-  /**
-   * A limit on the number of objects to be returned. Limit can range between 1 and
-   * 100, and the default is 10.
-   */
-  limit?: number;
 
   /**
    * Only return the price with these lookup_keys, if any exist. You can specify up
@@ -676,14 +642,6 @@ export interface PriceListParams {
    * Only return prices with these recurring fields.
    */
   recurring?: PriceListParams.Recurring;
-
-  /**
-   * A cursor for use in pagination. `starting_after` is an object ID that defines
-   * your place in the list. For instance, if you make a list request and receive 100
-   * objects, ending with `obj_foo`, your subsequent call can include
-   * `starting_after=obj_foo` in order to fetch the next page of the list.
-   */
-  starting_after?: string;
 
   /**
    * Only return prices of type `recurring` or `one_time`.
@@ -717,7 +675,7 @@ export namespace PriceListParams {
 export declare namespace Prices {
   export {
     type Price as Price,
-    type PriceListResponse as PriceListResponse,
+    type PricesMyCursorIDPage as PricesMyCursorIDPage,
     type PriceCreateParams as PriceCreateParams,
     type PriceListParams as PriceListParams,
   };

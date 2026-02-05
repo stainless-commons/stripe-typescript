@@ -11,6 +11,7 @@ import * as PricesAPI from './prices';
 import * as Shared from './shared';
 import * as SubscriptionsAPI from './subscriptions';
 import { APIPromise } from '../core/api-promise';
+import { MyCursorIDPage, type MyCursorIDPageParams, PagePromise } from '../core/pagination';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
@@ -33,8 +34,8 @@ export class Invoices extends APIResource {
   list(
     query: InvoiceListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<InvoiceListResponse> {
-    return this._client.get('/v1/invoices', { query, ...options });
+  ): PagePromise<InvoicesMyCursorIDPage, Invoice> {
+    return this._client.getAPIList('/v1/invoices', MyCursorIDPage<Invoice>, { query, ...options });
   }
 
   /**
@@ -52,6 +53,8 @@ export class Invoices extends APIResource {
     });
   }
 }
+
+export type InvoicesMyCursorIDPage = MyCursorIDPage<Invoice>;
 
 export interface APIErrors {
   /**
@@ -5818,26 +5821,6 @@ export namespace TaxRate {
   }
 }
 
-export interface InvoiceListResponse {
-  data: Array<Invoice>;
-
-  /**
-   * True if this list has another page of items after this one that can be fetched.
-   */
-  has_more: boolean;
-
-  /**
-   * String representing the object's type. Objects of the same type share the same
-   * value. Always has the value `list`.
-   */
-  object: 'list';
-
-  /**
-   * The URL where this list can be accessed.
-   */
-  url: string;
-}
-
 export interface InvoiceCreateParams {
   /**
    * The account tax IDs associated with the invoice. Only editable when the invoice
@@ -6423,7 +6406,7 @@ export namespace InvoiceCreateParams {
   }
 }
 
-export interface InvoiceListParams {
+export interface InvoiceListParams extends MyCursorIDPageParams {
   /**
    * The collection method of the invoice to retrieve. Either `charge_automatically`
    * or `send_invoice`.
@@ -6449,31 +6432,9 @@ export interface InvoiceListParams {
   due_date?: InvoiceListParams.RangeQuerySpecs | number;
 
   /**
-   * A cursor for use in pagination. `ending_before` is an object ID that defines
-   * your place in the list. For instance, if you make a list request and receive 100
-   * objects, starting with `obj_bar`, your subsequent call can include
-   * `ending_before=obj_bar` in order to fetch the previous page of the list.
-   */
-  ending_before?: string;
-
-  /**
    * Specifies which fields in the response should be expanded.
    */
   expand?: Array<string>;
-
-  /**
-   * A limit on the number of objects to be returned. Limit can range between 1 and
-   * 100, and the default is 10.
-   */
-  limit?: number;
-
-  /**
-   * A cursor for use in pagination. `starting_after` is an object ID that defines
-   * your place in the list. For instance, if you make a list request and receive 100
-   * objects, ending with `obj_foo`, your subsequent call can include
-   * `starting_after=obj_foo` in order to fetch the next page of the list.
-   */
-  starting_after?: string;
 
   /**
    * The status of the invoice, one of `draft`, `open`, `paid`, `uncollectible`, or
@@ -6559,7 +6520,7 @@ export declare namespace Invoices {
     type SepaDebitGeneratedFrom as SepaDebitGeneratedFrom,
     type ShippingRateDeliveryEstimateBound as ShippingRateDeliveryEstimateBound,
     type TaxRate as TaxRate,
-    type InvoiceListResponse as InvoiceListResponse,
+    type InvoicesMyCursorIDPage as InvoicesMyCursorIDPage,
     type InvoiceCreateParams as InvoiceCreateParams,
     type InvoiceListParams as InvoiceListParams,
     type InvoiceFinalizeParams as InvoiceFinalizeParams,

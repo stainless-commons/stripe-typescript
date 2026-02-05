@@ -134,6 +134,37 @@ On timeout, an `APIConnectionTimeoutError` is thrown.
 
 Note that requests which time out will be [retried twice by default](#retries).
 
+## Auto-pagination
+
+List methods in the Stripe API are paginated.
+You can use the `for await … of` syntax to iterate through items across all pages:
+
+```ts
+async function fetchAllCoupons(params) {
+  const allCoupons = [];
+  // Automatically fetches more pages as needed.
+  for await (const coupon of client.coupons.list()) {
+    allCoupons.push(coupon);
+  }
+  return allCoupons;
+}
+```
+
+Alternatively, you can request a single page at a time:
+
+```ts
+let page = await client.coupons.list();
+for (const coupon of page.data) {
+  console.log(coupon);
+}
+
+// Convenience methods are provided for manually paginating:
+while (page.hasNextPage()) {
+  page = await page.getNextPage();
+  // ...
+}
+```
+
 ## Advanced Usage
 
 ### Accessing raw Response data (e.g., headers)

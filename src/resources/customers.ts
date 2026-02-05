@@ -8,6 +8,7 @@ import * as InvoicesAPI from './invoices';
 import * as Shared from './shared';
 import * as SubscriptionsAPI from './subscriptions';
 import { APIPromise } from '../core/api-promise';
+import { MyCursorIDPage, type MyCursorIDPageParams, PagePromise } from '../core/pagination';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 
@@ -29,10 +30,12 @@ export class Customers extends APIResource {
   list(
     query: CustomerListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomerListResponse> {
-    return this._client.get('/v1/customers', { query, ...options });
+  ): PagePromise<CustomersMyCursorIDPage, Customer> {
+    return this._client.getAPIList('/v1/customers', MyCursorIDPage<Customer>, { query, ...options });
   }
 }
+
+export type CustomersMyCursorIDPage = MyCursorIDPage<Customer>;
 
 /**
  * These bank accounts are payment methods on `Customer` objects.
@@ -1349,26 +1352,6 @@ export interface TaxIDsOwner {
   customer_account?: string | null;
 }
 
-export interface CustomerListResponse {
-  data: Array<Customer>;
-
-  /**
-   * True if this list has another page of items after this one that can be fetched.
-   */
-  has_more: boolean;
-
-  /**
-   * String representing the object's type. Objects of the same type share the same
-   * value. Always has the value `list`.
-   */
-  object: 'list';
-
-  /**
-   * The URL where this list can be accessed.
-   */
-  url: string;
-}
-
 export interface CustomerCreateParams {
   /**
    * The customer's address. Learn about
@@ -1694,7 +1677,7 @@ export namespace CustomerCreateParams {
   }
 }
 
-export interface CustomerListParams {
+export interface CustomerListParams extends MyCursorIDPageParams {
   /**
    * Only return customers that were created during the given date interval.
    */
@@ -1707,31 +1690,9 @@ export interface CustomerListParams {
   email?: string;
 
   /**
-   * A cursor for use in pagination. `ending_before` is an object ID that defines
-   * your place in the list. For instance, if you make a list request and receive 100
-   * objects, starting with `obj_bar`, your subsequent call can include
-   * `ending_before=obj_bar` in order to fetch the previous page of the list.
-   */
-  ending_before?: string;
-
-  /**
    * Specifies which fields in the response should be expanded.
    */
   expand?: Array<string>;
-
-  /**
-   * A limit on the number of objects to be returned. Limit can range between 1 and
-   * 100, and the default is 10.
-   */
-  limit?: number;
-
-  /**
-   * A cursor for use in pagination. `starting_after` is an object ID that defines
-   * your place in the list. For instance, if you make a list request and receive 100
-   * objects, ending with `obj_foo`, your subsequent call can include
-   * `starting_after=obj_foo` in order to fetch the next page of the list.
-   */
-  starting_after?: string;
 
   /**
    * Provides a list of customers that are associated with the specified test clock.
@@ -1763,7 +1724,7 @@ export declare namespace Customers {
     type PromotionCode as PromotionCode,
     type TaxID as TaxID,
     type TaxIDsOwner as TaxIDsOwner,
-    type CustomerListResponse as CustomerListResponse,
+    type CustomersMyCursorIDPage as CustomersMyCursorIDPage,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerListParams as CustomerListParams,
   };

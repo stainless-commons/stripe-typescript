@@ -20,9 +20,9 @@ export {
 export {
   Coupons,
   type Coupon,
-  type CouponListResponse,
   type CouponCreateParams,
   type CouponListParams,
+  type CouponsMyCursorIDPage,
 } from './coupons';
 export {
   Customers,
@@ -34,9 +34,9 @@ export {
   type PromotionCode,
   type TaxID,
   type TaxIDsOwner,
-  type CustomerListResponse,
   type CustomerCreateParams,
   type CustomerListParams,
+  type CustomersMyCursorIDPage,
 } from './customers';
 export {
   Disputes,
@@ -80,9 +80,9 @@ export {
   type Payout,
   type Topup,
   type Transfer,
-  type DisputeListResponse,
   type DisputeUpdateParams,
   type DisputeListParams,
+  type DisputesMyCursorIDPage,
 } from './disputes';
 export { Invoiceitems, type InvoiceitemCreateResponse, type InvoiceitemCreateParams } from './invoiceitems';
 export {
@@ -119,10 +119,10 @@ export {
   type SepaDebitGeneratedFrom,
   type ShippingRateDeliveryEstimateBound,
   type TaxRate,
-  type InvoiceListResponse,
   type InvoiceCreateParams,
   type InvoiceListParams,
   type InvoiceFinalizeParams,
+  type InvoicesMyCursorIDPage,
 } from './invoices';
 export {
   PaymentIntents,
@@ -133,8 +133,8 @@ export {
   type PaymentMethodOptionsCardPresentRouting,
   type PaymentTransferData,
   type Review,
-  type PaymentIntentListResponse,
   type PaymentIntentListParams,
+  type PaymentIntentsMyCursorIDPage,
 } from './payment-intents';
 export {
   PaymentLinks,
@@ -145,16 +145,16 @@ export {
 export {
   Prices,
   type Price,
-  type PriceListResponse,
   type PriceCreateParams,
   type PriceListParams,
+  type PricesMyCursorIDPage,
 } from './prices';
 export {
   Products,
   type Product,
-  type ProductListResponse,
   type ProductCreateParams,
   type ProductListParams,
+  type ProductsMyCursorIDPage,
 } from './products';
 export { Refunds, type Refund, type TransferReversal, type RefundCreateParams } from './refunds';
 export {
@@ -186,8 +186,8 @@ export {
   type SubscriptionInvoiceSettings,
   type SubscriptionItem,
   type SubscriptionTransferData,
-  type SubscriptionListResponse,
   type SubscriptionUpdateParams,
   type SubscriptionListParams,
   type SubscriptionCancelParams,
+  type SubscriptionsMyCursorIDPage,
 } from './subscriptions';

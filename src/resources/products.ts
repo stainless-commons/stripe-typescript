@@ -4,6 +4,7 @@ import { APIResource } from '../core/resource';
 import * as PricesAPI from './prices';
 import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
+import { MyCursorIDPage, type MyCursorIDPageParams, PagePromise } from '../core/pagination';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 
@@ -25,10 +26,12 @@ export class Products extends APIResource {
   list(
     query: ProductListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ProductListResponse> {
-    return this._client.get('/v1/products', { query, ...options });
+  ): PagePromise<ProductsMyCursorIDPage, Product> {
+    return this._client.getAPIList('/v1/products', MyCursorIDPage<Product>, { query, ...options });
   }
 }
+
+export type ProductsMyCursorIDPage = MyCursorIDPage<Product>;
 
 /**
  * Products describe the specific goods or services you offer to your customers.
@@ -175,29 +178,6 @@ export namespace Product {
      */
     width: number;
   }
-}
-
-export interface ProductListResponse {
-  /**
-   * Details about each object.
-   */
-  data: Array<Product>;
-
-  /**
-   * True if this list has another page of items after this one that can be fetched.
-   */
-  has_more: boolean;
-
-  /**
-   * String representing the object's type. Objects of the same type share the same
-   * value. Always has the value `list`.
-   */
-  object: 'list';
-
-  /**
-   * The URL where this list can be accessed.
-   */
-  url: string;
 }
 
 export interface ProductCreateParams {
@@ -390,7 +370,7 @@ export namespace ProductCreateParams {
   }
 }
 
-export interface ProductListParams {
+export interface ProductListParams extends MyCursorIDPageParams {
   /**
    * Only return products that are active or inactive (e.g., pass `false` to list all
    * inactive products).
@@ -401,14 +381,6 @@ export interface ProductListParams {
    * Only return products that were created during the given date interval.
    */
   created?: ProductListParams.RangeQuerySpecs | number;
-
-  /**
-   * A cursor for use in pagination. `ending_before` is an object ID that defines
-   * your place in the list. For instance, if you make a list request and receive 100
-   * objects, starting with `obj_bar`, your subsequent call can include
-   * `ending_before=obj_bar` in order to fetch the previous page of the list.
-   */
-  ending_before?: string;
 
   /**
    * Specifies which fields in the response should be expanded.
@@ -423,23 +395,9 @@ export interface ProductListParams {
   ids?: Array<string>;
 
   /**
-   * A limit on the number of objects to be returned. Limit can range between 1 and
-   * 100, and the default is 10.
-   */
-  limit?: number;
-
-  /**
    * Only return products that can be shipped (i.e., physical, not digital products).
    */
   shippable?: boolean;
-
-  /**
-   * A cursor for use in pagination. `starting_after` is an object ID that defines
-   * your place in the list. For instance, if you make a list request and receive 100
-   * objects, ending with `obj_foo`, your subsequent call can include
-   * `starting_after=obj_foo` in order to fetch the next page of the list.
-   */
-  starting_after?: string;
 
   /**
    * Only return products with the given url.
@@ -462,7 +420,7 @@ export namespace ProductListParams {
 export declare namespace Products {
   export {
     type Product as Product,
-    type ProductListResponse as ProductListResponse,
+    type ProductsMyCursorIDPage as ProductsMyCursorIDPage,
     type ProductCreateParams as ProductCreateParams,
     type ProductListParams as ProductListParams,
   };
