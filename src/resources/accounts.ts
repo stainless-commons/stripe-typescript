@@ -1,14 +1,14 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as AccountAPI from './account';
+import * as AccountsAPI from './accounts';
 import * as CustomersAPI from './customers';
 import * as DisputesAPI from './disputes';
 import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
-export class AccountResource extends APIResource {
+export class Accounts extends APIResource {
   /**
    * <p>Retrieves the details of an account.</p>
    */
@@ -628,9 +628,9 @@ export namespace Account {
   export interface Company {
     address?: Shared.Address;
 
-    address_kana?: AccountAPI.LegalEntityJapanAddress | null;
+    address_kana?: AccountsAPI.LegalEntityJapanAddress | null;
 
-    address_kanji?: AccountAPI.LegalEntityJapanAddress | null;
+    address_kanji?: AccountsAPI.LegalEntityJapanAddress | null;
 
     /**
      * Whether the company's directors have been provided. This Boolean will be `true`
@@ -976,7 +976,7 @@ export namespace Account {
      * attempting to resolve the fields again. Re-providing `original_fields_due` also
      * serves as a pathway for attempting to resolve the fields again.
      */
-    alternatives?: Array<AccountAPI.AccountRequirementsAlternative> | null;
+    alternatives?: Array<AccountsAPI.AccountRequirementsAlternative> | null;
 
     /**
      * Date on which `future_requirements` becomes the main `requirements` hash and
@@ -1092,9 +1092,9 @@ export namespace Account {
 
     address?: Shared.Address;
 
-    address_kana?: AccountAPI.LegalEntityJapanAddress | null;
+    address_kana?: AccountsAPI.LegalEntityJapanAddress | null;
 
-    address_kanji?: AccountAPI.LegalEntityJapanAddress | null;
+    address_kanji?: AccountsAPI.LegalEntityJapanAddress | null;
 
     dob?: Individual.Dob;
 
@@ -1314,7 +1314,7 @@ export namespace Account {
        * attempting to resolve the fields again. Re-providing `original_fields_due` also
        * serves as a pathway for attempting to resolve the fields again.
        */
-      alternatives?: Array<AccountAPI.AccountRequirementsAlternative> | null;
+      alternatives?: Array<AccountsAPI.AccountRequirementsAlternative> | null;
     }
 
     export interface Relationship {
@@ -1409,7 +1409,7 @@ export namespace Account {
        * attempting to resolve the fields again. Re-providing `original_fields_due` also
        * serves as a pathway for attempting to resolve the fields again.
        */
-      alternatives?: Array<AccountAPI.AccountRequirementsAlternative> | null;
+      alternatives?: Array<AccountsAPI.AccountRequirementsAlternative> | null;
     }
 
     export interface UsCfpbData {
@@ -1592,7 +1592,7 @@ export namespace Account {
      * attempting to resolve the fields again. Re-providing `original_fields_due` also
      * serves as a pathway for attempting to resolve the fields again.
      */
-    alternatives?: Array<AccountAPI.AccountRequirementsAlternative> | null;
+    alternatives?: Array<AccountsAPI.AccountRequirementsAlternative> | null;
 
     /**
      * Date by which the fields in `currently_due` must be collected to keep the
@@ -2032,7 +2032,7 @@ export interface AccountRetrieveParams {
   expand?: Array<string>;
 }
 
-export declare namespace AccountResource {
+export declare namespace Accounts {
   export {
     type Account as Account,
     type AccountInvoicesSettings as AccountInvoicesSettings,

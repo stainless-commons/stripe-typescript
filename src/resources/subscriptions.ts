@@ -2,7 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import * as SubscriptionsAPI from './subscriptions';
-import * as AccountAPI from './account';
+import * as AccountsAPI from './accounts';
 import * as CouponsAPI from './coupons';
 import * as CustomersAPI from './customers';
 import * as InvoicesAPI from './invoices';
@@ -144,7 +144,7 @@ export interface DefaultSettings {
    * The account (if any) the charge was made on behalf of for charges associated
    * with the schedule's subscription. See the Connect documentation for details.
    */
-  on_behalf_of?: string | AccountAPI.Account | null;
+  on_behalf_of?: string | AccountsAPI.Account | null;
 
   transfer_data?: SubscriptionTransferData | null;
 }
@@ -1143,7 +1143,7 @@ export interface SchedulePhaseConfiguration {
    * The account (if any) the charge was made on behalf of for charges associated
    * with the schedule's subscription. See the Connect documentation for details.
    */
-  on_behalf_of?: string | AccountAPI.Account | null;
+  on_behalf_of?: string | AccountsAPI.Account | null;
 
   transfer_data?: SubscriptionTransferData | null;
 
@@ -1290,7 +1290,7 @@ export interface SetupAttempt {
    * [on_behalf_of](https://docs.stripe.com/api/setup_intents/object#setup_intent_object-on_behalf_of)
    * on the SetupIntent at the time of this confirmation.
    */
-  on_behalf_of?: string | AccountAPI.Account | null;
+  on_behalf_of?: string | AccountsAPI.Account | null;
 
   setup_error?: InvoicesAPI.APIErrors | null;
 }
@@ -1789,7 +1789,7 @@ export interface SetupIntent {
   /**
    * The account (if any) for which the setup is intended.
    */
-  on_behalf_of?: string | AccountAPI.Account | null;
+  on_behalf_of?: string | AccountsAPI.Account | null;
 
   /**
    * ID of the payment method used with this SetupIntent. If the payment method is
@@ -2576,7 +2576,7 @@ export interface Subscription {
    * [Connect documentation](https://docs.stripe.com/connect/subscriptions#on-behalf-of)
    * for details.
    */
-  on_behalf_of?: string | AccountAPI.Account | null;
+  on_behalf_of?: string | AccountsAPI.Account | null;
 
   /**
    * The Pause Collection settings determine how we will pause collection for this
@@ -3198,7 +3198,7 @@ export interface SubscriptionTransferData {
    * The account where funds from the payment will be transferred to upon payment
    * success.
    */
-  destination: string | AccountAPI.Account;
+  destination: string | AccountsAPI.Account;
 
   /**
    * A non-negative decimal between 0 and 100, with at most two decimal places. This

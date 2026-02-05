@@ -2,7 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import * as CustomersAPI from './customers';
-import * as AccountAPI from './account';
+import * as AccountsAPI from './accounts';
 import * as CouponsAPI from './coupons';
 import * as InvoicesAPI from './invoices';
 import * as Shared from './shared';
@@ -107,7 +107,7 @@ export interface BankAccount {
    * [controller.is_controller](/api/accounts/object#account_object-controller-is_controller)
    * is `true`.
    */
-  account?: string | AccountAPI.Account | null;
+  account?: string | AccountsAPI.Account | null;
 
   /**
    * The name of the person or business that owns the bank account.
@@ -296,7 +296,7 @@ export interface Card {
    * [Account Session](/api/account_sessions) to start Connect Onboarding. Learn
    * about the [differences between accounts](/connect/accounts).
    */
-  account?: string | AccountAPI.Account | null;
+  account?: string | AccountsAPI.Account | null;
 
   /**
    * City/District/Suburb/Town/Village.
@@ -1330,7 +1330,7 @@ export interface TaxIDsOwner {
   /**
    * The account being referenced when `type` is `account`.
    */
-  account?: string | AccountAPI.Account;
+  account?: string | AccountsAPI.Account;
 
   /**
    * The Connect Application being referenced when `type` is `application`.

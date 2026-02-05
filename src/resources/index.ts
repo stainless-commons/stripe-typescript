@@ -2,14 +2,14 @@
 
 export * from './shared';
 export {
-  AccountResource,
+  Accounts,
   type Account,
   type AccountInvoicesSettings,
   type AccountRequirementsAlternative,
   type AccountSettings,
   type LegalEntityJapanAddress,
   type AccountRetrieveParams,
-} from './account';
+} from './accounts';
 export {
   Balance,
   type BalanceAmount,

@@ -38,7 +38,7 @@ const client = new Stripe({
   apiKey: process.env['STRIPE_SECRET_KEY'], // This is the default and can be omitted
 });
 
-const account = await client.account.retrieve();
+const account = await client.accounts.retrieve();
 
 console.log(account.id);
 ```
@@ -55,7 +55,7 @@ const client = new Stripe({
   apiKey: process.env['STRIPE_SECRET_KEY'], // This is the default and can be omitted
 });
 
-const account: Stripe.Account = await client.account.retrieve();
+const account: Stripe.Account = await client.accounts.retrieve();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -68,7 +68,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const account = await client.account.retrieve().catch(async (err) => {
+const account = await client.accounts.retrieve().catch(async (err) => {
   if (err instanceof Stripe.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
@@ -108,7 +108,7 @@ const client = new Stripe({
 });
 
 // Or, configure per-request:
-await client.account.retrieve({
+await client.accounts.retrieve({
   maxRetries: 5,
 });
 ```
@@ -125,7 +125,7 @@ const client = new Stripe({
 });
 
 // Override per-request:
-await client.account.retrieve({
+await client.accounts.retrieve({
   timeout: 5 * 1000,
 });
 ```
@@ -148,11 +148,11 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Stripe();
 
-const response = await client.account.retrieve().asResponse();
+const response = await client.accounts.retrieve().asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: account, response: raw } = await client.account.retrieve().withResponse();
+const { data: account, response: raw } = await client.accounts.retrieve().withResponse();
 console.log(raw.headers.get('X-My-Header'));
 console.log(account.id);
 ```
@@ -234,7 +234,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.account.retrieve({
+client.accounts.retrieve({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
