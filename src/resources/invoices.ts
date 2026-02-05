@@ -5804,7 +5804,7 @@ export interface InvoiceCreateParams {
   /**
    * A list of up to 4 custom fields to be displayed on the invoice.
    */
-  custom_fields?: Array<InvoiceCreateParams.UnionMember0> | '';
+  custom_fields?: Array<InvoiceCreateParams.CustomFieldsList> | '';
 
   /**
    * The ID of the customer to bill.
@@ -5855,7 +5855,7 @@ export interface InvoiceCreateParams {
    * specified, inherits the discount from the invoice's customer. Pass an empty
    * string to avoid inheriting any discounts.
    */
-  discounts?: Array<InvoiceCreateParams.UnionMember0> | '';
+  discounts?: Array<InvoiceCreateParams.DiscountsList> | '';
 
   /**
    * The date on which payment for this invoice is due. Valid only for invoices where
@@ -5993,13 +5993,13 @@ export namespace InvoiceCreateParams {
     }
   }
 
-  export interface UnionMember0 {
+  export interface CustomFieldsList {
     name: string;
 
     value: string;
   }
 
-  export interface UnionMember0 {
+  export interface DiscountsList {
     coupon?: string;
 
     discount?: string;

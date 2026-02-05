@@ -3267,7 +3267,7 @@ export interface SubscriptionUpdateParams {
    * The coupons to redeem into discounts for the subscription. If not specified or
    * empty, inherits the discount from the subscription's customer.
    */
-  discounts?: Array<SubscriptionUpdateParams.UnionMember0> | '';
+  discounts?: Array<SubscriptionUpdateParams.DiscountsList> | '';
 
   /**
    * Specifies which fields in the response should be expanded.
@@ -3515,7 +3515,7 @@ export namespace SubscriptionUpdateParams {
       | 'unused';
   }
 
-  export interface UnionMember0 {
+  export interface DiscountsList {
     coupon?: string;
 
     discount?: string;
@@ -3549,7 +3549,7 @@ export namespace SubscriptionUpdateParams {
 
     deleted?: boolean;
 
-    discounts?: Array<Item.UnionMember0> | '';
+    discounts?: Array<Item.DiscountsList> | '';
 
     metadata?: { [key: string]: string } | '';
 
@@ -3567,7 +3567,7 @@ export namespace SubscriptionUpdateParams {
       usage_gte: number;
     }
 
-    export interface UnionMember0 {
+    export interface DiscountsList {
       coupon?: string;
 
       discount?: string;
