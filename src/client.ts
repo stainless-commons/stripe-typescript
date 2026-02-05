@@ -204,7 +204,6 @@ import {
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
-import { toBase64 } from './internal/utils/base64';
 import { readEnv } from './internal/utils/env';
 import {
   type LogLevel,
@@ -216,16 +215,6 @@ import {
 import { isEmptyObj } from './internal/utils/values';
 
 export interface ClientOptions {
-  /**
-   * Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>
-   */
-  username?: string | null | undefined;
-
-  /**
-   * Basic HTTP authentication. Allowed headers-- Authorization: Basic <api_key> | Authorization: Basic <base64 hash of `api_key:`>
-   */
-  password?: string | null | undefined;
-
   /**
    * Bearer HTTP authentication. Allowed headers-- Authorization: Bearer <api_key>
    */
@@ -304,8 +293,6 @@ export interface ClientOptions {
  * API Client for interfacing with the Stripe Minimal API.
  */
 export class StripeMinimal {
-  username: string | null;
-  password: string | null;
   apiKey: string | null;
 
   baseURL: string;
@@ -323,8 +310,6 @@ export class StripeMinimal {
   /**
    * API Client for interfacing with the Stripe Minimal API.
    *
-   * @param {string | null | undefined} [opts.username=process.env['STRIPE_MINIMAL_USERNAME'] ?? null]
-   * @param {string | null | undefined} [opts.password=process.env['STRIPE_MINIMAL_PASSWORD'] ?? null]
    * @param {string | null | undefined} [opts.apiKey=process.env['STRIPE_MINIMAL_API_KEY'] ?? null]
    * @param {string} [opts.baseURL=process.env['STRIPE_MINIMAL_BASE_URL'] ?? https://api.stripe.com/] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
@@ -336,14 +321,10 @@ export class StripeMinimal {
    */
   constructor({
     baseURL = readEnv('STRIPE_MINIMAL_BASE_URL'),
-    username = readEnv('STRIPE_MINIMAL_USERNAME') ?? null,
-    password = readEnv('STRIPE_MINIMAL_PASSWORD') ?? null,
     apiKey = readEnv('STRIPE_MINIMAL_API_KEY') ?? null,
     ...opts
   }: ClientOptions = {}) {
     const options: ClientOptions = {
-      username,
-      password,
       apiKey,
       ...opts,
       baseURL: baseURL || `https://api.stripe.com/`,
@@ -366,8 +347,6 @@ export class StripeMinimal {
 
     this._options = options;
 
-    this.username = username;
-    this.password = password;
     this.apiKey = apiKey;
   }
 
@@ -384,8 +363,6 @@ export class StripeMinimal {
       logLevel: this.logLevel,
       fetch: this.fetch,
       fetchOptions: this.fetchOptions,
-      username: this.username,
-      password: this.password,
       apiKey: this.apiKey,
       ...options,
     });
@@ -404,13 +381,6 @@ export class StripeMinimal {
   }
 
   protected validateHeaders({ values, nulls }: NullableHeaders) {
-    if (this.username && this.password && values.get('authorization')) {
-      return;
-    }
-    if (nulls.has('authorization')) {
-      return;
-    }
-
     if (this.apiKey && values.get('authorization')) {
       return;
     }
@@ -419,29 +389,11 @@ export class StripeMinimal {
     }
 
     throw new Error(
-      'Could not resolve authentication method. Expected either username, password or apiKey to be set. Or for one of the "Authorization" or "Authorization" headers to be explicitly omitted',
+      'Could not resolve authentication method. Expected the apiKey to be set. Or for the "Authorization" headers to be explicitly omitted',
     );
   }
 
   protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
-    return buildHeaders([await this.basicAuth(opts), await this.bearerAuth(opts)]);
-  }
-
-  protected async basicAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
-    if (!this.username) {
-      return undefined;
-    }
-
-    if (!this.password) {
-      return undefined;
-    }
-
-    const credentials = `${this.username}:${this.password}`;
-    const Authorization = `Basic ${toBase64(credentials)}`;
-    return buildHeaders([{ Authorization }]);
-  }
-
-  protected async bearerAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
     if (this.apiKey == null) {
       return undefined;
     }

@@ -25,10 +25,7 @@ The full API of this library can be found in [api.md](api.md).
 ```js
 import StripeMinimal from 'stripe-minimal';
 
-const client = new StripeMinimal({
-  username: process.env['STRIPE_MINIMAL_USERNAME'], // This is the default and can be omitted
-  password: process.env['STRIPE_MINIMAL_PASSWORD'], // This is the default and can be omitted
-});
+const client = new StripeMinimal();
 
 const account = await client.account.retrieve();
 
@@ -43,10 +40,7 @@ This library includes TypeScript definitions for all request params and response
 ```ts
 import StripeMinimal from 'stripe-minimal';
 
-const client = new StripeMinimal({
-  username: process.env['STRIPE_MINIMAL_USERNAME'], // This is the default and can be omitted
-  password: process.env['STRIPE_MINIMAL_PASSWORD'], // This is the default and can be omitted
-});
+const client = new StripeMinimal();
 
 const account: StripeMinimal.Account = await client.account.retrieve();
 ```
