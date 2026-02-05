@@ -20,8 +20,8 @@ export const parseAuthHeaders = (req: IncomingMessage, required?: boolean): Part
   }
 
   const apiKey =
-    Array.isArray(req.headers['x-stripe-minimal-api-key']) ?
-      req.headers['x-stripe-minimal-api-key'][0]
-    : req.headers['x-stripe-minimal-api-key'];
+    Array.isArray(req.headers['x-stripe-secret-key']) ?
+      req.headers['x-stripe-secret-key'][0]
+    : req.headers['x-stripe-secret-key'];
   return { apiKey };
 };

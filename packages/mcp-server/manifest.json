@@ -20,12 +20,12 @@
       "command": "node",
       "args": ["${__dirname}/index.js"],
       "env": {
-        "STRIPE_MINIMAL_API_KEY": "${user_config.STRIPE_MINIMAL_API_KEY}"
+        "STRIPE_SECRET_KEY": "${user_config.STRIPE_SECRET_KEY}"
       }
     }
   },
   "user_config": {
-    "STRIPE_MINIMAL_API_KEY": {
+    "STRIPE_SECRET_KEY": {
       "title": "api_key",
       "description": "Bearer HTTP authentication. Allowed headers-- Authorization: Bearer <api_key>",
       "required": false,

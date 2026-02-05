@@ -71,7 +71,7 @@ export function codeTool(): McpTool {
         ...(stainlessAPIKey && { Authorization: stainlessAPIKey }),
         'Content-Type': 'application/json',
         client_envs: JSON.stringify({
-          STRIPE_MINIMAL_API_KEY: readEnv('STRIPE_MINIMAL_API_KEY') ?? client.apiKey ?? undefined,
+          STRIPE_SECRET_KEY: readEnv('STRIPE_SECRET_KEY') ?? client.apiKey ?? undefined,
           STRIPE_MINIMAL_BASE_URL: readEnv('STRIPE_MINIMAL_BASE_URL') ?? client.baseURL ?? undefined,
         }),
       },

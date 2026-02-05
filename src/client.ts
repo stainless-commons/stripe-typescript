@@ -310,7 +310,7 @@ export class StripeMinimal {
   /**
    * API Client for interfacing with the Stripe Minimal API.
    *
-   * @param {string | null | undefined} [opts.apiKey=process.env['STRIPE_MINIMAL_API_KEY'] ?? null]
+   * @param {string | null | undefined} [opts.apiKey=process.env['STRIPE_SECRET_KEY'] ?? null]
    * @param {string} [opts.baseURL=process.env['STRIPE_MINIMAL_BASE_URL'] ?? https://api.stripe.com/] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
@@ -321,7 +321,7 @@ export class StripeMinimal {
    */
   constructor({
     baseURL = readEnv('STRIPE_MINIMAL_BASE_URL'),
-    apiKey = readEnv('STRIPE_MINIMAL_API_KEY') ?? null,
+    apiKey = readEnv('STRIPE_SECRET_KEY') ?? null,
     ...opts
   }: ClientOptions = {}) {
     const options: ClientOptions = {

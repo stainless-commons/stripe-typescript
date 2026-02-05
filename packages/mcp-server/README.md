@@ -19,7 +19,7 @@ cd stripe-minimal-typescript
 
 ```sh
 # set env vars as needed
-export STRIPE_MINIMAL_API_KEY="My API Key"
+export STRIPE_SECRET_KEY="My API Key"
 node ./packages/mcp-server/dist/index.js
 ```
 
@@ -42,7 +42,7 @@ For clients with a configuration JSON, it might look something like this:
       "command": "node",
       "args": ["/path/to/local/stripe-minimal-typescript/packages/mcp-server"],
       "env": {
-        "STRIPE_MINIMAL_API_KEY": "My API Key"
+        "STRIPE_SECRET_KEY": "My API Key"
       }
     }
   }
@@ -74,8 +74,8 @@ Authorization can be provided via the `Authorization` header using the Bearer sc
 
 Additionally, authorization can be provided via the following headers:
 | Header | Equivalent client option | Security scheme |
-| -------------------------- | ------------------------ | --------------- |
-| `x-stripe-minimal-api-key` | `apiKey` | bearerAuth |
+| --------------------- | ------------------------ | --------------- |
+| `x-stripe-secret-key` | `apiKey` | bearerAuth |
 
 A configuration JSON for this server might look like this, assuming the server is hosted at `http://localhost:3000`:
 
