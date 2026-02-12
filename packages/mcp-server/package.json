@@ -1,5 +1,5 @@
 {
-  "name": "@stainless-commons/stripe-minimal-mcp",
+  "name": "@stainless-commons/stripe-mcp",
   "version": "0.0.1",
   "description": "The official MCP Server for the Stripe API",
   "author": "Stripe <dev-platform@stripe.com>",
@@ -29,7 +29,7 @@
     "fix": "eslint --fix --ext ts,js ."
   },
   "dependencies": {
-    "@stainless-commons/stripe-minimal": "workspace:*",
+    "@stainless-commons/stripe": "workspace:*",
     "@cloudflare/cabidela": "^0.2.4",
     "@modelcontextprotocol/sdk": "^1.25.2",
     "@valtown/deno-http-worker": "^0.0.21",
@@ -73,8 +73,8 @@
     "tsconfig-paths": "^4.0.0"
   },
   "imports": {
-    "@stainless-commons/stripe-minimal-mcp": ".",
-    "@stainless-commons/stripe-minimal-mcp/*": "./src/*"
+    "@stainless-commons/stripe-mcp": ".",
+    "@stainless-commons/stripe-mcp/*": "./src/*"
   },
   "exports": {
     ".": {

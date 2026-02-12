@@ -55,12 +55,12 @@ $ cd stripe-typescript
 # With yarn
 $ yarn link
 $ cd ../my-package
-$ yarn link @stainless-commons/stripe-minimal
+$ yarn link @stainless-commons/stripe
 
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global @stainless-commons/stripe-minimal
+$ pnpm link -—global @stainless-commons/stripe
 ```
 
 ## Running tests

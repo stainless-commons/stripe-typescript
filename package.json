@@ -1,5 +1,5 @@
 {
-  "name": "@stainless-commons/stripe-minimal",
+  "name": "@stainless-commons/stripe",
   "version": "0.0.1",
   "description": "The official TypeScript library for the Stripe API",
   "author": "Stripe <dev-platform@stripe.com>",

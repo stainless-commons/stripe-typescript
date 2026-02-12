@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIPromise } from '@stainless-commons/stripe-minimal/core/api-promise';
+import { APIPromise } from '@stainless-commons/stripe/core/api-promise';
 
 import util from 'node:util';
-import Stripe from '@stainless-commons/stripe-minimal';
-import { APIUserAbortError } from '@stainless-commons/stripe-minimal';
+import Stripe from '@stainless-commons/stripe';
+import { APIUserAbortError } from '@stainless-commons/stripe';
 const defaultFetch = fetch;
 
 describe('instantiate client', () => {

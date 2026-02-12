@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { Stripe } from '@stainless-commons/stripe-minimal';
+import { Stripe } from '@stainless-commons/stripe';
 
 const { stringifyQuery } = Stripe.prototype as any;
 

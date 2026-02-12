@@ -1,7 +1,7 @@
 import iconv from 'iconv-lite';
-import { stringify } from '@stainless-commons/stripe-minimal/internal/qs';
-import { encode } from '@stainless-commons/stripe-minimal/internal/qs/utils';
-import { StringifyOptions } from '@stainless-commons/stripe-minimal/internal/qs/types';
+import { stringify } from '@stainless-commons/stripe/internal/qs';
+import { encode } from '@stainless-commons/stripe/internal/qs/utils';
+import { StringifyOptions } from '@stainless-commons/stripe/internal/qs/types';
 import { empty_test_cases } from './empty-keys-cases';
 import assert from 'assert';
 
