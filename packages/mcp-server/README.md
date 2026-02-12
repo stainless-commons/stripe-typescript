@@ -9,8 +9,8 @@ It is generated with [Stainless](https://www.stainless.com/).
 Because it's not published yet, clone the repo and build it:
 
 ```sh
-git clone git@github.com:stainless-sdks/stripe-minimal-typescript.git
-cd stripe-minimal-typescript
+git clone git@github.com:stainless-commons/stripe-typescript.git
+cd stripe-typescript
 ./scripts/bootstrap
 ./scripts/build
 ```
@@ -40,7 +40,7 @@ For clients with a configuration JSON, it might look something like this:
   "mcpServers": {
     "stainless_commons_stripe_minimal_api": {
       "command": "node",
-      "args": ["/path/to/local/stripe-minimal-typescript/packages/mcp-server"],
+      "args": ["/path/to/local/stripe-typescript/packages/mcp-server"],
       "env": {
         "STRIPE_SECRET_KEY": "My API Key"
       }
