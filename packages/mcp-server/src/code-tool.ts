@@ -5,7 +5,7 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import { readEnv } from './server';
 import { WorkerInput, WorkerOutput } from './code-tool-types';
 import { SdkMethod } from './methods';
-import { Stripe } from '@stainless-commons/stripe-minimal';
+import { Stripe } from '@stainless-commons/stripe';
 
 const prompt = `Runs JavaScript code to interact with the Stripe API.
 

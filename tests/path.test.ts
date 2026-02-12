@@ -1,4 +1,4 @@
-import { createPathTagFunction, encodeURIPath } from '@stainless-commons/stripe-minimal/internal/utils/path';
+import { createPathTagFunction, encodeURIPath } from '@stainless-commons/stripe/internal/utils/path';
 import { inspect } from 'node:util';
 import { runInNewContext } from 'node:vm';
 
