@@ -9,8 +9,8 @@ It is generated with [Stainless](https://www.stainless.com/).
 Because it's not published yet, clone the repo and build it:
 
 ```sh
-git clone git@github.com:stainless-sdks/stripe-minimal-typescript.git
-cd stripe-minimal-typescript
+git clone git@github.com:stainless-commons/stripe-typescript.git
+cd stripe-typescript
 ./scripts/bootstrap
 ./scripts/build
 ```
@@ -24,7 +24,7 @@ node ./packages/mcp-server/dist/index.js
 ```
 
 > [!NOTE]
-> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npx -y @stainless-commons/stripe-minimal-mcp`
+> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npx -y @stainless-commons/stripe-mcp`
 
 ### Via MCP Client
 
@@ -38,9 +38,9 @@ For clients with a configuration JSON, it might look something like this:
 ```json
 {
   "mcpServers": {
-    "stainless_commons_stripe_minimal_api": {
+    "stainless_commons_stripe_api": {
       "command": "node",
-      "args": ["/path/to/local/stripe-minimal-typescript/packages/mcp-server"],
+      "args": ["/path/to/local/stripe-typescript/packages/mcp-server"],
       "env": {
         "STRIPE_SECRET_KEY": "My API Key"
       }
@@ -82,7 +82,7 @@ A configuration JSON for this server might look like this, assuming the server i
 ```json
 {
   "mcpServers": {
-    "stainless_commons_stripe_minimal_api": {
+    "stainless_commons_stripe_api": {
       "url": "http://localhost:3000",
       "headers": {
         "Authorization": "Bearer <auth value>"

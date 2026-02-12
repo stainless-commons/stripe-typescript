@@ -80,7 +80,7 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: ^1.25.2
         version: 1.25.2(hono@4.11.4)(zod@3.25.76)
-      '@stainless-commons/stripe-minimal':
+      '@stainless-commons/stripe':
         specifier: workspace:*
         version: link:../..
       '@valtown/deno-http-worker':

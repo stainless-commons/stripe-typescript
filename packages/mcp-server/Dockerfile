@@ -3,10 +3,10 @@
 # This Dockerfile builds a Docker image for the MCP Server.
 #
 # To build the image locally:
-#   docker build -f packages/mcp-server/Dockerfile -t @stainless-commons/stripe-minimal-mcp:local .
+#   docker build -f packages/mcp-server/Dockerfile -t @stainless-commons/stripe-mcp:local .
 #
 # To run the image:
-#   docker run -i @stainless-commons/stripe-minimal-mcp:local [OPTIONS]
+#   docker run -i @stainless-commons/stripe-mcp:local [OPTIONS]
 #
 # Common options:
 #   --tool=<name>              Include specific tools
@@ -16,7 +16,7 @@
 #   --transport=<type>         Set transport type (stdio or http)
 #
 # For a full list of options:
-#   docker run -i @stainless-commons/stripe-minimal-mcp:local --help
+#   docker run -i @stainless-commons/stripe-mcp:local --help
 #
 # Note: The MCP server uses stdio transport by default. Docker's -i flag
 # enables interactive mode, allowing the container to communicate over stdin/stdout.
@@ -59,8 +59,8 @@ COPY --from=builder /build/packages/mcp-server/node_modules ./packages/mcp-serve
 # Copy node_modules from root (pnpm hoists dependencies here)
 COPY --from=builder /build/node_modules ./node_modules
 
-# Copy the built @stainless-commons/stripe-minimal into node_modules
-COPY --from=builder /build/dist ./node_modules/@stainless-commons/stripe-minimal
+# Copy the built @stainless-commons/stripe into node_modules
+COPY --from=builder /build/dist ./node_modules/@stainless-commons/stripe
 
 # Change ownership to nodejs user
 RUN chown -R nodejs:nodejs /app

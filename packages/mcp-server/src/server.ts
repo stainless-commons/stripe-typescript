@@ -7,8 +7,8 @@ import {
   ListToolsRequestSchema,
   SetLevelRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
-import { ClientOptions } from '@stainless-commons/stripe-minimal';
-import Stripe from '@stainless-commons/stripe-minimal';
+import { ClientOptions } from '@stainless-commons/stripe';
+import Stripe from '@stainless-commons/stripe';
 import { codeTool } from './code-tool';
 import docsSearchTool from './docs-search-tool';
 import { McpOptions } from './options';
@@ -16,7 +16,7 @@ import { blockedMethodsForCodeTool } from './methods';
 import { HandlerFunction, McpTool } from './types';
 
 export { McpOptions } from './options';
-export { ClientOptions } from '@stainless-commons/stripe-minimal';
+export { ClientOptions } from '@stainless-commons/stripe';
 
 async function getInstructions() {
   // This API key is optional; providing it allows the server to fetch instructions for unreleased versions.
@@ -57,8 +57,8 @@ async function getInstructions() {
 export const newMcpServer = async () =>
   new McpServer(
     {
-      name: 'stainless_commons_stripe_minimal_api',
-      version: '0.0.1',
+      name: 'stainless_commons_stripe_api',
+      version: '0.1.0',
     },
     {
       instructions: await getInstructions(),

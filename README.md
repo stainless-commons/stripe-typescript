@@ -1,6 +1,6 @@
 # Stripe TypeScript API Library
 
-[![NPM version](<https://img.shields.io/npm/v/@stainless-commons/stripe-minimal.svg?label=npm%20(stable)>)](https://npmjs.org/package/@stainless-commons/stripe-minimal) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@stainless-commons/stripe-minimal)
+[![NPM version](<https://img.shields.io/npm/v/@stainless-commons/stripe.svg?label=npm%20(stable)>)](https://npmjs.org/package/@stainless-commons/stripe) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@stainless-commons/stripe)
 
 This library provides convenient access to the Stripe REST API from server-side TypeScript or JavaScript.
 
@@ -12,19 +12,19 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 Use the Stripe MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.
 
-[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40stainless-commons%2Fstripe-minimal-mcp&config=eyJuYW1lIjoiQHN0YWlubGVzcy1jb21tb25zL3N0cmlwZS1taW5pbWFsLW1jcCIsInRyYW5zcG9ydCI6Imh0dHAiLCJ1cmwiOiJodHRwczovL3N0cmlwZS1taW5pbWFsLnN0bG1jcC5jb20iLCJoZWFkZXJzIjp7Ingtc3RyaXBlLXNlY3JldC1rZXkiOiJNeSBBUEkgS2V5In19)
-[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40stainless-commons%2Fstripe-minimal-mcp%22%2C%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fstripe-minimal.stlmcp.com%22%2C%22headers%22%3A%7B%22x-stripe-secret-key%22%3A%22My%20API%20Key%22%7D%7D)
+[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40stainless-commons%2Fstripe-mcp&config=eyJuYW1lIjoiQHN0YWlubGVzcy1jb21tb25zL3N0cmlwZS1tY3AiLCJ0cmFuc3BvcnQiOiJodHRwIiwidXJsIjoiaHR0cHM6Ly9zdHJpcGUtbWluaW1hbC5zdGxtY3AuY29tIiwiaGVhZGVycyI6eyJ4LXN0cmlwZS1zZWNyZXQta2V5IjoiTXkgQVBJIEtleSJ9fQ)
+[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40stainless-commons%2Fstripe-mcp%22%2C%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fstripe-minimal.stlmcp.com%22%2C%22headers%22%3A%7B%22x-stripe-secret-key%22%3A%22My%20API%20Key%22%7D%7D)
 
 > Note: You may need to set environment variables in your MCP client.
 
 ## Installation
 
 ```sh
-npm install git+ssh://git@github.com:stainless-sdks/stripe-minimal-typescript.git
+npm install git+ssh://git@github.com:stainless-commons/stripe-typescript.git
 ```
 
 > [!NOTE]
-> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npm install @stainless-commons/stripe-minimal`
+> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npm install @stainless-commons/stripe`
 
 ## Usage
 
@@ -32,7 +32,7 @@ The full API of this library can be found in [api.md](api.md).
 
 <!-- prettier-ignore -->
 ```js
-import Stripe from '@stainless-commons/stripe-minimal';
+import Stripe from '@stainless-commons/stripe';
 
 const client = new Stripe({
   apiKey: process.env['STRIPE_SECRET_KEY'], // This is the default and can be omitted
@@ -49,7 +49,7 @@ This library includes TypeScript definitions for all request params and response
 
 <!-- prettier-ignore -->
 ```ts
-import Stripe from '@stainless-commons/stripe-minimal';
+import Stripe from '@stainless-commons/stripe';
 
 const client = new Stripe({
   apiKey: process.env['STRIPE_SECRET_KEY'], // This is the default and can be omitted
@@ -202,7 +202,7 @@ The log level can be configured in two ways:
 2. Using the `logLevel` client option (overrides the environment variable if set)
 
 ```ts
-import Stripe from '@stainless-commons/stripe-minimal';
+import Stripe from '@stainless-commons/stripe';
 
 const client = new Stripe({
   logLevel: 'debug', // Show all log messages
@@ -230,7 +230,7 @@ When providing a custom logger, the `logLevel` option still controls which messa
 below the configured level will not be sent to your logger.
 
 ```ts
-import Stripe from '@stainless-commons/stripe-minimal';
+import Stripe from '@stainless-commons/stripe';
 import pino from 'pino';
 
 const logger = pino();
@@ -299,7 +299,7 @@ globalThis.fetch = fetch;
 Or pass it to the client:
 
 ```ts
-import Stripe from '@stainless-commons/stripe-minimal';
+import Stripe from '@stainless-commons/stripe';
 import fetch from 'my-fetch';
 
 const client = new Stripe({ fetch });
@@ -310,7 +310,7 @@ const client = new Stripe({ fetch });
 If you want to set custom `fetch` options without overriding the `fetch` function, you can provide a `fetchOptions` object when instantiating the client or making a request. (Request-specific options override client options.)
 
 ```ts
-import Stripe from '@stainless-commons/stripe-minimal';
+import Stripe from '@stainless-commons/stripe';
 
 const client = new Stripe({
   fetchOptions: {
@@ -327,7 +327,7 @@ options to requests:
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/node.svg" align="top" width="18" height="21"> **Node** <sup>[[docs](https://github.com/nodejs/undici/blob/main/docs/docs/api/ProxyAgent.md#example---proxyagent-with-fetch)]</sup>
 
 ```ts
-import Stripe from '@stainless-commons/stripe-minimal';
+import Stripe from '@stainless-commons/stripe';
 import * as undici from 'undici';
 
 const proxyAgent = new undici.ProxyAgent('http://localhost:8888');
@@ -341,7 +341,7 @@ const client = new Stripe({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/bun.svg" align="top" width="18" height="21"> **Bun** <sup>[[docs](https://bun.sh/guides/http/proxy)]</sup>
 
 ```ts
-import Stripe from '@stainless-commons/stripe-minimal';
+import Stripe from '@stainless-commons/stripe';
 
 const client = new Stripe({
   fetchOptions: {
@@ -353,7 +353,7 @@ const client = new Stripe({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/deno.svg" align="top" width="18" height="21"> **Deno** <sup>[[docs](https://docs.deno.com/api/deno/~/Deno.createHttpClient)]</sup>
 
 ```ts
-import Stripe from 'npm:@stainless-commons/stripe-minimal';
+import Stripe from 'npm:@stainless-commons/stripe';
 
 const httpClient = Deno.createHttpClient({ proxy: { url: 'http://localhost:8888' } });
 const client = new Stripe({
@@ -375,7 +375,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/stripe-minimal-typescript/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/stainless-commons/stripe-typescript/issues) with questions, bugs, or suggestions.
 
 ## Requirements
 

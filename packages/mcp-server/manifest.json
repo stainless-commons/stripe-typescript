@@ -1,6 +1,6 @@
 {
   "dxt_version": "0.2",
-  "name": "@stainless-commons/stripe-minimal-mcp",
+  "name": "@stainless-commons/stripe-mcp",
   "version": "0.0.1",
   "description": "The official MCP Server for the Stripe API",
   "author": {
@@ -9,9 +9,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stainless-sdks/stripe-minimal-typescript.git"
+    "url": "git+https://github.com/stainless-commons/stripe-typescript.git"
   },
-  "homepage": "https://github.com/stainless-sdks/stripe-minimal-typescript/tree/main/packages/mcp-server#readme",
+  "homepage": "https://github.com/stainless-commons/stripe-typescript/tree/main/packages/mcp-server#readme",
   "documentation": "https://stripe.com",
   "server": {
     "type": "node",
