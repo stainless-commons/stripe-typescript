@@ -8,8 +8,7 @@ const client = new Stripe({
 });
 
 describe('resource invoices', () => {
-  // Prism tests are disabled
-  test.skip('create', async () => {
+  test('create', async () => {
     const responsePromise = client.invoices.create();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -20,8 +19,7 @@ describe('resource invoices', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
-  test.skip('create: request options and params are passed correctly', async () => {
+  test('create: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.invoices.create(
@@ -147,8 +145,7 @@ describe('resource invoices', () => {
     ).rejects.toThrow(Stripe.NotFoundError);
   });
 
-  // Prism tests are disabled
-  test.skip('list', async () => {
+  test('list', async () => {
     const responsePromise = client.invoices.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -159,8 +156,7 @@ describe('resource invoices', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
+  test('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.invoices.list(
@@ -192,8 +188,7 @@ describe('resource invoices', () => {
     ).rejects.toThrow(Stripe.NotFoundError);
   });
 
-  // Prism tests are disabled
-  test.skip('finalize', async () => {
+  test('finalize', async () => {
     const responsePromise = client.invoices.finalize('invoice');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -204,8 +199,7 @@ describe('resource invoices', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
-  test.skip('finalize: request options and params are passed correctly', async () => {
+  test('finalize: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.invoices.finalize(
