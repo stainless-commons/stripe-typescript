@@ -60,7 +60,7 @@ $ yarn link @stainless-commons/stripe
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global @stainless-commons/stripe
+$ pnpm link --global @stainless-commons/stripe
 ```
 
 ## Running tests
