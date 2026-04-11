@@ -30,7 +30,7 @@ describe('resource refunds', () => {
           customer: 'customer',
           expand: ['string'],
           instructions_email: 'instructions_email',
-          metadata: { foo: 'string' },
+          metadata: '',
           origin: 'customer_balance',
           payment_intent: 'payment_intent',
           reason: 'duplicate',

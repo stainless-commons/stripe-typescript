@@ -33,7 +33,7 @@ describe('resource coupons', () => {
           duration_in_months: 0,
           expand: ['string'],
           max_redemptions: 0,
-          metadata: { foo: 'string' },
+          metadata: '',
           name: 'name',
           percent_off: 0,
           redeem_by: 0,

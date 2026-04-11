@@ -24,7 +24,7 @@ describe('resource invoices', () => {
     await expect(
       client.invoices.create(
         {
-          account_tax_ids: ['string'],
+          account_tax_ids: '',
           application_fee_amount: 0,
           auto_advance: true,
           automatic_tax: {
@@ -34,7 +34,7 @@ describe('resource invoices', () => {
           automatically_finalizes_at: 0,
           collection_method: 'charge_automatically',
           currency: 'currency',
-          custom_fields: [{ name: 'name', value: 'value' }],
+          custom_fields: '',
           customer: 'customer',
           customer_account: 'customer_account',
           days_until_due: 0,
@@ -42,68 +42,36 @@ describe('resource invoices', () => {
           default_source: 'default_source',
           default_tax_rates: ['string'],
           description: 'description',
-          discounts: [
-            {
-              coupon: 'coupon',
-              discount: 'discount',
-              promotion_code: 'promotion_code',
-            },
-          ],
+          discounts: '',
           due_date: 0,
           effective_at: 0,
           expand: ['string'],
           footer: 'footer',
           from_invoice: { action: 'revision', invoice: 'invoice' },
           issuer: { type: 'account', account: 'account' },
-          metadata: { foo: 'string' },
+          metadata: '',
           number: 'number',
           on_behalf_of: 'on_behalf_of',
           payment_settings: {
-            default_mandate: 'string',
+            default_mandate: '',
             payment_method_options: {
-              acss_debit: {
-                mandate_options: { transaction_type: 'business' },
-                verification_method: 'automatic',
-              },
-              bancontact: { preferred_language: 'de' },
-              card: {
-                installments: {
-                  enabled: true,
-                  plan: {
-                    type: 'bonus',
-                    count: 0,
-                    interval: 'month',
-                  },
-                },
-                request_three_d_secure: 'any',
-              },
-              customer_balance: {
-                bank_transfer: {
-                  eu_bank_transfer: { country: 'country' },
-                  type: 'type',
-                },
-                funding_type: 'funding_type',
-              },
-              konbini: {},
-              payto: { mandate_options: { amount: 0, purpose: 'dependant_support' } },
-              sepa_debit: {},
-              us_bank_account: {
-                financial_connections: {
-                  filters: { account_subcategories: ['checking'] },
-                  permissions: ['balances'],
-                  prefetch: ['balances'],
-                },
-                verification_method: 'automatic',
-              },
+              acss_debit: '',
+              bancontact: '',
+              card: '',
+              customer_balance: '',
+              konbini: '',
+              payto: '',
+              sepa_debit: '',
+              us_bank_account: '',
             },
-            payment_method_types: ['ach_credit_transfer'],
+            payment_method_types: '',
           },
           pending_invoice_items_behavior: 'exclude',
           rendering: {
             amount_tax_display: '',
             pdf: { page_size: 'a4' },
             template: 'template',
-            template_version: 0,
+            template_version: '',
           },
           shipping_cost: {
             shipping_rate: 'shipping_rate',
@@ -134,7 +102,7 @@ describe('resource invoices', () => {
               state: 'state',
             },
             name: 'name',
-            phone: 'string',
+            phone: '',
           },
           statement_descriptor: 'statement_descriptor',
           subscription: 'subscription',

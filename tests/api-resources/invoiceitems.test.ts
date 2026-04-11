@@ -30,16 +30,10 @@ describe('resource invoiceitems', () => {
           customer_account: 'customer_account',
           description: 'description',
           discountable: true,
-          discounts: [
-            {
-              coupon: 'coupon',
-              discount: 'discount',
-              promotion_code: 'promotion_code',
-            },
-          ],
+          discounts: '',
           expand: ['string'],
           invoice: 'invoice',
-          metadata: { foo: 'string' },
+          metadata: '',
           period: { end: 0, start: 0 },
           price_data: {
             currency: 'currency',
@@ -52,7 +46,7 @@ describe('resource invoiceitems', () => {
           quantity: 0,
           subscription: 'subscription',
           tax_behavior: 'exclusive',
-          tax_code: 'string',
+          tax_code: '',
           tax_rates: ['string'],
           unit_amount_decimal: 'unit_amount_decimal',
         },
