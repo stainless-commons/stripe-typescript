@@ -8,8 +8,7 @@ const client = new Stripe({
 });
 
 describe('resource customers', () => {
-  // Prism tests are disabled
-  test.skip('create', async () => {
+  test('create', async () => {
     const responsePromise = client.customers.create();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -20,54 +19,35 @@ describe('resource customers', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
-  test.skip('create: request options and params are passed correctly', async () => {
+  test('create: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.customers.create(
         {
-          address: {
-            city: 'city',
-            country: 'country',
-            line1: 'line1',
-            line2: 'line2',
-            postal_code: 'postal_code',
-            state: 'state',
-          },
+          address: '',
           balance: 0,
-          business_name: 'string',
+          business_name: '',
           cash_balance: { settings: { reconciliation_mode: 'automatic' } },
           description: 'description',
           email: 'email',
           expand: ['string'],
-          individual_name: 'string',
+          individual_name: '',
           invoice_prefix: 'invoice_prefix',
           invoice_settings: {
-            custom_fields: [{ name: 'name', value: 'value' }],
+            custom_fields: '',
             default_payment_method: 'default_payment_method',
             footer: 'footer',
-            rendering_options: { amount_tax_display: '', template: 'template' },
+            rendering_options: '',
           },
-          metadata: { foo: 'string' },
+          metadata: '',
           name: 'name',
           next_invoice_sequence: 0,
           payment_method: 'payment_method',
           phone: 'phone',
           preferred_locales: ['string'],
-          shipping: {
-            address: {
-              city: 'city',
-              country: 'country',
-              line1: 'line1',
-              line2: 'line2',
-              postal_code: 'postal_code',
-              state: 'state',
-            },
-            name: 'name',
-            phone: 'phone',
-          },
+          shipping: '',
           source: 'source',
-          tax: { ip_address: 'string', validate_location: 'deferred' },
+          tax: { ip_address: '', validate_location: 'deferred' },
           tax_exempt: '',
           tax_id_data: [{ type: 'ad_nrt', value: 'value' }],
           test_clock: 'test_clock',
@@ -77,8 +57,7 @@ describe('resource customers', () => {
     ).rejects.toThrow(Stripe.NotFoundError);
   });
 
-  // Prism tests are disabled
-  test.skip('list', async () => {
+  test('list', async () => {
     const responsePromise = client.customers.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -89,8 +68,7 @@ describe('resource customers', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
+  test('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.customers.list(

@@ -8,8 +8,7 @@ const client = new Stripe({
 });
 
 describe('resource subscriptions', () => {
-  // Prism tests are disabled
-  test.skip('update', async () => {
+  test('update', async () => {
     const responsePromise = client.subscriptions.update('subscription_exposed_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -20,8 +19,7 @@ describe('resource subscriptions', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
-  test.skip('update: request options and params are passed correctly', async () => {
+  test('update: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.subscriptions.update(
@@ -50,51 +48,39 @@ describe('resource subscriptions', () => {
                 unit_amount_decimal: 'unit_amount_decimal',
               },
               quantity: 0,
-              tax_rates: ['string'],
+              tax_rates: '',
             },
           ],
-          application_fee_percent: 0,
+          application_fee_percent: '',
           automatic_tax: {
             enabled: true,
             liability: { type: 'account', account: 'account' },
           },
           billing_cycle_anchor: 'now',
-          billing_thresholds: { amount_gte: 0, reset_billing_cycle_anchor: true },
+          billing_thresholds: '',
           cancel_at: '',
           cancel_at_period_end: true,
-          cancellation_details: { comment: 'string', feedback: '' },
+          cancellation_details: { comment: '', feedback: '' },
           collection_method: 'charge_automatically',
           days_until_due: 0,
           default_payment_method: 'default_payment_method',
-          default_source: 'string',
-          default_tax_rates: ['string'],
-          description: 'string',
-          discounts: [
-            {
-              coupon: 'coupon',
-              discount: 'discount',
-              promotion_code: 'promotion_code',
-            },
-          ],
+          default_source: '',
+          default_tax_rates: '',
+          description: '',
+          discounts: '',
           expand: ['string'],
           invoice_settings: {
-            account_tax_ids: ['string'],
+            account_tax_ids: '',
             issuer: { type: 'account', account: 'account' },
           },
           items: [
             {
               id: 'id',
-              billing_thresholds: { usage_gte: 0 },
+              billing_thresholds: '',
               clear_usage: true,
               deleted: true,
-              discounts: [
-                {
-                  coupon: 'coupon',
-                  discount: 'discount',
-                  promotion_code: 'promotion_code',
-                },
-              ],
-              metadata: { foo: 'string' },
+              discounts: '',
+              metadata: '',
               price: 'price',
               price_data: {
                 currency: 'currency',
@@ -105,56 +91,32 @@ describe('resource subscriptions', () => {
                 unit_amount_decimal: 'unit_amount_decimal',
               },
               quantity: 0,
-              tax_rates: ['string'],
+              tax_rates: '',
             },
           ],
-          metadata: { foo: 'string' },
+          metadata: '',
           off_session: true,
-          on_behalf_of: 'string',
-          pause_collection: { behavior: 'keep_as_draft', resumes_at: 0 },
+          on_behalf_of: '',
+          pause_collection: '',
           payment_behavior: 'allow_incomplete',
           payment_settings: {
             payment_method_options: {
-              acss_debit: {
-                mandate_options: { transaction_type: 'business' },
-                verification_method: 'automatic',
-              },
-              bancontact: { preferred_language: 'de' },
-              card: {
-                mandate_options: {
-                  amount: 0,
-                  amount_type: 'fixed',
-                  description: 'description',
-                },
-                network: 'amex',
-                request_three_d_secure: 'any',
-              },
-              customer_balance: {
-                bank_transfer: {
-                  eu_bank_transfer: { country: 'country' },
-                  type: 'type',
-                },
-                funding_type: 'funding_type',
-              },
-              konbini: {},
-              payto: { mandate_options: { amount: 0, purpose: 'dependant_support' } },
-              sepa_debit: {},
-              us_bank_account: {
-                financial_connections: {
-                  filters: { account_subcategories: ['checking'] },
-                  permissions: ['balances'],
-                  prefetch: ['balances'],
-                },
-                verification_method: 'automatic',
-              },
+              acss_debit: '',
+              bancontact: '',
+              card: '',
+              customer_balance: '',
+              konbini: '',
+              payto: '',
+              sepa_debit: '',
+              us_bank_account: '',
             },
-            payment_method_types: ['ach_credit_transfer'],
+            payment_method_types: '',
             save_default_payment_method: 'off',
           },
-          pending_invoice_item_interval: { interval: 'day', interval_count: 0 },
+          pending_invoice_item_interval: '',
           proration_behavior: 'always_invoice',
           proration_date: 0,
-          transfer_data: { destination: 'destination', amount_percent: 0 },
+          transfer_data: '',
           trial_end: 'now',
           trial_from_plan: true,
           trial_settings: { end_behavior: { missing_payment_method: 'cancel' } },
@@ -164,8 +126,7 @@ describe('resource subscriptions', () => {
     ).rejects.toThrow(Stripe.NotFoundError);
   });
 
-  // Prism tests are disabled
-  test.skip('list', async () => {
+  test('list', async () => {
     const responsePromise = client.subscriptions.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -176,8 +137,7 @@ describe('resource subscriptions', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
+  test('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.subscriptions.list(
@@ -217,8 +177,7 @@ describe('resource subscriptions', () => {
     ).rejects.toThrow(Stripe.NotFoundError);
   });
 
-  // Prism tests are disabled
-  test.skip('cancel', async () => {
+  test('cancel', async () => {
     const responsePromise = client.subscriptions.cancel('subscription_exposed_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -229,14 +188,13 @@ describe('resource subscriptions', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
-  test.skip('cancel: request options and params are passed correctly', async () => {
+  test('cancel: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.subscriptions.cancel(
         'subscription_exposed_id',
         {
-          cancellation_details: { comment: 'string', feedback: '' },
+          cancellation_details: { comment: '', feedback: '' },
           expand: ['string'],
           invoice_now: true,
           prorate: true,

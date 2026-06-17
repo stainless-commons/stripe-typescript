@@ -8,8 +8,7 @@ const client = new Stripe({
 });
 
 describe('resource invoiceitems', () => {
-  // Prism tests are disabled
-  test.skip('create', async () => {
+  test('create', async () => {
     const responsePromise = client.invoiceitems.create();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -20,8 +19,7 @@ describe('resource invoiceitems', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
-  test.skip('create: request options and params are passed correctly', async () => {
+  test('create: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.invoiceitems.create(
@@ -32,16 +30,10 @@ describe('resource invoiceitems', () => {
           customer_account: 'customer_account',
           description: 'description',
           discountable: true,
-          discounts: [
-            {
-              coupon: 'coupon',
-              discount: 'discount',
-              promotion_code: 'promotion_code',
-            },
-          ],
+          discounts: '',
           expand: ['string'],
           invoice: 'invoice',
-          metadata: { foo: 'string' },
+          metadata: '',
           period: { end: 0, start: 0 },
           price_data: {
             currency: 'currency',
@@ -54,7 +46,7 @@ describe('resource invoiceitems', () => {
           quantity: 0,
           subscription: 'subscription',
           tax_behavior: 'exclusive',
-          tax_code: 'string',
+          tax_code: '',
           tax_rates: ['string'],
           unit_amount_decimal: 'unit_amount_decimal',
         },

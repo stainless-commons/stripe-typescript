@@ -8,8 +8,7 @@ const client = new Stripe({
 });
 
 describe('resource paymentLinks', () => {
-  // Prism tests are disabled
-  test.skip('create: only required params', async () => {
+  test('create: only required params', async () => {
     const responsePromise = client.paymentLinks.create({ line_items: [{ quantity: 0 }] });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -20,8 +19,7 @@ describe('resource paymentLinks', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
-  test.skip('create: required and optional params', async () => {
+  test('create: required and optional params', async () => {
     const response = await client.paymentLinks.create({
       line_items: [
         {
@@ -89,10 +87,10 @@ describe('resource paymentLinks', () => {
         },
       ],
       custom_text: {
-        after_submit: { message: 'message' },
-        shipping_address: { message: 'message' },
-        submit: { message: 'message' },
-        terms_of_service_acceptance: { message: 'message' },
+        after_submit: '',
+        shipping_address: '',
+        submit: '',
+        terms_of_service_acceptance: '',
       },
       customer_creation: 'always',
       expand: ['string'],
@@ -100,13 +98,13 @@ describe('resource paymentLinks', () => {
       invoice_creation: {
         enabled: true,
         invoice_data: {
-          account_tax_ids: ['string'],
-          custom_fields: [{ name: 'name', value: 'value' }],
+          account_tax_ids: '',
+          custom_fields: '',
           description: 'description',
           footer: 'footer',
           issuer: { type: 'account', account: 'account' },
-          metadata: { foo: 'string' },
-          rendering_options: { amount_tax_display: '', template: 'template' },
+          metadata: '',
+          rendering_options: '',
         },
       },
       metadata: { foo: 'string' },

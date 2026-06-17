@@ -8,8 +8,7 @@ const client = new Stripe({
 });
 
 describe('resource disputes', () => {
-  // Prism tests are disabled
-  test.skip('update', async () => {
+  test('update', async () => {
     const responsePromise = client.disputes.update('dispute');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -20,8 +19,7 @@ describe('resource disputes', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
-  test.skip('update: request options and params are passed correctly', async () => {
+  test('update: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.disputes.update(
@@ -41,47 +39,7 @@ describe('resource disputes', () => {
             duplicate_charge_documentation: 'duplicate_charge_documentation',
             duplicate_charge_explanation: 'duplicate_charge_explanation',
             duplicate_charge_id: 'duplicate_charge_id',
-            enhanced_evidence: {
-              visa_compelling_evidence_3: {
-                disputed_transaction: {
-                  customer_account_id: 'string',
-                  customer_device_fingerprint: 'string',
-                  customer_device_id: 'string',
-                  customer_email_address: 'string',
-                  customer_purchase_ip: 'string',
-                  merchandise_or_services: 'merchandise',
-                  product_description: 'string',
-                  shipping_address: {
-                    city: 'string',
-                    country: 'string',
-                    line1: 'string',
-                    line2: 'string',
-                    postal_code: 'string',
-                    state: 'string',
-                  },
-                },
-                prior_undisputed_transactions: [
-                  {
-                    charge: 'charge',
-                    customer_account_id: 'string',
-                    customer_device_fingerprint: 'string',
-                    customer_device_id: 'string',
-                    customer_email_address: 'string',
-                    customer_purchase_ip: 'string',
-                    product_description: 'string',
-                    shipping_address: {
-                      city: 'string',
-                      country: 'string',
-                      line1: 'string',
-                      line2: 'string',
-                      postal_code: 'string',
-                      state: 'string',
-                    },
-                  },
-                ],
-              },
-              visa_compliance: { fee_acknowledged: true },
-            },
+            enhanced_evidence: '',
             product_description: 'product_description',
             receipt: 'receipt',
             refund_policy: 'refund_policy',
@@ -98,7 +56,7 @@ describe('resource disputes', () => {
             uncategorized_text: 'uncategorized_text',
           },
           expand: ['string'],
-          metadata: { foo: 'string' },
+          metadata: '',
           submit: true,
         },
         { path: '/_stainless_unknown_path' },
@@ -106,8 +64,7 @@ describe('resource disputes', () => {
     ).rejects.toThrow(Stripe.NotFoundError);
   });
 
-  // Prism tests are disabled
-  test.skip('list', async () => {
+  test('list', async () => {
     const responsePromise = client.disputes.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -118,8 +75,7 @@ describe('resource disputes', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
+  test('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.disputes.list(
